@@ -1,0 +1,12 @@
+﻿@model WebApplicationCrud.ViewModels.QuestionViewModel 
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+    <form asp-action="AddProductPanel" asp-controller="Panel" method="get">
+        How Many Colours Does Your Product Have
+        <input asp-for="ColourCount"/>
+        How Many Sizes Does Your Product Have
+        <input asp-for="SizeCount"/>
+        <button type="submit">Submit</button>
+    </form>

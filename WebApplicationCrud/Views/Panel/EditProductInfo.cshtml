@@ -1,0 +1,28 @@
+﻿@model WebApplicationCrud.ViewModels.EditInfoViewModel
+
+
+
+
+    <form asp-action="EditProductInfo" asp-controller="Panel" method="post">
+
+
+        <label>color</label>
+        <input asp-for="color" value="@Model.color" />
+        <label>Size</label>
+        <input asp-for="Size" value="@Model.Size" />
+
+        <label>Quantity</label>
+        <input asp-for="Quantity" value="@Model.Quantity" />
+        <label>SizeText</label>
+        <input asp-for="SizeText" value="@Model.SizeText" />
+
+
+        <input type="hidden"asp-for="id" value="@Model.id" />
+
+
+        <input type="submit" name="" value="submit" />
+
+
+
+
+    </form>

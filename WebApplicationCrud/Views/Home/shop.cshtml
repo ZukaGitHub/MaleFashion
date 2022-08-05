@@ -1,0 +1,426 @@
+﻿@model WebApplicationCrud.ViewModels.ShopViewModel
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="breadcrumb__text">
+                        <h4>Shop</h4>
+                        <div class="breadcrumb__links">
+                            <a href="./index.html">Home</a>
+                            <span>Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                @*aqedan------------------------------------------*@
+                <form asp-action="shop" asp-controller="Home" class="col-lg-3" enctype="multipart/form-data" method="post">
+                    @*<div class="col-lg-3">*@
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+
+                            <input asp-for="SearchString" asp-action="shop" asp-controller="Home" type="text" />
+                            <button type="submit"><span class="icon_search"></span></button>
+
+                        </div>
+                        <div class="shop__sidebar__accordion">
+                            <div class="accordion" id="accordionExample">
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        @*Category filter------------------------*@
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    @foreach (var categories in Model.Categories)
+                                                    {
+                                                        <li>
+                                                            <label>@categories.name</label>
+                                                            <input asp-for="CategoryName" type="radio" value="@categories.name" />
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*Brand filter------------------------*@
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__brand">
+                                                <ul>
+                                                    @foreach (var brands in Model.Brands)
+                                                    {
+                                                        <li>
+                                                            <label>@brands.name</label>
+                                                            <input asp-for="BrandName" type="radio" value="@brands.name" />
+                                                        </li>
+
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                    </div>
+                                    @*Price filter---------------------------*@
+                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__price">
+                                                <ul>
+                                                    @foreach (var Price in Model.PriceList)
+                                                    {
+                                                        <li>
+                                                            <label>$@(Price-50)-$@Price</label>
+                                                            <input asp-for="MaxPrice" type="radio" value="@Price" />
+                                                        </li>
+
+                                                    }
+
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*Size Filter---------------------------*@
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseFour">Size</a>
+                                    </div>
+                                    <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__size">
+                                                @foreach (var size in Model.TextSizes)
+                                                {
+                                                    <label @*for="@size.name"*@>
+                                                        @size.name
+                                                        <input asp-for="SelectedSize" type="radio" value="@size.name" onclick="">
+                                                    </label>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseFive">Colors</a>
+                                        </div>
+                                        <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__color">
+                                                    <label class="c-1" for="sp-1">
+                                                        <input type="radio" id="sp-1">
+                                                    </label>
+                                                    <label class="c-2" for="sp-2">
+                                                        <input type="radio" id="sp-2">
+                                                    </label>
+                                                    <label class="c-3" for="sp-3">
+                                                        <input type="radio" id="sp-3">
+                                                    </label>
+                                                    <label class="c-4" for="sp-4">
+                                                        <input type="radio" id="sp-4">
+                                                    </label>
+                                                    <label class="c-5" for="sp-5">
+                                                        <input type="radio" id="sp-5">
+                                                    </label>
+                                                    <label class="c-6" for="sp-6">
+                                                        <input type="radio" id="sp-6">
+                                                    </label>
+                                                    <label class="c-7" for="sp-7">
+                                                        <input type="radio" id="sp-7">
+                                                    </label>
+                                                    <label class="c-8" for="sp-8">
+                                                        <input type="radio" id="sp-8">
+                                                    </label>
+                                                    <label class="c-9" for="sp-9">
+                                                        <input type="radio" id="sp-9">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
+                                        </div>
+                                        <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                   
+                                                <div class="shop__sidebar__tags">
+                                                   @foreach(var Tag in Model.Tags)
+                                                   {  
+                                                       <label>@Tag
+                                                          <input asp-for="TagFilter" type="radio" value="@Tag" />
+                                                      </label>
+                                                   }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*</div>*@
+                    <div>
+                        <input type="submit" name="Submit" value="Submit" />
+                    </div>
+
+                    @*aqamde--------------------------*@
+                </form>
+                <div class="col-lg-9">
+                    <div class="shop__product__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__left">
+                                    <p>Showing 1-@Model.PageSize of @Model.ProductCount results</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="shop__product__option__right">
+
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Sort By Price
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" asp-action="Shop" asp-controller="Home" asp-route-SortOrder="Featured">Featured</a>
+                                            <a class="dropdown-item" asp-action="Shop" asp-controller="Home" asp-route-SortOrder="High To Low">High To Low</a>
+
+                                            <a class="dropdown-item" asp-action="Shop" asp-controller="Home" asp-route-SortOrder="Low To High">Low To High</a>
+                                        </div>
+                                    </div>
+
+                                    @*<form asp-action="Shop" asp-controller="Home" method="post">
+
+                            <select asp-for="SortOrder">
+
+                                <option value="Low To High">Low To High</option>
+                                <option value="High To Low">High To Low</option>
+
+
+                            </select>
+
+                        </form>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @{
+                        List<Product> products = ViewData["Products"] as List<Product>;
+                        List<Thumbnail> thumbnails = ViewData["Thumbnails"] as List<Thumbnail>;
+                    }
+                    
+                    @*normal Shop*@
+                    @foreach (var prod in Model.products)
+                    {
+
+
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
+
+                                        <div class="product__item__pic set-bg">
+                                            @{
+                                                var current = thumbnails.Where(s => s.ProductId == prod.id);
+                                            }
+                                            @if (!String.IsNullOrEmpty(current.Select(s => s.ThumbnailName).FirstOrDefault().ToString()))
+                                            {
+                                                var image_path = $"/img/product/Thumbnails/{current.Select(s => s.ThumbnailName).FirstOrDefault().ToString()}";
+                                                <img src="@image_path" />
+                                            }
+
+                                            <ul class="product__hover">
+                                                <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
+                                                <li>
+                                                    <a href="#"><img src="../img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                                </li>
+                                                <li><a href="#"><img src="../img/icon/search.png" alt=""></a></li>
+                                            </ul>
+                                        </div>
+                                    </a>
+                                    <div class="product__item__text">
+                                        <h6>@prod.name</h6>
+                                       
+                                        <div class="rating">
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+
+                                        @if (Model.IsSalePage == true)
+                                        {
+                                               <div class="SalePricePrevious">@prod.price</div>
+
+
+                                               <div class="SalePriceAfter">@prod.NewPrice</div>
+
+                                        }
+                                        else
+                                        {
+                                            <h5>@prod.price</h5>
+                                        }
+
+
+                                        <div class="product__color__select">
+                                            <label for="pc-4">
+                                                <input type="radio" id="pc-4">
+                                            </label>
+                                            <label class="active black" for="pc-5">
+                                                <input type="radio" id="pc-5">
+                                            </label>
+                                            <label class="grey" for="pc-6">
+                                                <input type="radio" id="pc-6">
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    @*Pagination-----------------------------*@
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="product__pagination">
+                                @*<a class="active" href="#">1</a>*@
+                                @for (int i = 1; i <= Model.PageCount; i++)
+                                {
+
+                                    if (Model.pageNumber == i)
+                                    {
+                                        <a class="active" asp-action="shop" asp-controller="Home" asp-route-pageNumber="@i">@i</a>
+
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="shop" asp-controller="Home" asp-route-pageNumber="@i">@i</a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="../img/footer-logo.png" alt=""></a>
+                        </div>
+                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <a href="#"><img src="../img/payment.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Clothing Store</a></li>
+                            <li><a href="#">Trending Shoes</a></li>
+                            <li><a href="#">Accessories</a></li>
+                            <li><a href="#">Sale</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Delivary</a></li>
+                            <li><a href="#">Return & Exchanges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>NewLetter</h6>
+                        <div class="footer__newslatter">
+                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <form action="#">
+                                <input type="text" placeholder="Your email">
+                                <button type="submit"><span class="icon_mail_alt"></span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>
+                            Copyright ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>2020
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                                                                                aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+

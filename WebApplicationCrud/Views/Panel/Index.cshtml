@@ -1,0 +1,33 @@
+﻿@model WebApplicationCrud.ViewModels.PanelIndexViewModel
+
+
+
+
+
+
+
+
+<a asp-action="AddProductPanel" asp-controller="Panel">Add New Product</a>
+
+
+@for (int i = 0; i < Model.MyProducts.Count; i++)
+{
+    <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
+    <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
+    for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count(); j++)
+    {
+        <div>
+
+            <a asp-action="EditProductInfo" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Edit Product</a>
+            <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Remove Product</a>
+            <p>@Model.MyProducts[i].name</p>
+            @*<p>@Model.MyProducts[i].ProductInfos[j].Size</p>*@
+            <p>@Model.MyProducts[i].ProductInfos[j].color</p>
+            @*<p>@Model.MyProducts[i].ProductInfos[j].Quantity</p>
+            <p>@Model.MyProducts[i].ProductInfos[j].SizeText</p>*@
+
+            ------------------------------------------------------------------------
+
+        </div>
+    }
+}

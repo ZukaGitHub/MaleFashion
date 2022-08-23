@@ -11,11 +11,16 @@ namespace WebApplicationCrud.Controllers
         private SignInManager<IdentityUser> _signInManager;
         private UserManager<IdentityUser> _userManager;
         private CRUDdbcontext _ctx;
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, CRUDdbcontext ctx)
+        private RoleManager<IdentityRole> _roleManager;
+        public AuthController(SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
+            CRUDdbcontext ctx,
+            RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _ctx = ctx;
+            _roleManager = roleManager;
         }
 
         [HttpGet]

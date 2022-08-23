@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+    <link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+    <div class="wrapper d-flex align-items-stretch mt-4">
+        <partial name="_AdministrationSidebar" >
+
+            <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
+                @if (Model.Any())
+                {
+                    <a asp-action="CreateRole" class="btn btn-dark mb-1" asp-controller="Administration">
+                        Create Role
+                    </a>
+                    foreach (var role in Model)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                Role Id:@role.Id
+
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title">@role.Name</div>
+                            </div>
+                            <div>
+                                <a class="btn btn-dark" asp-action="EditRole" asp-controller="Administration"
+                                   asp-route-id="@role.Id">Edit</a>
+                                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                                    <span id="confirmDeleteSpan_@role.Id" style="display:none">
+                                        <span>Are you sure you want to delete?</span>
+                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                        <a href="#" class="btn btn-primary"
+                                           onclick="confirmDelete('@role.Id', false)">No</a>
+                                    </span>
+
+                                    <span id="deleteSpan_@role.Id">
+                                        <a href="#" class="btn btn-danger"
+                                           onclick="confirmDelete('@role.Id', true)">Delete</a>
+                                    </span>
+                                </form>
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+
+                    <div class="card" style="width:100%">
+                        <div class="card-header">
+                            No Role To Display
+                        </div>
+                        <div>
+                            <h5 class="card-title">
+                                Click below button to create a role
+                            </h5>
+                            <a asp-action="CreateRole" asp-controller="Administration">
+                                CreateRole
+                            </a>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+            </div>
+    <script src="~/js/deleteConfirm.js">
+
+    </script>

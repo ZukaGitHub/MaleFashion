@@ -1,33 +1,49 @@
-﻿@model WebApplicationCrud.ViewModels.PanelIndexViewModel
+﻿
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Sidebar 04</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+</head>
+<body>
 
+    <div class="wrapper d-flex align-items-stretch">
+      <partial name="_AdministrationSidebar">
+       
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 pt-5">
+            <h2 class="mb-4">Sidebar #04</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            @for (int i = 0; i < Model.MyProducts.Count; i++)
+            {
+                <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
+                <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
+                for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count(); j++)
+                {
+                    <div>
 
+                        <a asp-action="EditProductInfo" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Edit Product</a>
+                        <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Remove Product</a>
+                        <p>@Model.MyProducts[i].name</p>
+                        @*<p>@Model.MyProducts[i].ProductInfos[j].Size</p>*@
+                        <p>@Model.MyProducts[i].ProductInfos[j].color</p>
+                        @*<p>@Model.MyProducts[i].ProductInfos[j].Quantity</p>
+                    <p>@Model.MyProducts[i].ProductInfos[j].SizeText</p>*@
 
+                        ------------------------------------------------------------------------
 
-
-
-
-
-<a asp-action="AddProductPanel" asp-controller="Panel">Add New Product</a>
-
-
-@for (int i = 0; i < Model.MyProducts.Count; i++)
-{
-    <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
-    <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
-    for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count(); j++)
-    {
-        <div>
-
-            <a asp-action="EditProductInfo" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Edit Product</a>
-            <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Remove Product</a>
-            <p>@Model.MyProducts[i].name</p>
-            @*<p>@Model.MyProducts[i].ProductInfos[j].Size</p>*@
-            <p>@Model.MyProducts[i].ProductInfos[j].color</p>
-            @*<p>@Model.MyProducts[i].ProductInfos[j].Quantity</p>
-            <p>@Model.MyProducts[i].ProductInfos[j].SizeText</p>*@
-
-            ------------------------------------------------------------------------
-
+                    </div>
+                }
+            }
         </div>
-    }
-}
+    </div>
+
+   
+</body>
+</html>
+

@@ -1,0 +1,39 @@
+﻿@model List<WebApplicationCrud.ViewModels.PanelVMs.UserRoleViewModel>
+@{
+
+    var roleId = ViewBag.roleId;
+}
+<link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+
+<div class="wrapper d-flex align-items-stretch">
+    <partial name="_AdministrationSidebar">
+
+        <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
+
+            <form action="/" method="post">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Add Or Remove Users From This Role</h2>
+                    </div>
+                    <div class="card-body">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <div class="form-check m-1">
+                                <input asp-for="@Model[i].UserName" type="hidden" name="name" value="" />
+                                <input asp-for="@Model[i].UserId" type="hidden" name="name" value="" />
+                                <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                                <label class="fomr-check-label" asp-for="@Model[i].IsSelected">
+                                    @Model[i].UserName
+                                </label>
+                            </div>
+                        }
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" name="name" value="Update" class="btn btn-primary" style="width:auto" />
+                        <a asp-action="EditRole" asp-route-id="@roleId" class="btn btn-primary" style="width:auto">Cancel</a>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>

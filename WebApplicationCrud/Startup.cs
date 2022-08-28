@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using System;
 using System.IO;
 using WebApplicationCrud.Data.FileManager;
 using WebApplicationCrud.Models;
@@ -40,10 +41,25 @@ namespace WebApplicationCrud
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
+                //options.SignIn.RequireConfirmedEmail = true;
+                //options.Lockout.MaxFailedAccessAttempts = 5;
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             }
             )
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<CRUDdbcontext>();
+                .AddEntityFrameworkStores<CRUDdbcontext>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddGoogle(options => {
+                options.ClientId = "728209250486-iqv794df2o311grvum0ls14pg451pg9k.apps.googleusercontent.com";
+                options.ClientSecret = "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";
+
+
+            }).AddFacebook(options =>
+            {
+                options.AppId = "487829986500552";
+                options.AppSecret = "688e5572747e0c333034189752fe0846";
+            }); 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IFileManager, FileManager>();
@@ -69,7 +85,7 @@ namespace WebApplicationCrud
             app.UseStaticFiles();
 
             app.UseCookiePolicy();
-          
+
 
             app.UseAuthentication();
             app.UseSession();

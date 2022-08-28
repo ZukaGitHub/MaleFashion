@@ -132,6 +132,8 @@ namespace WebApplicationCrud.Controllers
             return RedirectToAction("EditUser", new { Id = model.UserId });
 
         }
+      
+
         [HttpGet]
         public async Task<IActionResult> ManageUserRoles(string userId)
         {

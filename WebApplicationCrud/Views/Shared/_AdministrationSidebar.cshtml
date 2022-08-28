@@ -6,40 +6,43 @@
         </button>
     </div>
     @*<h1><a href="index.html" class="logo">Project Name</a></h1>*@
-    <ul class="list-unstyled components mb-5" clas="p-4 pt-5">
-        <li class="active">
-            <a asp-action="AddProductPanel" asp-controller="Panel"><span class="mr-3"></span>Add New Product</a>
-        </li>
-       
-        <li>
-            <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <span class="mr-3"></span>Role Manager
-            </a>
-            <ul class="collapse list-unstyled" id="pageSubmenu2">
-                <li>
-                    <a asp-controller="Administration" asp-action="GetRoles">
-                        <span class="fa fa-chevron-right mr-2"></span>Roles List
-                    </a>
-                </li>
-              
-            </ul>
-        </li>
-        <li>
-            <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                <span class="mr-3"></span>User Manager
-            </a>
-            <ul class="collapse list-unstyled" id="pageSubmenu3">
-                <li>
-                    <a asp-controller="Administration" asp-action="GetUsers">
-                        <span class="fa fa-chevron-right mr-2"></span>Users List
-                    </a>
-                </li>
-            
-            </ul>
-        </li>
-        <li>
-            <a href="#"><span class="fa fa-paper-plane mr-3"></span> Information</a>
-        </li>
-    </ul>
+<ul class="list-unstyled components mb-5" clas="p-4 pt-5">
+    <li class="active">
+        <a asp-action="AddProductPanel" asp-controller="Panel"><span class="mr-3"></span>Add New Product</a>
+    </li>
+
+    <li>
+        <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <span class="mr-3"></span>Role Manager
+        </a>
+        <ul class="collapse list-unstyled" id="pageSubmenu2">
+            <li>
+                <a asp-controller="Administration" asp-action="GetRoles">
+                    <span class="fa fa-chevron-right mr-2"></span>Roles List
+                </a>
+            </li>
+
+        </ul>
+    </li>
+    <li>
+        <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+            <span class="mr-3"></span>User Manager
+        </a>
+        <ul class="collapse list-unstyled" id="pageSubmenu3">
+            <li>
+                <a asp-controller="Administration" asp-action="GetUsers">
+                    <span class="fa fa-chevron-right mr-2"></span>Users List
+                </a>
+            </li>
+
+        </ul>
+    </li>
+    <li >
+        <a asp-action="ChangePassword" asp-controller="Auth"><span class="mr-3"></span>Change Password</a>
+    </li>
+    <li>
+        <a href="#"><span class="fa fa-paper-plane mr-3"></span> Information</a>
+    </li>
+</ul>
 
 </nav>

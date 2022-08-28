@@ -77,7 +77,7 @@
                             <span class="btn-show-pass">
                                 <i class="fa fa-eye"></i>
                             </span>
-                            <input class="input100"  asp-for="Password">
+                            <input class="input100" asp-for="Password">
                             <span class="focus-input100"></span>
                         </div>
 
@@ -98,13 +98,27 @@
 
                         <div class="container-login100-form-btn">
                             <input type="submit" class="login100-form-btn" value="Login">
-             
-                            <a class="login100-form-btn" asp-action="Register" asp-controller="Auth" >Sign up</a>
-                        </div>
 
+                            <a class="login100-form-btn" asp-action="Register" asp-controller="Auth">Sign up</a>
+                        </div>
+                        <div>
+                            <a asp-action="ForgotPassword">Forgot Password?</a>
+                        </div>
                     </form>
                 </div>
             </div>
+            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                <div>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <button type="submit" class="btn btn-primary"
+                                name="provider" value="@provider.Name"
+                                title="Log in using your @provider.DisplayName account">
+                            @provider.DisplayName
+                        </button>
+                    }
+                </div>
+            </form>
         </div>
 
 

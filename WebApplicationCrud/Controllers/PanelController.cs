@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
 using WebApplicationCrud.Models;
 using WebApplicationCrud.ViewModels;
@@ -85,7 +86,7 @@ namespace WebApplicationCrud.Controllers
 
 
         [HttpPost]
-        public IActionResult AddProductPanel(AddProductVMpost vm)
+        public async Task<IActionResult> AddProductPanel(AddProductVMpost vm)
         {
             var VMproducts = new List<Product>();
             if (vm != null)
@@ -122,7 +123,7 @@ namespace WebApplicationCrud.Controllers
                         
                         foreach (var Image in Productinfo.images)
                         {
-                            var imgname = _filemanager.SaveImage(Image);
+                            var imgname = await _filemanager.SaveImageAsync(Image);
                             var img = new Image()
                             {
                                 Imagename = imgname,

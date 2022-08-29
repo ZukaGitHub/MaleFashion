@@ -5,9 +5,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
+using WebApplicationCrud.Data.Repository;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.BlogModels;
 using WebApplicationCrud.ViewModels;
+using WebApplicationCrud.ViewModels.BlogVMs;
 
 namespace WebApplicationCrud.Controllers
 {
@@ -16,9 +20,16 @@ namespace WebApplicationCrud.Controllers
         private IFileManager _fileManager;
         private CRUDdbcontext _ctx;
         private readonly ShoppingCart _shoppingCart;
+        private IRepository _repo;
 
-        public HomeController(CRUDdbcontext ctx, IFileManager fileManager, ShoppingCart shoppingCart)
+        public HomeController(
+            CRUDdbcontext ctx, 
+            IFileManager fileManager, 
+            ShoppingCart shoppingCart,
+             IRepository repo
+            )
         {
+            _repo = repo; 
             _fileManager = fileManager;
             _ctx = ctx;
             _shoppingCart = shoppingCart;
@@ -322,6 +333,60 @@ namespace WebApplicationCrud.Controllers
             _ctx.SaveChanges();
             return RedirectToAction("Index");
         }
+        public IActionResult Index(int pageNumber, string category, string search)
+        {
+            if (pageNumber < 1)
+                return RedirectToAction("Index", new { pageNumber = 1, category });
+
+            var vm = _repo.GetAllPosts(pageNumber, category, search);
+
+            return View(vm);
+        }
+
+        public IActionResult Post(int id) =>
+            View(_repo.GetPost(id));
+
+        //[HttpGet("/Image/{image}")]
+        //[ResponseCache(CacheProfileName = "Monthly")]
+        //public IActionResult Image(string image) =>
+        //     new FileStreamResult(
+        //         _fileManager.ImageStream(image),
+        //         $"image/{image.Substring(image.LastIndexOf('.') + 1)}");
+
+        [HttpPost]
+        public async Task<IActionResult> Comment(CommentViewModel vm)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("Post", new { id = vm.PostId });
+
+            var post = _repo.GetPost(vm.PostId);
+            if (vm.MainCommentId == 0)
+            {
+                post.MainComments = post.MainComments ?? new List<MainComment>();
+
+                post.MainComments.Add(new MainComment
+                {
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                });
+
+                _repo.UpdatePost(post);
+            }
+            else
+            {
+                var comment = new SubComment
+                {
+                    MainCommentId = vm.MainCommentId,
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                };
+                _repo.AddSubComment(comment);
+            }
+
+            await _repo.SaveChangesAsync();
+
+            return RedirectToAction("Post", new { id = vm.PostId });
+        }
         [HttpGet]
         public IActionResult Update()
         {
@@ -351,12 +416,7 @@ namespace WebApplicationCrud.Controllers
             var item = _ctx.Forms.FirstOrDefault(x => x.id == id);
             return View(item);
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+     
         public List<Product> CustomFilter(string CategoryName, string BrandName, int? MaxPrice, string SelectedSize)
         {
 
@@ -384,6 +444,12 @@ namespace WebApplicationCrud.Controllers
 
 
          
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Models;
 
 namespace WebApplicationCrud

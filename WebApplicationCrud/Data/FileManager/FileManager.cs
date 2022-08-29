@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WebApplicationCrud.Data.FileManager
 {
@@ -21,8 +22,22 @@ namespace WebApplicationCrud.Data.FileManager
         {
             return new FileStream(Path.Combine(_imagePath, Image), FileMode.Open, FileAccess.Read);
         }
-
-        public string SaveImage(IFormFile Image)
+        public bool RemoveImage(string image)
+        {
+            try
+            {
+                var file = Path.Combine(_imagePath, image);
+                if (File.Exists(file))
+                    File.Delete(file);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        public async Task<string> SaveImageAsync(IFormFile Image)
         {
             try
             {
@@ -35,7 +50,7 @@ namespace WebApplicationCrud.Data.FileManager
                 var filename = $"img_{DateTime.Now.ToString("dd-mm-yy-hh-mm-ss")}{mime}";
                 using (var filestream = new FileStream(Path.Combine(save_path, filename), FileMode.Create))
                 {
-                    Image.CopyToAsync(filestream);
+                   await Image.CopyToAsync(filestream);
                 }
                 return filename;
 

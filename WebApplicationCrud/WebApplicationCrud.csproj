@@ -74,6 +74,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Blog\" />
     <Folder Include="wwwroot\img\product\Thumbnails\" />
     <Folder Include="wwwroot\img\product\ProductImages\" />
   </ItemGroup>

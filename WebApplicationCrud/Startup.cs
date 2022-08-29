@@ -1,3 +1,4 @@
+using Blog.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.IO;
+using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
+using WebApplicationCrud.Data.Repository;
 using WebApplicationCrud.Models;
 
 namespace WebApplicationCrud
@@ -63,6 +66,7 @@ namespace WebApplicationCrud
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IFileManager, FileManager>();
+            services.AddTransient<IRepository, Repository>();
             services.AddMemoryCache();
             services.AddSession();
         }

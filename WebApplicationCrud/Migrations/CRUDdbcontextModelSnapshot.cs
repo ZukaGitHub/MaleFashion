@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Models;
 
 namespace WebApplicationCrud.Migrations
@@ -184,6 +185,69 @@ namespace WebApplicationCrud.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebApplicationCrud.Models.BlogModels.MainComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<string>("Message");
+
+                    b.Property<int?>("PostId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("MainComment");
+                });
+
+            modelBuilder.Entity("WebApplicationCrud.Models.BlogModels.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Body");
+
+                    b.Property<string>("Category");
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Image");
+
+                    b.Property<string>("Tags");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("WebApplicationCrud.Models.BlogModels.SubComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<int>("MainCommentId");
+
+                    b.Property<string>("Message");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MainCommentId");
+
+                    b.ToTable("SubComments");
+                });
+
             modelBuilder.Entity("WebApplicationCrud.Models.Brand", b =>
                 {
                     b.Property<int>("id")
@@ -200,7 +264,7 @@ namespace WebApplicationCrud.Migrations
                         new { id = 1, name = "Hermes" },
                         new { id = 2, name = "Prada" },
                         new { id = 3, name = "Chanel" },
-                        new { id = 5, name = "Hermes" },
+                        new { id = 5, name = "Gucci" },
                         new { id = 6, name = "Armani" },
                         new { id = 7, name = "Other" }
                     );
@@ -589,6 +653,21 @@ namespace WebApplicationCrud.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("WebApplicationCrud.Models.BlogModels.MainComment", b =>
+                {
+                    b.HasOne("WebApplicationCrud.Models.BlogModels.Post")
+                        .WithMany("MainComments")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("WebApplicationCrud.Models.BlogModels.SubComment", b =>
+                {
+                    b.HasOne("WebApplicationCrud.Models.BlogModels.MainComment")
+                        .WithMany("SubComments")
+                        .HasForeignKey("MainCommentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

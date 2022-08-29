@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.BlogModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApplicationCrud.Models
+namespace WebApplicationCrud.Data.DbContext
 {
     public class CRUDdbcontext : IdentityDbContext
     {
@@ -24,6 +26,8 @@ namespace WebApplicationCrud.Models
         public DbSet<TextSize> TextSizes { get; set; }
         public DbSet<ProductInfo> ProductInfos { get; set; }
         public DbSet<ShoppingCartItem> shoppingCartItems { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<SubComment> SubComments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

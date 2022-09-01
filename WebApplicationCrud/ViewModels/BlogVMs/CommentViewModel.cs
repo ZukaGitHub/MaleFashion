@@ -15,5 +15,8 @@ namespace WebApplicationCrud.ViewModels.BlogVMs
         public int MainCommentId { get; set; }
         [Required]
         public string Message { get; set; }
+       
+        public string ImageName { get; set; }
+
     }
 }

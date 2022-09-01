@@ -6,16 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\js\node_modules\**" />
     <Compile Remove="wwwroot\node_modules\**" />
     <Compile Remove="wwwroot\vue-upload-multiple-image\**" />
-    <Content Remove="wwwroot\js\node_modules\**" />
     <Content Remove="wwwroot\node_modules\**" />
     <Content Remove="wwwroot\vue-upload-multiple-image\**" />
-    <EmbeddedResource Remove="wwwroot\js\node_modules\**" />
     <EmbeddedResource Remove="wwwroot\node_modules\**" />
     <EmbeddedResource Remove="wwwroot\vue-upload-multiple-image\**" />
-    <None Remove="wwwroot\js\node_modules\**" />
     <None Remove="wwwroot\node_modules\**" />
     <None Remove="wwwroot\vue-upload-multiple-image\**" />
   </ItemGroup>
@@ -34,16 +30,6 @@
     <None Include="wwwroot\fonts\ElegantIcons.svg" />
     <None Include="wwwroot\fonts\fontawesome-webfont.svg" />
     <None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
-    <None Include="wwwroot\js\bootstrap.min.js" />
-    <None Include="wwwroot\js\jquery-3.3.1.min.js" />
-    <None Include="wwwroot\js\jquery.countdown.min.js" />
-    <None Include="wwwroot\js\jquery.magnific-popup.min.js" />
-    <None Include="wwwroot\js\jquery.nice-select.min.js" />
-    <None Include="wwwroot\js\jquery.nicescroll.min.js" />
-    <None Include="wwwroot\js\jquery.slicknav.js" />
-    <None Include="wwwroot\js\main.js" />
-    <None Include="wwwroot\js\mixitup.min.js" />
-    <None Include="wwwroot\js\owl.carousel.min.js" />
     <None Include="wwwroot\sass\style.scss" />
     <None Include="wwwroot\sass\_about.scss" />
     <None Include="wwwroot\sass\_base.scss" />
@@ -74,9 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Blog\" />
-    <Folder Include="wwwroot\img\product\Thumbnails\" />
+    <Folder Include="wwwroot\img\blog\" />
     <Folder Include="wwwroot\img\product\ProductImages\" />
+    <Folder Include="wwwroot\img\product\Thumbnails\" />
   </ItemGroup>
 
 </Project>

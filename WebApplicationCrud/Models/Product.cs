@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebApplicationCrud.Models.BlogModels;
 
 namespace WebApplicationCrud.Models
 {
@@ -11,6 +12,7 @@ namespace WebApplicationCrud.Models
         public string BrandName { get; set; }
         public List<Tag> Tags { get; set; }
         public List<ProductInfo> ProductInfos { get; set; }
+        public List<MainComment> Comments { get; set; }
         public int? SalePercentage { get; set; }
         public string OwnerId { get; set; }
         public int stock { get; set; }

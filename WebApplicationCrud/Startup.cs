@@ -1,4 +1,4 @@
-using Blog.Data.Repository;
+using WebApplicationCrud.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +12,7 @@ using System;
 using System.IO;
 using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
-using WebApplicationCrud.Data.Repository;
+
 using WebApplicationCrud.Models;
 
 namespace WebApplicationCrud

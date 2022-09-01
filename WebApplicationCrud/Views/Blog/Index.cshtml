@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Post>
+
+
+@{ }
+
+<div class="wrapper d-flex align-items-stretch">
+    <partial name="_AdministrationSidebar">
+
+        <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
+            <h2>Admin Panel!</h2>
+            <a asp-controller="Blog" asp-action="Edit">
+                Add New Post
+            </a>
+
+            <div>
+                <ul>
+                    @foreach (var post in Model)
+                    {
+        <li>
+            @post.Title
+            -
+            <a asp-controller="Blog" asp-action="Edit" asp-route-id="@post.Id">
+                Edit
+            </a>
+            -
+            <a asp-controller="Blog" asp-action="Remove" asp-route-id="@post.Id">
+                Remove
+            </a>
+        </li>
+}
+                </ul>
+            </div>
+            </div>
+</div>

@@ -1,4 +1,6 @@
-﻿<nav id="sidebar">
+﻿<link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+
+<nav id="sidebar">
     <div class="custom-menu">
         <button type="button" id="sidebarCollapse" class="btn btn-primary">
             <i class="fa fa-bars"></i>
@@ -7,8 +9,14 @@
     </div>
     @*<h1><a href="index.html" class="logo">Project Name</a></h1>*@
 <ul class="list-unstyled components mb-5" clas="p-4 pt-5">
+    <li>
+        <a asp-action="Index" asp-controller="Panel"><span class="mr-3"></span>Main Page</a>
+    </li>
     <li class="active">
         <a asp-action="AddProductPanel" asp-controller="Panel"><span class="mr-3"></span>Add New Product</a>
+    </li>
+    <li>
+        <a asp-action="Index" asp-controller="Blog"><span class="mr-3"></span>Blog Manager</a>
     </li>
 
     <li>
@@ -37,7 +45,7 @@
 
         </ul>
     </li>
-    <li >
+    <li>
         <a asp-action="ChangePassword" asp-controller="Auth"><span class="mr-3"></span>Change Password</a>
     </li>
     <li>
@@ -46,3 +54,4 @@
 </ul>
 
 </nav>
+<script src="~/js/mainPanel.js"></script>

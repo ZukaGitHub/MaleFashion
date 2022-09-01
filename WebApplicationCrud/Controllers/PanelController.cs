@@ -120,10 +120,10 @@ namespace WebApplicationCrud.Controllers
                         var tempProductInfo = new ProductInfo();
                         tempProductInfo.color = Productinfo.color;
                         tempProductInfo.ThumbnailIndex = Productinfo.Thumbnail;
-                        
+                        var path = "product";
                         foreach (var Image in Productinfo.images)
                         {
-                            var imgname = await _filemanager.SaveImageAsync(Image);
+                            var imgname = await _filemanager.SaveImageAsync(Image,path);
                             var img = new Image()
                             {
                                 Imagename = imgname,
@@ -159,6 +159,7 @@ namespace WebApplicationCrud.Controllers
                         NewPrice = (vm.productVms[i].price * (100 - salepercentage) / 100),
                         Tags = Tags,
                         OwnerId = _userManager.GetUserId(HttpContext.User)
+                     
 
 
 

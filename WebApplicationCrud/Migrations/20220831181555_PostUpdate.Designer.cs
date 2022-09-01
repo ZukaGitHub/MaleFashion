@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationCrud.Data.DbContext;
 
 namespace WebApplicationCrud.Migrations
 {
     [DbContext(typeof(CRUDdbcontext))]
-    partial class CRUDdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20220831181555_PostUpdate")]
+    partial class PostUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,25 +192,15 @@ namespace WebApplicationCrud.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Author");
-
-                    b.Property<string>("AuthorId");
-
                     b.Property<DateTime>("Created");
-
-                    b.Property<string>("ImageName");
 
                     b.Property<string>("Message");
 
                     b.Property<int?>("PostId");
 
-                    b.Property<int?>("Productid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("Productid");
 
                     b.ToTable("MainComment");
                 });
@@ -250,13 +242,7 @@ namespace WebApplicationCrud.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Author");
-
-                    b.Property<string>("AuthorId");
-
                     b.Property<DateTime>("Created");
-
-                    b.Property<string>("ImageName");
 
                     b.Property<int>("MainCommentId");
 
@@ -682,10 +668,6 @@ namespace WebApplicationCrud.Migrations
                     b.HasOne("WebApplicationCrud.Models.BlogModels.Post")
                         .WithMany("MainComments")
                         .HasForeignKey("PostId");
-
-                    b.HasOne("WebApplicationCrud.Models.Product")
-                        .WithMany("Comments")
-                        .HasForeignKey("Productid");
                 });
 
             modelBuilder.Entity("WebApplicationCrud.Models.BlogModels.SubComment", b =>

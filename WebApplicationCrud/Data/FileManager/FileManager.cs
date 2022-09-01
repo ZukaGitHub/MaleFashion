@@ -10,11 +10,15 @@ namespace WebApplicationCrud.Data.FileManager
     {
         private string _imagePath;
         private string _ThumbnailPath;
+        private string _blogImagePath;
+       
 
         public FileManager(IConfiguration config)
         {
             _imagePath = config["Path:Images"];
             _ThumbnailPath = config["Path:Thumbnails"];
+            _blogImagePath = config["Path:BlogImages"];
+          
 
         }
 
@@ -37,11 +41,19 @@ namespace WebApplicationCrud.Data.FileManager
                 return false;
             }
         }
-        public async Task<string> SaveImageAsync(IFormFile Image)
+        public async Task<string> SaveImageAsync(IFormFile Image,string path)
         {
+            if (path != "blog")
+            {
+                path = _imagePath;
+            }
+            else
+            {
+                path = _blogImagePath;
+            }
             try
             {
-                var save_path = Path.Combine(_imagePath);
+                var save_path = Path.Combine(path);
                 if (!Directory.Exists(save_path))
                 {
                     Directory.CreateDirectory(save_path);
@@ -66,7 +78,7 @@ namespace WebApplicationCrud.Data.FileManager
             return new FileStream(Path.Combine(_ThumbnailPath, Thumbnails), FileMode.Open, FileAccess.Read);
         }
 
-        public string SaveThumbnail(IFormFile Thumbnail)
+        public string SaveThumbnail(IFormFile Thumbnail,string path)
         {
             try
             {

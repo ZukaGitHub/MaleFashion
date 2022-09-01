@@ -66,6 +66,7 @@ namespace WebApplicationCrud.Controllers
                 Category = vm.Category,
                 Tags = vm.Tags,
             };
+            string path = "blog";
 
             if (vm.Image == null)
                 post.Image = vm.CurrentImage;
@@ -74,7 +75,7 @@ namespace WebApplicationCrud.Controllers
                 if (!string.IsNullOrEmpty(vm.CurrentImage))
                     _fileManager.RemoveImage(vm.CurrentImage);
 
-                post.Image = await _fileManager.SaveImageAsync(vm.Image);
+                post.Image = await _fileManager.SaveImageAsync(vm.Image,path);
             }
 
             if (post.Id > 0)

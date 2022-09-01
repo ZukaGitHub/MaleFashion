@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationCrud.Data.DbContext;
 
 namespace WebApplicationCrud.Migrations
 {
     [DbContext(typeof(CRUDdbcontext))]
-    partial class CRUDdbcontextModelSnapshot : ModelSnapshot
+    [Migration("20220901170214_CommentsProduct")]
+    partial class CommentsProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,13 +192,7 @@ namespace WebApplicationCrud.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Author");
-
-                    b.Property<string>("AuthorId");
-
                     b.Property<DateTime>("Created");
-
-                    b.Property<string>("ImageName");
 
                     b.Property<string>("Message");
 
@@ -250,13 +246,7 @@ namespace WebApplicationCrud.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Author");
-
-                    b.Property<string>("AuthorId");
-
                     b.Property<DateTime>("Created");
-
-                    b.Property<string>("ImageName");
 
                     b.Property<int>("MainCommentId");
 

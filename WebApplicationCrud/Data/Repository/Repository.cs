@@ -9,8 +9,9 @@ using WebApplicationCrud.Models.BlogModels;
 using WebApplicationCrud.ViewModels.BlogVMs;
 using WebApplicationCrud.Data.Repository;
 using WebApplicationCrud.Data.DbContext;
+using WebApplicationCrud.Data.Helpers;
 
-namespace Blog.Data.Repository
+namespace WebApplicationCrud.Data.Repository
 {
     public class Repository : IRepository
     {
@@ -36,9 +37,11 @@ namespace Blog.Data.Repository
             string category,
             string search)
         {
-            Func<Post, bool> InCategory = (post) => { return post.Category.ToLower().Equals(category.ToLower()); };
+            Func<Post, bool> InCategory = 
+                (post) => 
+                { return post.Category.ToLower().Equals(category.ToLower()); };
 
-            int pageSize = 5;
+            int pageSize = 3;
             int skipAmount = pageSize * (pageNumber - 1);
 
             var query = _ctx.Posts.AsNoTracking().AsQueryable();
@@ -59,13 +62,13 @@ namespace Blog.Data.Repository
                 PageNumber = pageNumber,
                 PageCount = pageCount,
                 NextPage = postsCount > skipAmount + pageSize,
-                //Pages = PageHelper.PageNumbers(pageNumber, pageCount).ToList(),
-                //Category = category,
-                //Search = search,
-                //Posts = query
-                //    .Skip(skipAmount)
-                //    .Take(pageSize)
-                //    .ToList()
+                Pages = PageHelper.PageNumbers(pageNumber, pageCount).ToList(),
+                Category = category,
+                Search = search,
+                Posts = query
+                    .Skip(skipAmount)
+                    .Take(pageSize)
+                    .ToList()
             };
         }
 
@@ -85,6 +88,10 @@ namespace Blog.Data.Repository
         public void UpdatePost(Post post)
         {
             _ctx.Posts.Update(post);
+        }
+        public void UpdateProduct(Product product)
+        {
+            _ctx.Products.Update(product);
         }
 
         public async Task<bool> SaveChangesAsync()

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
@@ -102,13 +103,78 @@ namespace WebApplicationCrud.Controllers
 
             return View(ViewValues);
         }
-        public IActionResult blog()
+        public IActionResult Blog(int pageNumber, string category, string search)
         {
-            return View();
+            if (pageNumber < 1)
+                return RedirectToAction("Blog", new { pageNumber = 1, category });
+
+            var vm = _repo.GetAllPosts(pageNumber, category, search);
+
+            return View(vm);
         }
-        public IActionResult blogdetails()
+        public IActionResult Blogdetails(int id)
+        { 
+            var post = _repo.GetPost(id);
+
+
+
+
+            var postVm = new BlogDetailsViewModel()
+            {
+                Author = post.Author,
+                Body = post.Body,
+                Category = post.Category,
+                CreationDate = post.Created,
+                Description = post.Description,
+                Image = post.Image,
+                Quote = post.Qoute,
+                Id = post.Id,
+                Comments = post.MainComments == null ? null : post.MainComments.ToList(),
+                QuoteAuthor=post.QouteAuthor,
+                Tags=post.Tags,
+                Title=post.Title,
+               
+            };
+            return View(postVm);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Comment(CommentViewModel vm)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return RedirectToAction("BlogDetails", new { id = vm.PostId });
+
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = User.Identity.Name;
+            var post = _repo.GetPost(vm.PostId);
+            if (vm.MainCommentId == 0)
+            {
+                post.MainComments = post.MainComments ?? new List<MainComment>();
+
+                post.MainComments.Add(new MainComment
+                {
+                    Author = userName,
+                    AuthorId=userId,
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                }) ;
+
+                _repo.UpdatePost(post);
+            }
+            else
+            {
+                var comment = new SubComment
+                {
+                    MainCommentId = vm.MainCommentId,
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                };
+                _repo.AddSubComment(comment);
+            }
+
+            await _repo.SaveChangesAsync();
+
+            return RedirectToAction("BlogDetails", new { id = vm.PostId });
         }
         public IActionResult shop(string InSale, string SortOrder, ShopViewModel ViewModel, int pageNumber = 1)
         {
@@ -333,15 +399,7 @@ namespace WebApplicationCrud.Controllers
             _ctx.SaveChanges();
             return RedirectToAction("Index");
         }
-        public IActionResult Index(int pageNumber, string category, string search)
-        {
-            if (pageNumber < 1)
-                return RedirectToAction("Index", new { pageNumber = 1, category });
-
-            var vm = _repo.GetAllPosts(pageNumber, category, search);
-
-            return View(vm);
-        }
+       
 
         public IActionResult Post(int id) =>
             View(_repo.GetPost(id));
@@ -353,40 +411,7 @@ namespace WebApplicationCrud.Controllers
         //         _fileManager.ImageStream(image),
         //         $"image/{image.Substring(image.LastIndexOf('.') + 1)}");
 
-        [HttpPost]
-        public async Task<IActionResult> Comment(CommentViewModel vm)
-        {
-            if (!ModelState.IsValid)
-                return RedirectToAction("Post", new { id = vm.PostId });
-
-            var post = _repo.GetPost(vm.PostId);
-            if (vm.MainCommentId == 0)
-            {
-                post.MainComments = post.MainComments ?? new List<MainComment>();
-
-                post.MainComments.Add(new MainComment
-                {
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                });
-
-                _repo.UpdatePost(post);
-            }
-            else
-            {
-                var comment = new SubComment
-                {
-                    MainCommentId = vm.MainCommentId,
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                };
-                _repo.AddSubComment(comment);
-            }
-
-            await _repo.SaveChangesAsync();
-
-            return RedirectToAction("Post", new { id = vm.PostId });
-        }
+       
         [HttpGet]
         public IActionResult Update()
         {

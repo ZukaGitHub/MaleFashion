@@ -1,5 +1,7 @@
 ﻿@model BlogDetailsViewModel
 
+
+    <script src="~/js/mainPanel.js"></script>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -21,7 +23,7 @@
                         <ul>
                             <li>By @Model.Author</li>
                             <li>@Model.CreationDate</li>
-                            <li>8 Comments</li>
+                            <li>@Model.CommentCount Comments</li>
                         </ul>
                     </div>
                 </div>
@@ -64,7 +66,7 @@
 
                         </div>
 
-                    
+
                         <div class="blog__details__option">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
@@ -73,7 +75,7 @@
                                             <img src="~/img/blog/details/blog-author.jpg" alt="">
                                         </div>
                                         <div class="blog__details__author__text">
-                                            <h5>Aiden Blair</h5>
+                                            <h5>@Model.Author</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -102,53 +104,92 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                    <div class="comment-section">
-                        
-                            @{ await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { PostId = this.Model.Id, MainCommentId = 0 }); }
-                
 
 
-
-                        @if (Model.Comments != null)
-                        {
-                            @foreach (var c in Model.Comments)
+                        <nav class="comment-section">
+                            @if (User.Identity.IsAuthenticated)
                             {
-                                <div class="Comment">
-                                    <span><img src="" class="rounded-circle" /></span>
-                                    <a href="#"><span><i class="fa fa-reply"></i> reply</span></a>
-                                    <p>
 
-                                        @c.Message --- @c.Created
-                                    </p>
-                                </div>
-                                <div id="SubComments" style="margin-left: 50px;">
-
-                                    @{ await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id }); }
-
-                                    @foreach (var sc in c.SubComments)
-                                    {
-                                        <span><img src="" class="rounded-circle" /></span>
-                                        <div class="Comment">
-                                            <p>
-                                                @sc.Message --- @sc.Created
-                                            </p>
-                                        </div>
-                                    }
-                                </div>
-                                        }
-                                        }
-                    </div>
+                                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = true, IsProduct = false });
                             }
-                        else
-                        {
-                            <div>
-                                <a asp-action="Login" asp-controller="Auth">Sign In</a> to comment on this awesome post!
-                            </div>}
+                            else
+                            {
+
+                                <div>
+                                    <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this awesome post!
+
+                                </div>
+                            }
+
+
+                            @if (Model.Comments != null)
+                            {
+                                @foreach (var comment in Model.Comments)
+                                {
+
+                                    <div class="Comment">
+
+                                        <span><img src="" class="rounded-circle" /></span>
+                                        <span style="font-weight:bold">@comment.Author</span>
+                                        <span style="font-style:italic">@comment.Created</span>
+                                        <button id="@comment.Id" class="replyButton" onclick="SubCommentsCollapse(this.id)">
+                                            <span><i class="fa fa-reply"></i> reply</span>
+                                        </button>
+                                        <p>
+                                            @comment.Message
+                                        </p>
+                                    </div>
+                                    <div class="subComment inactiveSection" id="subComments+@comment.Id" style="margin-left: 50px;">
+
+
+
+
+                                        @foreach (var subComment in comment.SubComments)
+                                        {
+                                            <div class="Comment">
+                                                <span><img src="" class="rounded-circle" /></span>
+                                                <span style="font-weight:bold">@subComment.Author</span>
+                                                <span style="font-style:italic">@subComment.Created</span>
+
+                                                <p>
+                                                    @subComment.Message
+                                                </p>
+                                            </div>
+                                        }
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = comment.Id, IsPost = true, IsProduct = false });
+                                        }
+                                        else
+                                        {
+                                            <div>
+                                                <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this post
+
+                                            </div>
+
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = 0, IsPost = true, IsProduct = false });
+                                }
+                                else
+                                {
+                                    <div>
+                                        <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this post
+
+                                    </div>
+
+                                }
+
+                            }
+                        </nav>
                     </div>
-                       @*<div class="blog__details__comment">
+                    @*<div class="blog__details__comment">
                             <h4>Leave A Comment</h4>
                             <form action="#">
                                 <div class="row">
@@ -166,17 +207,23 @@
                                         <button type="submit" class="site-btn">Post Comment</button>
                                     </div>
                                 </div>
-                            </form> 
+                            </form>
                         </div>*@
-                    </div>
                 </div>
             </div>
         </div>
+
     </section>
-   
- 
-    
-  
+
+
+
+
 </body>
 
 </html>
+<script>
+    function SubCommentsCollapse(id) {
+        var subComment = document.getElementById("subComments+"+id);
+        subComment.classList.toggle("inactiveSection");
+    }
+</script>

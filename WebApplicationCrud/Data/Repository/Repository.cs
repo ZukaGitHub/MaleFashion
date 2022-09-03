@@ -79,6 +79,12 @@ namespace WebApplicationCrud.Data.Repository
                     .ThenInclude(mc => mc.SubComments)
                 .FirstOrDefault(p => p.Id == id);
         }
+        public Product GetProduct(int id)
+        {
+            return _ctx.Products.Include(p => p.Comments)
+                    .ThenInclude(mc => mc.SubComments)
+                .FirstOrDefault(p => p.id == id);
+        }
 
         public void RemovePost(int id)
         {

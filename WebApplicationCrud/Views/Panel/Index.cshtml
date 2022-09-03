@@ -23,7 +23,7 @@
             {
                 <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
                 <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
-                for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count(); j++)
+                for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count; j++)
                 {
                     <div>
 

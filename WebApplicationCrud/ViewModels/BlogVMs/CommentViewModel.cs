@@ -10,7 +10,11 @@ namespace WebApplicationCrud.ViewModels.BlogVMs
     public class CommentViewModel
     {
         [Required]
-        public int PostId { get; set; }
+        public int Id { get; set; }
+        [Required]
+        public bool IsPost { get; set; }
+        [Required]
+        public bool IsProduct { get; set; }
         [Required]
         public int MainCommentId { get; set; }
         [Required]

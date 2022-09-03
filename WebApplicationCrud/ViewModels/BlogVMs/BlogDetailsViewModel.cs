@@ -20,6 +20,7 @@ namespace WebApplicationCrud.ViewModels.BlogVMs
         public string Tags { get; set; } = "";
         public string Category { get; set; } = "";
         public string Image { get; set; } = "";
+        public int  CommentCount { get; set; }
         public List<RelatedBlogsViewModel> RelatedBlogs { get; set; }
 
     }

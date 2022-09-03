@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.BlogModels;
 
 namespace WebApplicationCrud.ViewModels
 {
     public class ProductPanelViewModel
     {
-        public int? ProductId { get; set; }
+        public int ProductId { get; set; }
         public List<RelatedProductViewModel> RelatedProducts { get; set; }
         public string brand { get; set; }
         public List<Image> Images { get; set; }
@@ -13,6 +14,7 @@ namespace WebApplicationCrud.ViewModels
         public string name { get; set; }
         public float price { get; set; }
         public string Tags { get; set; }
+        public List<MainComment> Comments { get; set; }
 
         public string category { get; set; }
         public string desc { get; set; }

@@ -92,6 +92,7 @@ namespace WebApplicationCrud.Controllers
                 price = product.price,
                 //RelatedProducts = RelatedProductList,
                 category = product.CategoryName,
+                Comments = product.Comments == null ? null : product.Comments.ToList(),
                 Tags = AggregateTags,
                 Images = Images,
                 name = product.name,
@@ -118,7 +119,23 @@ namespace WebApplicationCrud.Controllers
 
 
 
+            int CommentCount = 0;
+            if (post.MainComments!=null && post.MainComments.Count>0)
+            {
+                CommentCount += post.MainComments.Count;
 
+                foreach(var maincomments in post.MainComments)
+                {
+                    if(maincomments.SubComments!=null && maincomments.SubComments.Count > 0)
+                    {
+                        CommentCount += maincomments.SubComments.Count;
+                    }
+                   
+
+                }
+               
+
+            }
             var postVm = new BlogDetailsViewModel()
             {
                 Author = post.Author,
@@ -133,7 +150,7 @@ namespace WebApplicationCrud.Controllers
                 QuoteAuthor=post.QouteAuthor,
                 Tags=post.Tags,
                 Title=post.Title,
-               
+                CommentCount=CommentCount
             };
             return View(postVm);
         }
@@ -141,40 +158,92 @@ namespace WebApplicationCrud.Controllers
         public async Task<IActionResult> Comment(CommentViewModel vm)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction("BlogDetails", new { id = vm.PostId });
+                if (vm.IsPost)
+                {
+                    return RedirectToAction("BlogDetails", new { id = vm.Id });
+                }
+            if (vm.IsProduct)
+            {
+                return RedirectToAction("ProductPanel", new { id = vm.Id });
+            }
+                
 
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userName = User.Identity.Name;
-            var post = _repo.GetPost(vm.PostId);
-            if (vm.MainCommentId == 0)
+
+
+            if (vm.IsPost)
             {
-                post.MainComments = post.MainComments ?? new List<MainComment>();
-
-                post.MainComments.Add(new MainComment
+                var post = _repo.GetPost(vm.Id);
+                if (vm.MainCommentId == 0)
                 {
-                    Author = userName,
-                    AuthorId=userId,
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                }) ;
+                    post.MainComments = post.MainComments ?? new List<MainComment>();
 
-                _repo.UpdatePost(post);
+                    post.MainComments.Add(new MainComment
+                    {
+                        Author = userName,
+                        AuthorId = userId,
+                        Message = vm.Message,
+                        Created = DateTime.Now,
+                    });
+
+                    _repo.UpdatePost(post);
+                }
+                else
+                {
+                    var comment = new SubComment
+                    {
+                        MainCommentId = vm.MainCommentId,
+                        Message = vm.Message,
+                        Author = userName,
+                        Created = DateTime.Now,
+                    };
+                    _repo.AddSubComment(comment);
+                }
+
+                await _repo.SaveChangesAsync();
+
+                return RedirectToAction("BlogDetails", new { id = vm.Id });
+            }
+            if (vm.IsProduct)
+            {
+                var product = _repo.GetProduct(vm.Id);
+                if (vm.MainCommentId == 0)
+                {
+                    product.Comments = product.Comments ?? new List<MainComment>();
+
+                    product.Comments.Add(new MainComment
+                    {
+                        Author = userName,
+                        AuthorId = userId,
+                        Message = vm.Message,
+                        Created = DateTime.Now,
+                    });
+
+                    _repo.UpdateProduct(product);
+                }
+                else
+                {
+                    var comment = new SubComment
+                    {
+                        MainCommentId = vm.MainCommentId,
+                        Message = vm.Message,
+                        Author = userName,
+                        Created = DateTime.Now,
+                    };
+                    _repo.AddSubComment(comment);
+                }
+
+                await _repo.SaveChangesAsync();
+
+                return RedirectToAction("ProductPanel", new { id = vm.Id });
+
             }
             else
             {
-                var comment = new SubComment
-                {
-                    MainCommentId = vm.MainCommentId,
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                };
-                _repo.AddSubComment(comment);
+                return RedirectToAction("Index");
             }
-
-            await _repo.SaveChangesAsync();
-
-            return RedirectToAction("BlogDetails", new { id = vm.PostId });
         }
         public IActionResult shop(string InSale, string SortOrder, ShopViewModel ViewModel, int pageNumber = 1)
         {
@@ -332,11 +401,7 @@ namespace WebApplicationCrud.Controllers
         {
             return View();
         }
-        public IActionResult shopdetails()
-        {
-            return View();
-        }
-
+     
         public IActionResult shoppingcart()
         {
             return View();
@@ -344,13 +409,7 @@ namespace WebApplicationCrud.Controllers
 
         public IActionResult Index()
         {
-
-            var forms = _ctx.Forms.ToList();
-
-
-
-
-            return View(forms);
+           return View();
         }
         [HttpGet("img/product/ProductImages/{Image}")]
         public IActionResult Image(string Image)
@@ -364,43 +423,10 @@ namespace WebApplicationCrud.Controllers
             var mime = Thumbnail.Substring(Thumbnail.LastIndexOf('.') + 1);
             return new FileStreamResult(_fileManager.Thumbnailstream(Thumbnail), $"Thumbnails/{mime} ");
         }
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(FormViewModel vm)
-        {
-            Form form = new Form
-            {
-                id = vm.id,
-                Name = vm.Name,
-                Email = vm.Email,
-            };
-            _ctx.Add(form);
-            await _ctx.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+      
 
 
-        public IActionResult Delete(int? id)
-        {
-            var forms = _ctx.Forms.ToList();
-            if (forms.FirstOrDefault(x => x.id == id) == null)
-            {
-                return View("bla");
-            }
-            else
-            {
-
-                _ctx.Forms.Remove(_ctx.Forms.FirstOrDefault(x => x.id == id));
-            }
-            _ctx.SaveChanges();
-            return RedirectToAction("Index");
-        }
-       
-
+      
         public IActionResult Post(int id) =>
             View(_repo.GetPost(id));
 
@@ -411,37 +437,7 @@ namespace WebApplicationCrud.Controllers
         //         _fileManager.ImageStream(image),
         //         $"image/{image.Substring(image.LastIndexOf('.') + 1)}");
 
-       
-        [HttpGet]
-        public IActionResult Update()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Update(FormViewModel vm)
-        {
-            Form form = new Form
-            {
-                id = vm.id,
-                Name = vm.Name,
-                Email = vm.Email,
-
-            };
-
-            _ctx.Forms.Update(form);
-
-
-
-            await _ctx.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        public IActionResult Read(int? id)
-        {
-
-            var item = _ctx.Forms.FirstOrDefault(x => x.id == id);
-            return View(item);
-        }
-     
+            
         public List<Product> CustomFilter(string CategoryName, string BrandName, int? MaxPrice, string SelectedSize)
         {
 

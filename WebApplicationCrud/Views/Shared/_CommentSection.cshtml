@@ -5,9 +5,11 @@
 
 <div>
     <form method="post" asp-controller="Home" asp-action="Comment">
-        <input asp-for="PostId" type="hidden" />
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="IsPost" type="hidden" />
+        <input asp-for="IsProduct" type="hidden" />
         <input asp-for="MainCommentId" type="hidden" />
-        <textarea class="Comment" asp-for="Message"></textarea>
+        <textarea class="Comment" placeholder="Write your comment here" asp-for="Message"></textarea>
         <span asp-validation-for="Message"></span>
         <button class="btn btn-dark" type="submit">Comment</button>
     </form>

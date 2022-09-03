@@ -1,299 +1,216 @@
 ﻿
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"  />
-
-</head>
-
 <body>
     <script src="~/js/VueComponents/DropzoneC.js"></script>
-    <div class="VueModel">
-        <div id="preloder">
-            <div class="loader"></div>
-        </div>
-        <button class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductInfo()">
+    <div class="wrapper d-flex align-items-stretch">
+        <partial name="_AdministrationSidebar">
+            <div id="content" class="p-4 p-md-5 pt-5">
+                <div class="VueModel">
+                    <div id="preloder">
+                        <div class="loader"></div>
+                    </div>
+                    <button class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductInfo()">
+                        Add New ProductInfo
+                    </button>
+                    <div v-for="(productInfo,Index) in ProductInfos">
+                        <button v-on:click="sendToServer">Submit outta form</button>                  
+                        <div>
 
-            Add New ProductInfo
-        </button>
-        <div v-for="(productInfo,Index) in ProductInfos">
+                            @{
+                                List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
+                                List<Category> Categories = ViewData["Categories"] as List<Category>;
+                            }
 
+                            <ul>
+                                @for (int i = 0; i < Brandss.Count; i++)
+                                {
+                                    <li>
+                                        <label>@Brandss[i].name</label>
+                                        <input type="radio" value="@Brandss[i].name" v-model="productInfo.Brand" />
+                                    </li>
 
-
-            <button v-on:click="sendToServer">Submit outta form</button>
-            @*<form asp-action="AddProductPanel" asp-controller="Panel" method="post" enctype="multipart/form-data">*@
-
-
-
-
-        <div class="ProductInfo">
-
-            @{
-                List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
-                List<Category> Categories = ViewData["Categories"] as List<Category>;
-            }
-
-            <ul class="Brands">
-                @for (int i = 0; i < Brandss.Count; i++)
-                {
-                    <li>
-                        <label>@Brandss[i].name</label>
-                        <input type="radio" value="@Brandss[i].name" v-model="productInfo.Brand" />
-                    </li>
-
-                }
-            </ul>
-           
-
-            <div>
-                <h1>SalePercentage</h1>
-                <input type="number" v-model="productInfo.salePercentage" />
-            </div>
-
-            <h1>Categories</h1>
-            <ul class="Categories">
-
-                @for (int i = 0; i < Categories.Count; i++)
-                {
-                    <li>
-                        <label>@Categories[i].name</label>
-                        <input type="radio" value="@Categories[i].name" v-model="productInfo.Category" />
-                    </li>
-
-                }
-            </ul>
+                                }
+                            </ul>
 
 
+                            <div>
+                                <h1>SalePercentage</h1>
+                                <input type="number" v-model="productInfo.salePercentage" />
+                            </div>
+
+                            <h1>Categories</h1>
+                            <ul>
+
+                                @for (int i = 0; i < Categories.Count; i++)
+                                {
+                                    <li>
+                                        <label>@Categories[i].name</label>
+                                        <input type="radio" value="@Categories[i].name" v-model="productInfo.Category" />
+                                    </li>
+
+                                }
+                            </ul>
+                            <div>
+                                <div v-for="(ProductDetail,Indexx) in productInfo.ProductDetails">
+
+                                    <table>
+
+                                        <tr>
+                                            <th>
+                                                {{Index}}
+                                                Colors-{{Indexx}}
+                                            </th>
+                                            <th @*v-if="ProductDetail.Color.length>0"*@>
+                                                Sizes
+
+                                            </th>
+                                            <th @*v-if="ProductDetail.Sizes.length>0"*@>
+                                                Stock
+                                            </th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div>
+                                                    <span class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductDetail(Index)">
+
+                                                        +
+                                                    </span>
+                                                    <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
+
+                                                    <label>Color</label>
+                                                    <input v-model="ProductDetail.Color" type="color" v-on:keyup.enter="ProductDetail.Index=Indexx" />
+
+                                                </div>
+                                            </td>
+                                            <td @*v-if="ProductDetail.Color.length>0"*@>
+                                                <div>
+                                                    <div class="AdminPanelSizes">
+
+
+                                                        @for (int j = 0; j < Model.Sizes.Count; j++)
+                                                        {
+                                                            <label>
+                                                                <input type="checkbox"
+                                                                       value="@Model.Sizes[j].Text" v-model="ProductDetail.Sizes"
+                                                                       v-on:change="PopulateStocks(Index,Indexx,this.event)" />
+
+                                                                <span>@Model.Sizes[j].Text</span>
+                                                            </label>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td @*v-if="ProductDetail.Sizes.length>0"*@>
+                                                <div>
+                                                    @*Computed Properties biiiiiiitch*@
+                                                    <div>
+                                                        <div v-for="(sizes,indexxx) in ProductDetail.Sizes">
+
+
+                                                            {{sizes}}-<input type="number" v-on:input="ProductDetail.stock[indexxx].SizeName=sizes"
+                                                                             v-model="ProductDetail.stock[indexxx].number" />
 
 
 
+                                                        </div>
+                                                    </div>
+                                                </div>
 
+                                            </td>
+                                            @*multiple instances of same components updates only one key*@
+                                            <td @*v-if="ProductDetail.stock.length>0"*@>
 
+                                                @*@@dragenter.prevent="toggleActive"
+                                                    @@dragleave.prevent="toggleActive"
+                                                    @@dragover.prevent
+                                                    @@drop.prevent="toggleActive"
+                                                    ::class="{'active-dropzone':ProductDetail.active}"
+                                                *@
 
+                                                @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
 
+                                                <div v-on:drop="drop(this.event,Indexx,Index)"
+                                                     v-on:change="SelectFiles(Index,Indexx,this.event)"
+                                                     @@dragleave.prevent="toggleActive(Index,Indexx)"
+                                                     @@dragover.prevent
+                                                     @@drop.prevent="toggleActive(Index,Indexx)"
+                                                     ::class="{'active-dropzone':ProductDetail.active}"
+                                                     class="DropzoneC">
 
+                                                    <span>Drag And Drop File</span>
+                                                    <span>Or</span>
+                                                    <label for="DropzoneFile">Select File</label>
+                                                    <input type="file" id="DropzoneFile" class="selectFiles" multiple />
+                                                </div>          
+                                                <div v-for="(File,index) in ProductDetail.dropzoneFiles" class="file-info">
+                                                    File:{{File.name}}
+                                                    <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
+                                                </div>
+                                                <div v-for="(Image,index) in ProductDetail.dropzoneFilesUrl">
+                                                    <label>
+                                                        <input type="radio" :value=index v-model="ProductDetail.Thumbnail" />
+                                                        <img :src="Image" />
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-
-
-            <div class="ProductDetailsTable">
-                <div v-for="(ProductDetail,Indexx) in productInfo.ProductDetails" >
-
-                    <table>
-
-                        <tr>
-                            <th>
-                                {{Index}}
-                                Colors-{{Indexx}}
-                            </th>
-                            <th @*v-if="ProductDetail.Color.length>0"*@>
-                                Sizes
-
-                            </th>
-                            <th @*v-if="ProductDetail.Sizes.length>0"*@>
-                                Stock
-                            </th>
-
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="color">
-                                    <span class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductDetail(Index)">
-
-                                        +
-                                    </span>
-                                    <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
-
-                                    <label>Color</label>
-                                    <input v-model="ProductDetail.Color" type="color" v-on:keyup.enter="ProductDetail.Index=Indexx" />
-
+                                    </table>
                                 </div>
-                            </td>
-                            <td @*v-if="ProductDetail.Color.length>0"*@>
-                                <div class="sizes">
-                                    <div class="AdminPanelSizes">
+                            </div>
+                        </div>
 
+                        @*Submit Button----------------------------------------------*@
+                        <button v-on:click="sendToServer">Submit</button>
 
-                                        @for (int j = 0; j < Model.Sizes.Count; j++)
-                                        {
-                                            <label>
-                                                <input type="checkbox"
-                                                       value="@Model.Sizes[j].Text" v-model="ProductDetail.Sizes"
-                                                       v-on:change="PopulateStocks(Index,Indexx,this.event)" />
-
-                                                <span>@Model.Sizes[j].Text</span>
-                                            </label>
-                                        }
-                                    </div>
-                                </div>
-                            </td>
-                            <td @*v-if="ProductDetail.Sizes.length>0"*@>
-                                <div class="number">
-                                    @*Computed Properties biiiiiiitch*@
-                                    <div class="stock-input">
-                                        <div v-for="(sizes,indexxx) in ProductDetail.Sizes">
-
-
-                                            {{sizes}}-<input type="number" v-on:input="ProductDetail.stock[indexxx].SizeName=sizes"
-                                                             v-model="ProductDetail.stock[indexxx].number" />
-
-
-
+                        <!-- Page Preloder -->
+                        <!-- Offcanvas Menu End -->
+                        <!-- Shop Details Section Begin -->
+                        <section class="shop-details">
+                            <h1> New ProductInfo  (index:{{ Index }})  </h1>
+                            <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductInfo(Index)">X</span>
+                            <div class="product__details__pic">
+                            </div>
+                            <div class="product__details__content">
+                                <div class="container">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-lg-8">
+                                            <div class="product__details__text">
+                                                @*Name----------------------------------------*@
+                                                <h4>name</h4>
+                                                <input type="text" v-model="productInfo.name" v-on:input="productInfo.Index=Index" />
+                                                @*Price----------------------------------------*@
+                                                <h3>Price</h3>
+                                                <input type="number" v-model="productInfo.price" />
+                                                <div class="product__details__last__option">
+                                                 @*Tags---------------------------------------------------------------*@
+                                                    <h4>Tags</h4>
+                                                    <input type="text" v-model="productInfo.Tagnames" />
+                                                    <h4>Description</h4>
+                                                    <input type="text" v-model="productInfo.Description" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
-                            </td>
-                            @*multiple instances of same components updates only one key*@
-                        <td @*v-if="ProductDetail.stock.length>0"*@>
-
-                            @*@@dragenter.prevent="toggleActive"
-        @@dragleave.prevent="toggleActive"
-        @@dragover.prevent
-        @@drop.prevent="toggleActive"
-        ::class="{'active-dropzone':ProductDetail.active}"
-                               *@
-
-                            @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
-
-
-
-                            <div v-on:drop="drop(this.event,Indexx,Index)"
-                                 v-on:change="SelectFiles(Index,Indexx,this.event)"
-                                  @@dragleave.prevent="toggleActive(Index,Indexx)"
-                                  @@dragover.prevent
-                                   @@drop.prevent="toggleActive(Index,Indexx)"
-                                   ::class="{'active-dropzone':ProductDetail.active}"
-                                  class="DropzoneC">
-                              
-                                <span>Drag And Drop File</span>
-                                <span>Or</span>
-                                <label for="DropzoneFile">Select File</label>
-                                <input type="file" id="DropzoneFile" class="selectFiles" multiple />
-
-
-
                             </div>
-
-
-
-                            @*</div>*@
-
-                            <div v-for="(File,index) in ProductDetail.dropzoneFiles" class="file-info">
-                                File:{{File.name}}
-                                <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
-                            </div>
-                            <div v-for="(Image,index) in ProductDetail.dropzoneFilesUrl">
-                                <label>
-                                    <input type="radio" :value=index v-model="ProductDetail.Thumbnail" />
-                                    <img :src="Image" />
-                                </label>
-                            </div>
-
-
-                        </td>
-                        </tr>
-
-                    </table>
+                        </section>
+                    </div>
                 </div>
+               </div>
             </div>
-        </div>
-
-            @*Submit Button----------------------------------------------*@
-            <button v-on:click="sendToServer">Submit</button>
-
-            <!-- Page Preloder -->
-            <!-- Offcanvas Menu End -->
-            <!-- Shop Details Section Begin -->
-            <section class="shop-details">
-
-                <h1> New ProductInfo  (index:{{ Index }})  </h1>
-
-                <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductInfo(Index)">X</span>
-                <div class="product__details__pic">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="product__details__breadcrumb">
-                                    <a href="./index.html">Home</a>
-                                    <a href="./shop.html">Shop</a>
-                                    <span>Product Details</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">  
-                            
-                                
-                          
-                        </div>
-                    </div>
-                </div>
-                <div class="product__details__content">
-                    <div class="container"> 
-                        <div class="row d-flex justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="product__details__text">
-                                    @*Name----------------------------------------*@
-                                    <h4>name</h4>
-                                    <input type="text" v-model="productInfo.name" v-on:input="productInfo.Index=Index" />
-
-                                    @*Price----------------------------------------*@
-                                    <h3>Price</h3>
-                                    <input type="number" v-model="productInfo.price" />
-
-                                   
-                                   
-                                        
-                                    <div class="product__details__last__option">
-
-
-
-                                     
-                                        @*Tags---------------------------------------------------------------*@
-                                        <h4>Tags</h4>
-                                        <input type="text" v-model="productInfo.Tagnames" />
-                                        <h4>Description</h4>
-                                        <input type="text" v-model="productInfo.Description" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-             
-                    </div>
-                </div>
-               
-
-
-            </section>
-            <!-- Shop Details Section End -->
-            @*</form>*@
-
-       </div>
-    </div>
-
-
-
-
 </body>
 
 
 
 
 <script defer>
-   
- 
     var app = new Vue({
         el: '.VueModel',
-        
-        data: {
-           
-           
 
-            
-          
+        data: {
             ProductInfos: [
                 {
-
-
                     name: '',
                     Category: '',
                     price: '',
@@ -301,9 +218,7 @@
                     Index: '',
                     Brand: '',
                     Description: '',
-                    salePercentage:'',
-                   
-
+                    salePercentage: '',
                     ProductDetails: [
                         {
                             Color: '',
@@ -311,26 +226,14 @@
                             Thumbnail: '',
                             stock: [],
                             dropzoneFiles: [],
-
                             dropzoneFilesUrl: [],
-
                             Index: '',
                             IndexInfo: '',
-
-
-
                         }
                     ],
-
-
                 }
-
             ]
         },
-
-
-
-
 
         methods: {
             sendToServer: function () {
@@ -339,13 +242,13 @@
                 formdata.append('yle', 'lteeeeeee')
 
                 for (let i = 0; i < this.ProductInfos.length; i++) {
-                         formdata.append("productVms[" + i + "].name", this.ProductInfos[i].name)
-                         formdata.append("productVms[" + i + "].Category", this.ProductInfos[i].Caterogy)
-                         formdata.append("productVms[" + i + "].Tagnames", this.ProductInfos[i].Tagnames)
-                         formdata.append("productVms[" + i + "].price", this.ProductInfos[i].price)
-                         formdata.append("productVms[" + i + "].Brand", this.ProductInfos[i].Brand)
-                         formdata.append("productVms[" + i + "].Description", this.ProductInfos[i].Description)
-                        formdata.append("productVms[" + i + "].salepercentage", this.ProductInfos[i].salePercentage)
+                    formdata.append("productVms[" + i + "].name", this.ProductInfos[i].name)
+                    formdata.append("productVms[" + i + "].Category", this.ProductInfos[i].Caterogy)
+                    formdata.append("productVms[" + i + "].Tagnames", this.ProductInfos[i].Tagnames)
+                    formdata.append("productVms[" + i + "].price", this.ProductInfos[i].price)
+                    formdata.append("productVms[" + i + "].Brand", this.ProductInfos[i].Brand)
+                    formdata.append("productVms[" + i + "].Description", this.ProductInfos[i].Description)
+                    formdata.append("productVms[" + i + "].salepercentage", this.ProductInfos[i].salePercentage)
                     for (let j = 0; j < this.ProductInfos[i].ProductDetails.length; j++) {
                         formdata.append("productVms[" + i + "].productInfoVms[" + j + "].color", this.ProductInfos[i].ProductDetails[j].Color)
                         formdata.append("productVms[" + i + "].productInfoVms[" + j + "].sizes", this.ProductInfos[i].ProductDetails[j].Sizes)
@@ -362,21 +265,15 @@
                                     this.ProductInfos[i].ProductDetails[j].stock[h].number)
                         }
                     }
-
-
-
-
-                   
-
                 }
-             
+
                 axios({
                     method: 'post',
                     url: '/Panel/AddProductPanel',
 
 
-                    data:formdata
-                    
+                    data: formdata
+
                 })
                     .then(function (response) {
                         console.log(response);
@@ -388,53 +285,53 @@
             },
             drop(e, ProdInfoIndex, ProdDetailsIndex) {
                 console.log(e)
-                
-               
-                    this.ProductInfos[ProdInfoIndex]
+
+
+                this.ProductInfos[ProdInfoIndex]
                     .ProductDetails[ProdDetailsIndex].
                     dropzoneFiles.push(e.dataTransfer.files[0])
-              
-                let url=URL.createObjectURL(e.dataTransfer.files[0])
+
+                let url = URL.createObjectURL(e.dataTransfer.files[0])
                 this.ProductInfos[ProdInfoIndex]
                     .ProductDetails[ProdDetailsIndex]
                     .dropzoneFilesUrl.push(url)
-               
+
             },
-            SelectFiles(ProdInfoIndex,ProdDetailsIndex,e) {
+            SelectFiles(ProdInfoIndex, ProdDetailsIndex, e) {
                 console.log(e)
                 console.log(ProdInfoIndex, ProdDetailsIndex)
-                
+
                 for (let i = 0; i < e.target.files.length; i++) {
-                   
+
                     this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
                         dropzoneFiles.push(e.target.files[i])
-                   
+
                     let url = URL.createObjectURL(e.target.files[i])
                     this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
                         dropzoneFilesUrl.push(url)
-                    
-                }                   
-                
+
+                }
+
 
             },
-           
+
             AddNewProductInfo: function () {
                 this.ProductInfos.push({
 
                     name: '',
                     Index: '',
-                    Category:'',
+                    Category: '',
                     price: '',
                     Tagnames: '',
                     Brand: '',
-                    Description:'',
+                    Description: '',
                     ProductDetails: [
                         {
                             Color: '',
                             Sizes: [],
                             stock: [],
                             dropzoneFiles: [],
-                            active:false,
+                            active: false,
                             dropzoneFilesUrl: [],
 
                             Index: '',
@@ -448,37 +345,35 @@
 
                 })
             },
-            PopulateStocks: function ( ProdInfoIndex, ProdDetailsIndex,event) {
-          
+            PopulateStocks: function (ProdInfoIndex, ProdDetailsIndex, event) {
+
                 console.log(event)
                 console.log(ProdInfoIndex, ProdDetailsIndex)
                 if (event.target.checked) {
                     this.ProductInfos[ProdInfoIndex]
                         .ProductDetails[ProdDetailsIndex]
-                        .stock.push({ SizeName:event.target.value, number: '' })
+                        .stock.push({ SizeName: event.target.value, number: '' })
                 }
                 else {
 
-                
-                   
+
+
 
                     for (let i = 0; i < this.ProductInfos[ProdInfoIndex]
                         .ProductDetails[ProdDetailsIndex].stock.length; i++) {
                         if (this.ProductInfos[ProdInfoIndex]
-                            .ProductDetails[ProdDetailsIndex].stock[i].SizeName == event.target.value)
-
-                        {
+                            .ProductDetails[ProdDetailsIndex].stock[i].SizeName == event.target.value) {
                             this.ProductInfos[ProdInfoIndex]
-                                .ProductDetails[ProdDetailsIndex].stock.splice(i,1)
+                                .ProductDetails[ProdDetailsIndex].stock.splice(i, 1)
                         }
 
                     }
-                 
-                
+
+
 
 
                 }
-             
+
 
 
             },
@@ -502,7 +397,7 @@
             jandaba: function (e) {
                 console.log(e)
             },
-            RemoveImage(e,index,ProdInfoIndex, ProdDetailsIndex) {
+            RemoveImage(e, index, ProdInfoIndex, ProdDetailsIndex) {
                 this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
                     dropzoneFiles.splice(index, 1)
                 this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
@@ -513,11 +408,11 @@
             RemoveProductInfo(Index) {
                 this.ProductInfos.splice(Index, 1)
             },
-            RemoveProductDetail(DetailIndex, InfoIndex) {    
+            RemoveProductDetail(DetailIndex, InfoIndex) {
                 console.log()
                 this.ProductInfos[InfoIndex].ProductDetails.splice(DetailIndex, 1)
             },
-            
+
             toggleActive(ProdInfoIndex, ProdDetailIndex) {
                 this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailIndex].active =
                     !this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailIndex].active

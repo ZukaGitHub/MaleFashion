@@ -4,7 +4,9 @@
 
   
 (function ($) {
-  
+
+
+    
     /*------------------
         Preloader
     --------------------*/
@@ -58,7 +60,7 @@
     $('.collapse').on('shown.bs.collapse', function () {
         $(this).prev().addClass('active');
     });
-
+  
     $('.collapse').on('hidden.bs.collapse', function () {
         $(this).prev().removeClass('active');
     });
@@ -206,6 +208,11 @@
             }
         });
     });
+
+  
+
+
+
 
 })(jQuery);
 

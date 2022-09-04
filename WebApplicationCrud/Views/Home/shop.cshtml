@@ -61,10 +61,11 @@
                                                 <ul class="nice-scroll">
                                                     @foreach (var categories in Model.Categories)
                                                     {
-                                                        <li>
-                                                            <label>@categories.name</label>
-                                                            <input asp-for="CategoryName" type="radio" value="@categories.name" />
-                                                        </li>
+                                                    <li>
+                                                        <input id="@categories.name" type="checkbox" value="@categories.name" />
+                                                        <label for="@categories.name">@categories.name</label>
+
+                                                    </li>
                                                     }
                                                 </ul>
                                             </div>
@@ -82,10 +83,11 @@
                                                 <ul>
                                                     @foreach (var brands in Model.Brands)
                                                     {
-                                                        <li>
-                                                            <label>@brands.name</label>
-                                                            <input asp-for="BrandName" type="radio" value="@brands.name" />
-                                                        </li>
+                                                    <li>
+                                                        <input id="@brands.name" asp-for="BrandName" type="checkbox" value="@brands.name" />
+                                                        <label for="@brands.name">@brands.name</label>
+
+                                                    </li>
 
                                                     }
                                                 </ul>
@@ -104,10 +106,11 @@
                                                 <ul>
                                                     @foreach (var Price in Model.PriceList)
                                                     {
-                                                        <li>
-                                                            <label>$@(Price-50)-$@Price</label>
-                                                            <input asp-for="MaxPrice" type="radio" value="@Price" />
-                                                        </li>
+                                                    <li>
+                                                        <input id="@Price" type="checkbox" value="@Price" />
+                                                        <label for="@Price">$@(Price-50)-$@Price</label>
+
+                                                    </li>
 
                                                     }
 
@@ -127,10 +130,11 @@
                                             <div class="shop__sidebar__size">
                                                 @foreach (var size in Model.TextSizes)
                                                 {
-                                                    <label @*for="@size.name"*@>
-                                                        @size.name
-                                                        <input asp-for="SelectedSize" type="radio" value="@size.name" onclick="">
-                                                    </label>
+                                                    <input id=@size.name asp-for="SelectedSize" type="checkbox" value="@size.name">
+                                                    <label for="@size.name"> @size.name </label>
+
+
+
                                                 }
 
                                             </div>
@@ -185,10 +189,12 @@
                                             <div class="shop__sidebar__tags">
                                                 @foreach (var Tag in Model.Tags)
                                                 {
-                                                    <label>
-                                                        @Tag
-                                                        <input asp-for="TagFilter" type="radio" value="@Tag" />
-                                                    </label>
+
+                                                    <input id="@Tag" asp-for="TagFilter" type="checkbox" value="@Tag" />
+                                                    <label for="@Tag">@Tag</label>
+
+
+
                                                 }
                                             </div>
                                         </div>
@@ -199,7 +205,7 @@
 
                         @*</div>*@
                         <div>
-                            <input type="submit" name="Submit" value="Submit" />
+                            <input class="btn btn-dark mt-5" type="submit" name="Submit" value="Submit" />
                         </div>
 
                         @*aqamde--------------------------*@
@@ -218,7 +224,7 @@
                                 <div class="shop__product__option__right">
 
                                     <div class="dropdown">
-                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button class="dropdown-toggle btn btn-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Sort By Price
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -250,20 +256,21 @@
                     }
                     
                     @*normal Shop*@
+                <div class="pagination-content">
                     @foreach (var prod in Model.products)
                     {
 
 
                         <div class="row">
                             <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
+                                <div data-category="@prod.CategoryName" data-brand="@prod.BrandName" class="product__item content">
                                     <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
 
                                         <div class="product__item__pic set-bg">
                                             @{
                                                 var current = thumbnails.Where(s => s.ProductId == prod.id);
                                             }
-                                            @if (current.Select(s=>s.ThumbnailName).Any())
+                                            @if (current.Select(s => s.ThumbnailName).Any())
                                             {
                                                 var image_path = $"/img/product/Thumbnails/{current.Select(s => s.ThumbnailName).FirstOrDefault().ToString()}";
                                                 <img src="@image_path" />
@@ -280,7 +287,7 @@
                                     </a>
                                     <div class="product__item__text">
                                         <h6>@prod.name</h6>
-                                       
+
                                         <div class="rating">
                                             <i class="fa fa-star-o"></i>
                                             <i class="fa fa-star-o"></i>
@@ -291,10 +298,10 @@
 
                                         @if (Model.IsSalePage == true)
                                         {
-                                               <div class="SalePricePrevious">@prod.price</div>
+                                            <div class="SalePricePrevious">@prod.price</div>
 
 
-                                               <div class="SalePriceAfter">@prod.NewPrice</div>
+                                            <div class="SalePriceAfter">@prod.NewPrice</div>
 
                                         }
                                         else
@@ -321,25 +328,41 @@
 
                         </div>
                     }
+                </div>
                     @*Pagination-----------------------------*@
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="product__pagination">
+
+
+                            <div class="pagination">
+                                @*<ul>
+                                    <li class="page-item previous-page"><a class="page-link">Prev</a></li>
+                                    <li class="page-item current-page"><a class="page-link">1</a></li>
+                                    <li class="page-item dots"><a class="page-link">...</a></li>
+                                    <li class="page-item current-page"><a class="page-link">5</a></li>
+                                    <li class="page-item current-page"><a class="page-link">6</a></li>
+                                    <li class="page-item dots"><a class="page-link">...</a></li>
+                                    <li class="page-item current-page"><a class="page-link">10</a></li>
+                                    <li class="page-item next-page"><a class="page-link">Next</a></li>
+                                </ul>*@
+
+                            </div>
+                            <!--<div class="product__pagination">-->
                                 @*<a class="active" href="#">1</a>*@
-                                @for (int i = 1; i <= Model.PageCount; i++)
+                                <!--for (int i = 1; i <= Model.PageCount; i++)
                                 {
 
                                     if (Model.pageNumber == i)
                                     {
-                                        <a class="active" asp-action="shop" asp-controller="Home" asp-route-pageNumber="@i">@i</a>
+                                        <a class="active" asp-action="shop" asp-controller="Home" asp-route-pageNumber="i">i</a>
 
                                     }
                                     else
                                     {
-                                        <a asp-action="shop" asp-controller="Home" asp-route-pageNumber="@i">@i</a>
+                                        <a asp-action="shop" asp-controller="Home" asp-route-pageNumber="i">i</a>
                                     }
                                 }
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

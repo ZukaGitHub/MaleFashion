@@ -1242,11 +1242,31 @@ ol {
 .shop__sidebar__brand ul {
 	height: 225px;
 }
-
-.shop__sidebar__categories ul li,
-.shop__sidebar__price ul li,
-.shop__sidebar__brand ul li {
-	list-style: none;
+.shop__sidebar__categories input,
+.shop__sidebar__price input,
+.shop__sidebar__brand input{
+	visibility:hidden;
+	
+}
+.shop__sidebar__categories label,
+.shop__sidebar__price label,
+.shop__sidebar__brand label {
+	padding:5px;
+	transition:0.3s all ease;
+}
+.shop__sidebar__categories label:hover,
+.shop__sidebar__price label:hover,
+.shop__sidebar__brand label:hover {
+	background: #111111;
+	color: #ffffff;
+	border-color: #111111;
+}
+.shop__sidebar__categories input[type="checkbox"]:checked + label,
+.shop__sidebar__price input[type="checkbox"]:checked + label,
+.shop__sidebar__brand input[type="checkbox"]:checked + label {
+	background: #111111;
+	color: #ffffff;
+	border-color: #111111;
 }
 
 .shop__sidebar__categories ul li a,
@@ -1258,13 +1278,11 @@ ol {
 	-webkit-transition: all, 0.3s;
 	-o-transition: all, 0.3s;
 	transition: all, 0.3s;
+	cursor: pointer;
+	background:red;
 }
 
-.shop__sidebar__categories ul li a:hover,
-.shop__sidebar__price ul li a:hover,
-.shop__sidebar__brand ul li a:hover {
-	color: #111111;
-}
+
 
 .shop__sidebar__brand ul {
 	height: auto;
@@ -1289,15 +1307,20 @@ ol {
 	margin-bottom: 10px;
 	margin-right: 5px;
 	cursor: pointer;
+	transition:0.3s all ease;
 }
+	.shop__sidebar__size label:hover {
+		background: #111111;
+		color: #ffffff;
+		border-color: #111111;
+	}
+		.shop__sidebar__size input[type="checkbox"]:checked + label {
+		background: #111111;
+		color: #ffffff;
+		border-color: #111111;
+	}
 
-.shop__sidebar__size label:active {
-	background: #111111;
-	color: #ffffff;
-	border-color: #111111;
-}
-
-.shop__sidebar__size label input {
+.shop__sidebar__size input {
 	position: absolute;
 	visibility: hidden;
 }
@@ -1371,7 +1394,9 @@ ol {
 
 .shop__sidebar__tags {
 	padding-top: 15px;
+
 }
+
 
 .shop__sidebar__tags label {
 	color: #404040;
@@ -1393,13 +1418,14 @@ ol {
 	background: #111111;
 	color: #ffffff;
 }
-.shop__sidebar__tags label input {
+.shop__sidebar__tags input {
 	position: absolute;
 	visibility: hidden;
 }
-	.shop__sidebar__tags label:active {
+	
+	.shop__sidebar__tags input[type="checkbox"]:checked + label {
 		background: #111111;
-		color: #404040;
+		color: #ffffff;
 		border-color: #111111;
 	}
 
@@ -1928,7 +1954,57 @@ ol {
 .product__details__tab__content__item p {
 	margin-bottom: 0;
 }
+.pagination{
+	text-align:center;
+	margin:30px 30px 60px;
+	user-select:none;
 
+}
+.pagination li{
+	display:inline-block;
+	box-shadow:0 5px 25px rgb(1 1 1/10%);
+	margin:5px;
+}
+.pagination li a{
+	color:white;
+	text-decoration:none;
+	font-size:1.2em;
+	line-height:45px;
+
+}
+.previous-page, .next-page{
+	background:black;
+    cursor:pointer;
+	width:80px;
+	border-radius:45px;
+	transition:0.3s ease;
+
+}
+.previous-page:hover{
+	transform:translateX(-5px);
+}
+	.next-page:hover {
+		transform: translateX(5px);
+	}
+.current-page, .dots {
+	background: #ccc;
+	width: 45px;
+	cursor: pointer;
+	border-radius: 50%;
+
+}
+.activePage{
+	background:red;
+}
+.disable{
+	background:#ccc;
+}
+.pagination-content{
+
+}
+.content{
+
+}
 /*---------------------
   Related
 -----------------------*/

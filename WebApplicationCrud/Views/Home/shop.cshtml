@@ -1,4 +1,24 @@
 ﻿@model WebApplicationCrud.ViewModels.ShopViewModel
+    <script>
+        $('#searchField').on('keyup', function (){
+            const searchValue = this.value;
+            console.log(searchValue, "search");
+            $('pagination-content', '.content').each(function (results) {
+                if (results == 0) {
+                    var id = $(this).attr("data-name");
+                    console.log("id", id);
+                    if (id.indexOf(searchValue) !== 0 && id.toLowerCase().indexOf(searchValue.toLowerCase()) < 0) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
+
+                }
+            })
+        })
+    </script>
+
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -41,10 +61,10 @@
                     <div class="col-lg-3">
                 <div class="shop__sidebar">
                     <div class="shop__sidebar__search">
-                        <form  asp-action="shop" asp-controller="Home">
-                            <input asp-for="SearchString" type="text" />
-                            <button type="submit"><span class="icon_search"></span></button>
-                        </form>
+                     
+                            <input id="searchField" type="text" />
+                            <span class="icon_search"></span>
+                        
 
                     </div>
                     <form asp-action="shop" asp-controller="Home" enctype="multipart/form-data" method="post">
@@ -261,9 +281,9 @@
                     {
 
 
-                        <div class="row">
+                        <div data-name="@prod.name" class="row content ">
                             <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div data-category="@prod.CategoryName" data-brand="@prod.BrandName" class="product__item content">
+                                <div class="product__item " >
                                     <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
 
                                         <div class="product__item__pic set-bg">
@@ -286,7 +306,7 @@
                                         </div>
                                     </a>
                                     <div class="product__item__text">
-                                        <h6>@prod.name</h6>
+                                        <h6 >@prod.name</h6>
 
                                         <div class="rating">
                                             <i class="fa fa-star-o"></i>

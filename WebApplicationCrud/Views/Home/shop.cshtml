@@ -1,30 +1,7 @@
 ﻿@model WebApplicationCrud.ViewModels.ShopViewModel
-    <script>
-        $('#searchField').on('keyup', function (){
-            const searchValue = this.value;
-            console.log(searchValue, "search");
-            $('pagination-content', '.content').each(function (results) {
-                if (results == 0) {
-                    var id = $(this).attr("data-name");
-                    console.log("id", id);
-                    if (id.indexOf(searchValue) !== 0 && id.toLowerCase().indexOf(searchValue.toLowerCase()) < 0) {
-                        $(this).hide();
-                    }
-                    else {
-                        $(this).show();
-                    }
+    
 
-                }
-            })
-        })
-    </script>
 
-<!DOCTYPE html>
-<html lang="zxx">
-
-<head>
-
-</head>
 
 <body>
     <!-- Page Preloder -->
@@ -276,12 +253,12 @@
                     }
                     
                     @*normal Shop*@
-                <div class="pagination-content">
+                <div class="pagination-content" id="pagination-content">
                     @foreach (var prod in Model.products)
                     {
 
 
-                        <div data-name="@prod.name" class="row content ">
+                        <div data-name="@prod.name" class="row content">
                             <div class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item " >
                                     <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
@@ -403,6 +380,26 @@
 
 </body>
 
-</html>
+<script>
+
+    $(document).ready(function () {
+        $("#searchField").on("keyup", function () {
+           var searchValue = this.value;
+            var searchList = $("#pagination-content .content");
+            if (searchList.length !== 0 && searchList !== undefined && searchList !== null) {
+                Array.from(searchList).forEach(function (result, index) {
+                    var resultAttr = result.dataset.name;
+                    console.log(resultAttr, "id");
+                    if (resultAttr.indexOf(searchValue) !== 0 && resultAttr.toLowerCase().indexOf(searchValue.toLowerCase()) < 0) {
+                        result.style.display = "none";
+                    }
+                    else {
+                        result.style.display = "block";
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 

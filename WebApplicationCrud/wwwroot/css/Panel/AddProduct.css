@@ -1,0 +1,27 @@
+﻿.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.grid-item {
+  
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    text-align: center;
+}
+.grid-item ul li{
+    list-style:none;
+}
+.removeProductBtn {
+    padding: 6px;
+    border-radius: 5px;
+    cursor:pointer;
+    position:relative;
+    right:0;
+    top:0;
+    display:block;
+}
+.submitBtn{
+    padding:10px;
+    margin-top:20px;
+}

@@ -24,13 +24,13 @@ namespace WebApplicationCrud.Controllers
         private IRepository _repo;
 
         public HomeController(
-            CRUDdbcontext ctx, 
-            IFileManager fileManager, 
+            CRUDdbcontext ctx,
+            IFileManager fileManager,
             ShoppingCart shoppingCart,
              IRepository repo
             )
         {
-            _repo = repo; 
+            _repo = repo;
             _fileManager = fileManager;
             _ctx = ctx;
             _shoppingCart = shoppingCart;
@@ -114,26 +114,26 @@ namespace WebApplicationCrud.Controllers
             return View(vm);
         }
         public IActionResult Blogdetails(int id)
-        { 
+        {
             var post = _repo.GetPost(id);
 
 
 
             int CommentCount = 0;
-            if (post.MainComments!=null && post.MainComments.Count>0)
+            if (post.MainComments != null && post.MainComments.Count > 0)
             {
                 CommentCount += post.MainComments.Count;
 
-                foreach(var maincomments in post.MainComments)
+                foreach (var maincomments in post.MainComments)
                 {
-                    if(maincomments.SubComments!=null && maincomments.SubComments.Count > 0)
+                    if (maincomments.SubComments != null && maincomments.SubComments.Count > 0)
                     {
                         CommentCount += maincomments.SubComments.Count;
                     }
-                   
+
 
                 }
-               
+
 
             }
             var postVm = new BlogDetailsViewModel()
@@ -147,10 +147,10 @@ namespace WebApplicationCrud.Controllers
                 Quote = post.Qoute,
                 Id = post.Id,
                 Comments = post.MainComments == null ? null : post.MainComments.ToList(),
-                QuoteAuthor=post.QouteAuthor,
-                Tags=post.Tags,
-                Title=post.Title,
-                CommentCount=CommentCount
+                QuoteAuthor = post.QouteAuthor,
+                Tags = post.Tags,
+                Title = post.Title,
+                CommentCount = CommentCount
             };
             return View(postVm);
         }
@@ -166,7 +166,7 @@ namespace WebApplicationCrud.Controllers
             {
                 return RedirectToAction("ProductPanel", new { id = vm.Id });
             }
-                
+
 
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -264,7 +264,7 @@ namespace WebApplicationCrud.Controllers
             var products = _ctx.Products.Include(s => s.Tags).ToList();
             var TagNames = _ctx.Tags.Select(s => s.TagName).ToArray();
 
-            Dictionary<string, int> TopTagNamesDict = 
+            Dictionary<string, int> TopTagNamesDict =
                 TagNames.GroupBy(s => s).ToDictionary(g => g.Key.ToString(), g => g.Count());
             var TopTagNames = TopTagNamesDict.Select(s => s.Key).Take(5).ToList();
 
@@ -401,7 +401,7 @@ namespace WebApplicationCrud.Controllers
         {
             return View();
         }
-     
+
         public IActionResult shoppingcart()
         {
             return View();
@@ -409,7 +409,7 @@ namespace WebApplicationCrud.Controllers
 
         public IActionResult Index()
         {
-           return View();
+            return View();
         }
         [HttpGet("img/product/ProductImages/{Image}")]
         public IActionResult Image(string Image)
@@ -423,10 +423,10 @@ namespace WebApplicationCrud.Controllers
             var mime = Thumbnail.Substring(Thumbnail.LastIndexOf('.') + 1);
             return new FileStreamResult(_fileManager.Thumbnailstream(Thumbnail), $"Thumbnails/{mime} ");
         }
-      
 
 
-      
+
+
         public IActionResult Post(int id) =>
             View(_repo.GetPost(id));
 
@@ -437,8 +437,8 @@ namespace WebApplicationCrud.Controllers
         //         _fileManager.ImageStream(image),
         //         $"image/{image.Substring(image.LastIndexOf('.') + 1)}");
 
-            
-        public List<Product> CustomFilter(string CategoryName, string BrandName, int? MaxPrice, string SelectedSize)
+        [HttpGet]
+        public IActionResult CustomFilter(string CategoryName, string BrandName, int? MaxPrice, string SelectedSize)
         {
 
 
@@ -461,7 +461,7 @@ namespace WebApplicationCrud.Controllers
             {
                 query = query.Where(prod => prod.price < MaxPrice && prod.price > MaxPrice - 50);
             }
-            return query.ToList();
+            return View(query.ToList());
 
 
          

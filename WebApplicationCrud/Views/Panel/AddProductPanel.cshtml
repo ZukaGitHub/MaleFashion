@@ -1,4 +1,8 @@
 ﻿
+
+<head>
+    <link href="~/css/Panel/AddProduct.css" rel="stylesheet" />
+</head>
 <body>
     <script src="~/js/VueComponents/DropzoneC.js"></script>
     <div class="wrapper d-flex align-items-stretch">
@@ -12,193 +16,193 @@
                         Add New ProductInfo
                     </button>
                     <div v-for="(productInfo,Index) in ProductInfos">
-                        <button v-on:click="sendToServer">Submit outta form</button>                  
-                        <div>
+                        <h3 style="display:inline"> New ProductInfo  (index:{{ Index +1}})  </h3>
+                        <span class="float-right btn-danger removeProductBtn" v-on:click="RemoveProductInfo(Index)">X</span>
 
-                            @{
-                                List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
-                                List<Category> Categories = ViewData["Categories"] as List<Category>;
-                            }
 
-                            <ul>
+                        @{
+                            List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
+                            List<Category> Categories = ViewData["Categories"] as List<Category>;
+                        }
+                    <div class="grid-container">
+
+                        <div class="grid-item form-group">
+                            <h3>Brands</h3>
+                            <ul class="form-check">
                                 @for (int i = 0; i < Brandss.Count; i++)
                                 {
                                     <li>
-                                        <label>@Brandss[i].name</label>
-                                        <input type="radio" value="@Brandss[i].name" v-model="productInfo.Brand" />
+                                        <label for="@Brandss[i].name">@Brandss[i].name</label>
+                                        <input id="@Brandss[i].name"  type="radio" value="@Brandss[i].name" v-model="productInfo.Brand" />
                                     </li>
 
                                 }
                             </ul>
+                        </div>
 
 
-                            <div>
-                                <h1>SalePercentage</h1>
-                                <input type="number" v-model="productInfo.salePercentage" />
-                            </div>
-
-                            <h1>Categories</h1>
+                        <div class="grid-item form-group">
+                            <h3>Categories</h3>
                             <ul>
 
                                 @for (int i = 0; i < Categories.Count; i++)
                                 {
                                     <li>
-                                        <label>@Categories[i].name</label>
-                                        <input type="radio" value="@Categories[i].name" v-model="productInfo.Category" />
+                                        <label for="@Categories[i].name" >@Categories[i].name</label>
+                                        <input id="@Categories[i].name"  type="radio" value="@Categories[i].name" v-model="productInfo.Category" />
                                     </li>
 
                                 }
                             </ul>
-                            <div>
-                                <div v-for="(ProductDetail,Indexx) in productInfo.ProductDetails">
 
-                                    <table>
-
-                                        <tr>
-                                            <th>
-                                                {{Index}}
-                                                Colors-{{Indexx}}
-                                            </th>
-                                            <th @*v-if="ProductDetail.Color.length>0"*@>
-                                                Sizes
-
-                                            </th>
-                                            <th @*v-if="ProductDetail.Sizes.length>0"*@>
-                                                Stock
-                                            </th>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <span class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductDetail(Index)">
-
-                                                        +
-                                                    </span>
-                                                    <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
-
-                                                    <label>Color</label>
-                                                    <input v-model="ProductDetail.Color" type="color" v-on:keyup.enter="ProductDetail.Index=Indexx" />
-
-                                                </div>
-                                            </td>
-                                            <td @*v-if="ProductDetail.Color.length>0"*@>
-                                                <div>
-                                                    <div class="AdminPanelSizes">
-
-
-                                                        @for (int j = 0; j < Model.Sizes.Count; j++)
-                                                        {
-                                                            <label>
-                                                                <input type="checkbox"
-                                                                       value="@Model.Sizes[j].Text" v-model="ProductDetail.Sizes"
-                                                                       v-on:change="PopulateStocks(Index,Indexx,this.event)" />
-
-                                                                <span>@Model.Sizes[j].Text</span>
-                                                            </label>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td @*v-if="ProductDetail.Sizes.length>0"*@>
-                                                <div>
-                                                    @*Computed Properties biiiiiiitch*@
-                                                    <div>
-                                                        <div v-for="(sizes,indexxx) in ProductDetail.Sizes">
-
-
-                                                            {{sizes}}-<input type="number" v-on:input="ProductDetail.stock[indexxx].SizeName=sizes"
-                                                                             v-model="ProductDetail.stock[indexxx].number" />
-
-
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </td>
-                                            @*multiple instances of same components updates only one key*@
-                                            <td @*v-if="ProductDetail.stock.length>0"*@>
-
-                                                @*@@dragenter.prevent="toggleActive"
-                                                    @@dragleave.prevent="toggleActive"
-                                                    @@dragover.prevent
-                                                    @@drop.prevent="toggleActive"
-                                                    ::class="{'active-dropzone':ProductDetail.active}"
-                                                *@
-
-                                                @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
-
-                                                <div v-on:drop="drop(this.event,Indexx,Index)"
-                                                     v-on:change="SelectFiles(Index,Indexx,this.event)"
-                                                     @@dragleave.prevent="toggleActive(Index,Indexx)"
-                                                     @@dragover.prevent
-                                                     @@drop.prevent="toggleActive(Index,Indexx)"
-                                                     ::class="{'active-dropzone':ProductDetail.active}"
-                                                     class="DropzoneC">
-
-                                                    <span>Drag And Drop File</span>
-                                                    <span>Or</span>
-                                                    <label for="DropzoneFile">Select File</label>
-                                                    <input type="file" id="DropzoneFile" class="selectFiles" multiple />
-                                                </div>          
-                                                <div v-for="(File,index) in ProductDetail.dropzoneFiles" class="file-info">
-                                                    File:{{File.name}}
-                                                    <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
-                                                </div>
-                                                <div v-for="(Image,index) in ProductDetail.dropzoneFilesUrl">
-                                                    <label>
-                                                        <input type="radio" :value=index v-model="ProductDetail.Thumbnail" />
-                                                        <img :src="Image" />
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                    </table>
-                                </div>
-                            </div>
                         </div>
-
-                        @*Submit Button----------------------------------------------*@
-                        <button v-on:click="sendToServer">Submit</button>
-
-                        <!-- Page Preloder -->
-                        <!-- Offcanvas Menu End -->
-                        <!-- Shop Details Section Begin -->
-                        <section class="shop-details">
-                            <h1> New ProductInfo  (index:{{ Index }})  </h1>
-                            <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductInfo(Index)">X</span>
-                            <div class="product__details__pic">
-                            </div>
-                            <div class="product__details__content">
-                                <div class="container">
-                                    <div class="row d-flex justify-content-center">
-                                        <div class="col-lg-8">
-                                            <div class="product__details__text">
-                                                @*Name----------------------------------------*@
-                                                <h4>name</h4>
-                                                <input type="text" v-model="productInfo.name" v-on:input="productInfo.Index=Index" />
-                                                @*Price----------------------------------------*@
-                                                <h3>Price</h3>
-                                                <input type="number" v-model="productInfo.price" />
-                                                <div class="product__details__last__option">
-                                                 @*Tags---------------------------------------------------------------*@
-                                                    <h4>Tags</h4>
-                                                    <input type="text" v-model="productInfo.Tagnames" />
-                                                    <h4>Description</h4>
-                                                    <input type="text" v-model="productInfo.Description" />
-                                                </div>
-                                            </div>
+                        <div class="grid-item product__details__content form-group">
+                            <div class="container">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-lg-8">
+                                        <div class="product__details__text form-group">
+                                            <h4>SalePercentage</h4>
+                                            <input class="form-control" type="number" v-model="productInfo.salePercentage" />
+                                            @*Name----------------------------------------*@
+                                            <h4>name</h4>
+                                            <input class="form-control" type="text" v-model="productInfo.name" v-on:input="productInfo.Index=Index" />
+                                            @*Price----------------------------------------*@
+                                            <h4>Price</h4>
+                                            <input class="form-control" type="number" v-model="productInfo.price" />
+                                           
+                                                @*Tags---------------------------------------------------------------*@
+                                                <h4>Tags</h4>
+                                                <input class="form-control" type="text" v-model="productInfo.Tagnames" />
+                                                <h4>Description</h4>
+                                                <input class="form-control" type="text" v-model="productInfo.Description" />
+                                          
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </section>
+                        </div>
+                    </div>
+                        <div>
+                            <div v-for="(ProductDetail,Indexx) in productInfo.ProductDetails">
+
+                                <table>
+
+                                    <tr>
+                                        <th>
+                                            {{Index +  1 }}
+                                            Colors-{{Indexx + 1}}
+                                        </th>
+                                        <th @*v-if="ProductDetail.Color.length>0"*@>
+                                            Sizes
+
+                                        </th>
+                                        <th @*v-if="ProductDetail.Sizes.length>0"*@>
+                                            Stock
+                                        </th>
+                                        <th >
+                                            Images
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div>
+                                                <span class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductDetail(Index)">
+                                                    +
+                                                </span>
+                                                <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
+
+                                                <label>Color</label>
+                                                <input v-model="ProductDetail.Color" type="color" v-on:keyup.enter="ProductDetail.Index=Indexx" />
+
+                                            </div>
+                                        </td>
+                                        <td @*v-if="ProductDetail.Color.length>0"*@>
+                                            <div>
+                                                <div class="AdminPanelSizes">
+
+
+                                                    @for (int j = 0; j < Model.Sizes.Count; j++)
+                                                    {
+                                                        <label>
+                                                            <input type="checkbox"
+                                                                   value="@Model.Sizes[j].Text" v-model="ProductDetail.Sizes"
+                                                                   v-on:change="PopulateStocks(Index,Indexx,this.event)" />
+
+                                                            <span>@Model.Sizes[j].Text</span>
+                                                        </label>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td @*v-if="ProductDetail.Sizes.length>0"*@>
+                                            <div>
+                                                @*Computed Properties biiiiiiitch*@
+                                                <div>
+                                                    <div v-for="(sizes,indexxx) in ProductDetail.Sizes">
+
+
+                                                        {{sizes}}-<input type="number" v-on:input="ProductDetail.stock[indexxx].SizeName=sizes"
+                                                                         v-model="ProductDetail.stock[indexxx].number" />
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        @*multiple instances of same components updates only one key*@
+                                        <td @*v-if="ProductDetail.stock.length>0"*@>
+
+                                            @*@@dragenter.prevent="toggleActive"
+                            @@dragleave.prevent="toggleActive"
+                            @@dragover.prevent
+                            @@drop.prevent="toggleActive"
+                            ::class="{'active-dropzone':ProductDetail.active}"
+                                            *@
+
+                                            @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
+
+                                            <div v-on:drop="drop(this.event,Indexx,Index)"
+                                                 v-on:change="SelectFiles(Index,Indexx,this.event)"
+                                                 @@dragleave.prevent="toggleActive(Index,Indexx)"
+                                                 @@dragover.prevent
+                                                 @@drop.prevent="toggleActive(Index,Indexx)"
+                                                 ::class="{'active-dropzone':ProductDetail.active}"
+                                                 class="DropzoneC">
+
+                                                <span>Drag And Drop File</span>
+                                                <span>Or</span>
+                                                <label for="DropzoneFile">Select File</label>
+                                                <input type="file" id="DropzoneFile" class="selectFiles" multiple />
+                                            </div>
+                                            <div v-for="(File,index) in ProductDetail.dropzoneFiles" class="file-info">
+                                                File:{{File.name}}
+                                                <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
+                                            </div>
+                                            <div v-for="(Image,index) in ProductDetail.dropzoneFilesUrl">
+                                                <label>
+                                                    <input type="radio" :value=index v-model="ProductDetail.Thumbnail" />
+                                                    <img :src="Image" />
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                        @*Submit Button----------------------------------------------*@
+                        <button class="btn-danger submitBtn" v-on:click="sendToServer">Submit</button>
+
+                     
                     </div>
                 </div>
                </div>
-            </div>
+            
 </body>
 
 
@@ -276,7 +280,7 @@
 
                 })
                     .then(function (response) {
-                        console.log(response);
+                        Alert("product was added");
                     })
                     .catch(function (error) {
                         console.log(error);

@@ -59,7 +59,9 @@
                                                     @foreach (var categories in Model.Categories)
                                                     {
                                                     <li>
-                                                        <input id="@categories.name" type="checkbox" value="@categories.name" />
+                                                        <input id="@categories.name" type="checkbox"
+                                                               class="checkbox_selector category"
+                                                               value="@categories.name" />
                                                         <label for="@categories.name">@categories.name</label>
 
                                                     </li>
@@ -81,7 +83,7 @@
                                                     @foreach (var brands in Model.Brands)
                                                     {
                                                     <li>
-                                                        <input id="@brands.name" asp-for="BrandName" type="checkbox" value="@brands.name" />
+                                                        <input id="@brands.name" type="checkbox" class="brand checkbox_selector" value="@brands.name" />
                                                         <label for="@brands.name">@brands.name</label>
 
                                                     </li>
@@ -247,84 +249,12 @@
                             </div>
                         </div>
                     </div>
-                    @{
-                        List<Product> products = ViewData["Products"] as List<Product>;
-                        List<Thumbnail> thumbnails = ViewData["Thumbnails"] as List<Thumbnail>;
-                    }
+                  
                     
                     @*normal Shop*@
-                <div class="pagination-content" id="pagination-content">
-                    @foreach (var prod in Model.products)
-                    {
-
-
-                        <div data-name="@prod.name" class="row content">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item " >
-                                    <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
-
-                                        <div class="product__item__pic set-bg">
-                                            @{
-                                                var current = thumbnails.Where(s => s.ProductId == prod.id);
-                                            }
-                                            @if (current.Select(s => s.ThumbnailName).Any())
-                                            {
-                                                var image_path = $"/img/product/Thumbnails/{current.Select(s => s.ThumbnailName).FirstOrDefault().ToString()}";
-                                                <img src="@image_path" />
-                                            }
-
-                                            <ul class="product__hover">
-                                                <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
-                                                <li>
-                                                    <a href="#"><img src="../img/icon/compare.png" alt=""> <span>Compare</span></a>
-                                                </li>
-                                                <li><a href="#"><img src="../img/icon/search.png" alt=""></a></li>
-                                            </ul>
-                                        </div>
-                                    </a>
-                                    <div class="product__item__text">
-                                        <h6 >@prod.name</h6>
-
-                                        <div class="rating">
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                        </div>
-
-                                        @if (Model.IsSalePage == true)
-                                        {
-                                            <div class="SalePricePrevious">@prod.price</div>
-
-
-                                            <div class="SalePriceAfter">@prod.NewPrice</div>
-
-                                        }
-                                        else
-                                        {
-                                            <h5>@prod.price</h5>
-                                        }
-
-
-                                        <div class="product__color__select">
-                                            <label for="pc-4">
-                                                <input type="radio" id="pc-4">
-                                            </label>
-                                            <label class="active black" for="pc-5">
-                                                <input type="radio" id="pc-5">
-                                            </label>
-                                            <label class="grey" for="pc-6">
-                                                <input type="radio" id="pc-6">
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    }
+            
+                <div id="ProductList">
+                    @await Html.PartialAsync("_ProductListing", Model.products)
                 </div>
                     @*Pagination-----------------------------*@
                     <div class="row">
@@ -344,22 +274,7 @@
                                 </ul>*@
 
                             </div>
-                            <!--<div class="product__pagination">-->
-                                @*<a class="active" href="#">1</a>*@
-                                <!--for (int i = 1; i <= Model.PageCount; i++)
-                                {
-
-                                    if (Model.pageNumber == i)
-                                    {
-                                        <a class="active" asp-action="shop" asp-controller="Home" asp-route-pageNumber="i">i</a>
-
-                                    }
-                                    else
-                                    {
-                                        <a asp-action="shop" asp-controller="Home" asp-route-pageNumber="i">i</a>
-                                    }
-                                }
-                            </div>-->
+                           
                         </div>
                     </div>
                 </div>
@@ -382,6 +297,9 @@
 
 <script>
 
+
+
+
     $(document).ready(function () {
         $("#searchField").on("keyup", function () {
            var searchValue = this.value;
@@ -390,7 +308,9 @@
                 Array.from(searchList).forEach(function (result, index) {
                     var resultAttr = result.dataset.name;
                     console.log(resultAttr, "id");
-                    if (resultAttr.indexOf(searchValue) !== 0 && resultAttr.toLowerCase().indexOf(searchValue.toLowerCase()) < 0) {
+                    if (resultAttr.indexOf(searchValue) !==
+                        0 && resultAttr.toLowerCase().
+                            indexOf(searchValue.toLowerCase()) < 0) {
                         result.style.display = "none";
                     }
                     else {
@@ -399,6 +319,31 @@
                 });
             }
         });
+
+        function filter_data() {
+
+            var brandName = get_filter("brand");
+            var categoryName = get_filter("category");
+            $.ajax({
+                url: 'CustomFilter',
+                type: 'GET',
+                data: { CategoryName: categoryName,BrandName:brandName},
+                success: function (result) {
+                    $("#ProductList").html(result);
+                }
+            });
+        };
+        function get_filter(class_name) {
+            var filter;
+            $('.' + class_name + ':checked').each(function () {
+                filter=($(this).val());
+            });
+            return filter;           
+        };
+        $(".checkbox_selector").change(function () {
+            filter_data();
+        })
+       
     });
 </script>
 

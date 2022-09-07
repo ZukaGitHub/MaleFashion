@@ -134,3 +134,6 @@ a[data-toggle="collapse"] {
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
 }
+footer{
+    display:none;
+}

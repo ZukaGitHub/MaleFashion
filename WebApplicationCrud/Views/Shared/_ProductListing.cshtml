@@ -1,0 +1,71 @@
+﻿@model List<Product>
+
+@{
+    List<Product> products = ViewData["Products"] as List<Product>;
+    List<Thumbnail> thumbnails = ViewData["Thumbnails"] as List<Thumbnail>;
+}
+<div class="pagination-content" id="pagination-content">
+    @foreach (var prod in Model)
+    {
+
+
+        <div data-name="@prod.name" class="row content">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item ">
+                    <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
+
+                        <div class="product__item__pic set-bg">
+                            @{
+                                var current = thumbnails.Where(s => s.ProductId == prod.id);
+                            }
+                            @if (current.Select(s => s.ThumbnailName).Any())
+                            {
+                                var image_path = $"/img/product/Thumbnails/{current.Select(s => s.ThumbnailName).FirstOrDefault().ToString()}";
+                                <img src="@image_path" />
+                            }
+
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
+                                <li>
+                                    <a href="#"><img src="../img/icon/compare.png" alt=""> <span>Compare</span></a>
+                                </li>
+                                <li><a href="#"><img src="../img/icon/search.png" alt=""></a></li>
+                            </ul>
+                        </div>
+                    </a>
+                    <div class="product__item__text">
+                        <h6>@prod.name</h6>
+
+                        <div class="rating">
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                        </div>
+
+                      
+                       
+                            <h5>@prod.price</h5>
+                        
+
+
+                        <div class="product__color__select">
+                            <label for="pc-4">
+                                <input type="radio" id="pc-4">
+                            </label>
+                            <label class="active black" for="pc-5">
+                                <input type="radio" id="pc-5">
+                            </label>
+                            <label class="grey" for="pc-6">
+                                <input type="radio" id="pc-6">
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    }
+</div>

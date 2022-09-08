@@ -159,19 +159,10 @@ namespace WebApplicationCrud.Controllers
                         NewPrice = (vm.productVms[i].price * (100 - salepercentage) / 100),
                         Tags = Tags,
                         OwnerId = _userManager.GetUserId(HttpContext.User)
-                     
-
-
-
-
-
-
-
+                    
                     };
 
                     VMproducts.Add(product);
-
-
                     
                 }
 

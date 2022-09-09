@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -16,8 +17,7 @@ namespace WebApplicationCrud.Data.FileManager
         public FileManager(IConfiguration config)
         {
             _imagePath = config["Path:Images"];
-            _ThumbnailPath = config["Path:Thumbnails"];
-            _blogImagePath = config["Path:BlogImages"];
+          
           
 
         }
@@ -43,14 +43,7 @@ namespace WebApplicationCrud.Data.FileManager
         }
         public async Task<string> SaveImageAsync(IFormFile Image,string path)
         {
-            if (path != "blog")
-            {
-                path = _imagePath;
-            }
-            else
-            {
-                path = _blogImagePath;
-            }
+            path = _imagePath;
             try
             {
                 var save_path = Path.Combine(path);
@@ -71,6 +64,30 @@ namespace WebApplicationCrud.Data.FileManager
             {
                 return "error";
             }
+        }
+        public string DeleteImages(List<string> Imagenames)
+        {
+            try
+            {
+                foreach (var Image in Imagenames)
+                {
+                    var Image_path = Path.Combine(_imagePath);
+                    var ImageToBeDeleted = Path.Combine(Image_path, Image);
+                    if ((System.IO.File.Exists(ImageToBeDeleted)))
+                    {
+                        System.IO.File.Delete(ImageToBeDeleted);
+
+                    }
+
+
+                }
+                return "success";
+            }
+            catch (Exception)
+            {
+                return "error";
+            }
+
         }
 
         public FileStream Thumbnailstream(string Thumbnails)

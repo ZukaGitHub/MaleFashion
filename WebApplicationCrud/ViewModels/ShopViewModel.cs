@@ -18,11 +18,7 @@ namespace WebApplicationCrud.ViewModels
         public string SelectedSize { get; set; }
 
         public int[] PriceList = new int[] { 50, 100, 150, 200, 250 };
-        public int pageNumber { get; set; }
-        public int PageCount { get; set; }
-        public int PageSize { get; internal set; }
-        public int? ProductCount { get; internal set; }
-        public bool IsSalePage { get; set; }
+       
         public string SearchString { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -12,5 +13,6 @@ namespace WebApplicationCrud.Data.FileManager
 
         FileStream Thumbnailstream(string Image);
         bool RemoveImage(string image);
+        string DeleteImages(List<string> Imagenames);
     }
 }

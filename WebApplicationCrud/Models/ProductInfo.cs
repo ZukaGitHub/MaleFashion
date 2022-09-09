@@ -6,7 +6,7 @@ namespace WebApplicationCrud.Models
     {
         public int id { get; set; }
         public string color { get; set; }
-        public int ThumbnailIndex { get; set; }
+        public string ProductInfoThumbnailName { get; set; }
         public List<Image> Images { get; set; }
         public int ProductId { get; set; }
         public List<ProductInfoStockAndSize> ProductInfoStockAndSizes { get; set; }

@@ -143,7 +143,7 @@ namespace WebApplicationCrud.Controllers
                 Category = post.Category,
                 CreationDate = post.Created,
                 Description = post.Description,
-                Image = post.Image,
+                ImageName = post.Image,
                 Quote = post.Qoute,
                 Id = post.Id,
                 Comments = post.MainComments == null ? null : post.MainComments.ToList(),
@@ -245,23 +245,16 @@ namespace WebApplicationCrud.Controllers
                 return RedirectToAction("Index");
             }
         }
-        public IActionResult shop(string InSale, string SortOrder, ShopViewModel ViewModel, int pageNumber = 1)
+        public IActionResult shop(ShopViewModel ViewModel)
         {
-            int pageSize = 2;
-            decimal PageCountCtx = _ctx.Products.Count();
-            decimal pageCount = PageCountCtx / pageSize;
-            pageCount = Math.Ceiling(pageCount);
-            if (pageNumber < 1)
-            {
-                pageNumber = 1;
-            }
-            if (pageNumber > pageCount)
-            {
-                pageNumber = (int)pageCount;
-            }
+         
+           
+           
 
 
-            var products = _ctx.Products.Include(s => s.Tags).ToList();
+            var products = _ctx.Products.Include(s => s.Tags)
+                .Include(s=>s.ProductInfos)
+                .Include(d=>d.Comments).ToList();
             var TagNames = _ctx.Tags.Select(s => s.TagName).ToArray();
 
             Dictionary<string, int> TopTagNamesDict =
@@ -275,15 +268,12 @@ namespace WebApplicationCrud.Controllers
             {
                 products = products.Where(s => s.name.Contains(ViewModel.SearchString)).ToList();
             }
-            //Sale-----------------------------------------------------
-            if (!String.IsNullOrEmpty(InSale))
-            {
+           
                 int? ProductCount = products.Count();
                 products = products
-                    .Where(s => s.SalePercentage > 0)
                     .OrderBy(g => g.name)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
+                    
+                
                     .ToList();
 
                 var thumbnails = _ctx.Thumbnails.ToList();
@@ -291,23 +281,7 @@ namespace WebApplicationCrud.Controllers
                 var brands = _ctx.Brands.ToList();
                 var sizes = _ctx.TextSizes.ToList();
 
-                if (!String.IsNullOrEmpty(SortOrder))
-                {
-                    switch (SortOrder)
-                    {
-                        case "High To Low":
-                            products = products.OrderByDescending(p => p.price).ToList();
-
-                            break;
-
-                        case "Low To High":
-                            products = products.OrderBy(p => p.price).ToList();
-                            break;
-
-
-                    }
-
-                }
+              
 
                 var vm = new ShopViewModel()
                 {
@@ -315,12 +289,8 @@ namespace WebApplicationCrud.Controllers
                     thumbnails = thumbnails,
                     Categories = categories,
                     Brands = brands,
-                    TextSizes = sizes,
-                    pageNumber = pageNumber,
-                    PageCount = (int)pageCount,
-                    PageSize = pageSize,
-                    ProductCount = ProductCount,
-                    IsSalePage = true,
+                    TextSizes = sizes,                
+                  
                     Tags = TopTagNames
 
                 };
@@ -331,64 +301,7 @@ namespace WebApplicationCrud.Controllers
                 ViewData["Thumbnails"] = thumbnails;
 
                 return View(vm);
-
-
-            }
-            //Normal------------------------------------------------------------
-            else
-            {
-                int? ProductCount = products.Count();
-                products = products
-                    .OrderBy(g => g.name)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
-
-                var thumbnails = _ctx.Thumbnails.ToList();
-                var categories = _ctx.Categories.ToList();
-                var brands = _ctx.Brands.ToList();
-                var sizes = _ctx.TextSizes.ToList();
-
-                if (!String.IsNullOrEmpty(SortOrder))
-                {
-                    switch (SortOrder)
-                    {
-                        case "High To Low":
-                            products = products.OrderByDescending(p => p.price).ToList();
-
-                            break;
-
-                        case "Low To High":
-                            products = products.OrderBy(p => p.price).ToList();
-                            break;
-
-
-                    }
-
-                }
-
-                var vm = new ShopViewModel()
-                {
-                    products = products,
-                    thumbnails = thumbnails,
-                    Categories = categories,
-                    Brands = brands,
-                    TextSizes = sizes,
-                    pageNumber = pageNumber,
-                    PageCount = (int)pageCount,
-                    PageSize = pageSize,
-                    ProductCount = ProductCount,
-                    Tags = TopTagNames
-
-                };
-
-                ViewData["Products"] = products;
-
-
-                ViewData["Thumbnails"] = thumbnails;
-
-                return View(vm);
-            }
+            
 
 
         }

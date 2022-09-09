@@ -41,7 +41,7 @@
 
                             @for (int i = 0; i < Model.Images.Count; i++)
                             {
-                                var image_path = $"/img/product/ProductImages/{Model.Images[i].Imagename}";
+                                var image_path = $"/img/productAndBlogAddedImages{Model.Images[i].Imagename}";
                                 if (i == 0)
                                 {
                                     <li class="nav-item">
@@ -75,7 +75,7 @@
 
                             @for (int i = 0; i < Model.Images.Count; i++)
                             {
-                                var image_path = $"/img/product/ProductImages/{Model.Images[i].Imagename}";
+                                var image_path = $"/img/productAndBlogAddedImages/{Model.Images[i].Imagename}";
                                 if (i == 0)
                                 {
                                     <div class="tab-pane active" id="tabs-0" role="tabpanel">

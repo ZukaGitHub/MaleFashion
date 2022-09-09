@@ -61,8 +61,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\img\blog\" />
-    <Folder Include="wwwroot\img\product\ProductImages\" />
-    <Folder Include="wwwroot\img\product\Thumbnails\" />
+    <Folder Include="wwwroot\img\productAndBlogAddedImages\" />
   </ItemGroup>
 
 </Project>

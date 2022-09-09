@@ -42,11 +42,7 @@ namespace WebApplicationCrud.Controllers
 
             return View(ViewModel);
         }
-        [HttpGet]
-        public IActionResult test()
-        {
-            return View();
-        }
+     
 
         [HttpGet]
         public IActionResult AddProductPanel()
@@ -119,8 +115,9 @@ namespace WebApplicationCrud.Controllers
                     {
                         var tempProductInfo = new ProductInfo();
                         tempProductInfo.color = Productinfo.color;
-                        tempProductInfo.ThumbnailIndex = Productinfo.Thumbnail;
+                       
                         var path = "product";
+                        var tempListOfImages = new List<Image>();
                         foreach (var Image in Productinfo.images)
                         {
                             var imgname = await _filemanager.SaveImageAsync(Image,path);
@@ -128,10 +125,12 @@ namespace WebApplicationCrud.Controllers
                             {
                                 Imagename = imgname,
                             };
-                            var tempListOfImages = new List<Image>();
+                          
                             tempListOfImages.Add(img);
-                            tempProductInfo.Images = tempListOfImages;
+                           
                         }
+                        tempProductInfo.Images = tempListOfImages;
+                        tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.Thumbnail].Imagename;
 
                         foreach (var StockAndSize in Productinfo.stockVms)
                         {
@@ -145,6 +144,7 @@ namespace WebApplicationCrud.Controllers
                             tempSizesAndStocks.Add(tempStockandSize);
                             tempProductInfo.ProductInfoStockAndSizes=tempSizesAndStocks;
                         }
+                        productInfos.Add(tempProductInfo);
                     }
                     var salepercentage = int.Parse(vm.productVms[i].salePercentage);
                     var product = new Product()

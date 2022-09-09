@@ -1,5 +1,5 @@
 ﻿@model WebApplicationCrud.ViewModels.ShopViewModel
-    
+
 
 
 
@@ -34,190 +34,151 @@
         <div class="container">
             <div class="row">
                 @*aqedan------------------------------------------*@
-               
-                    <div class="col-lg-3">
-                <div class="shop__sidebar">
-                    <div class="shop__sidebar__search">
-                     
+
+                <div class="col-lg-3">
+                    <div class="shop__sidebar">
+                        <div class="shop__sidebar__search">
+
                             <input id="searchField" type="text" />
                             <span class="icon_search"></span>
-                        
 
+
+                        </div>
+                        <form asp-action="shop" asp-controller="Home" enctype="multipart/form-data" method="post">
+                            <div class="shop__sidebar__accordion">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                        </div>
+                                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                            @*Category filter------------------------*@
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__categories">
+                                                    <ul class="nice-scroll">
+                                                        @foreach (var categories in Model.Categories)
+                                                        {
+                                                            <li>
+                                                                <input id="@categories.name" type="checkbox"
+                                                                       class="checkbox_selector category"
+                                                                       value="@categories.name" />
+                                                                <label for="@categories.name">@categories.name</label>
+
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*Brand filter------------------------*@
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__brand">
+                                                    <ul>
+                                                        @foreach (var brands in Model.Brands)
+                                                        {
+                                                            <li>
+                                                                <input id="@brands.name" type="checkbox" class="brand checkbox_selector" value="@brands.name" />
+                                                                <label for="@brands.name">@brands.name</label>
+
+                                                            </li>
+
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                        </div>
+                                        @*Price filter---------------------------*@
+                                        <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__price">
+                                                    <ul>
+                                                        @foreach (var Price in Model.PriceList)
+                                                        {
+                                                            <li>
+                                                                <input id="@Price" type="checkbox" value="@Price" />
+                                                                <label for="@Price">$@(Price-50)-$@Price</label>
+
+                                                            </li>
+
+                                                        }
+
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*Size Filter---------------------------*@
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseFour">Size</a>
+                                        </div>
+                                        <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="shop__sidebar__size">
+                                                    @foreach (var size in Model.TextSizes)
+                                                    {
+                                                        <input id=@size.name asp-for="SelectedSize" type="checkbox" value="@size.name">
+                                                        <label for="@size.name"> @size.name </label>
+
+
+
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-heading">
+                                            <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
+                                        </div>
+                                        <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
+                                            <div class="card-body">
+
+                                                <div class="shop__sidebar__tags">
+                                                    @foreach (var Tag in Model.Tags)
+                                                    {
+
+                                                        <input id="@Tag" asp-for="TagFilter" type="checkbox" value="@Tag" />
+                                                        <label for="@Tag">@Tag</label>
+
+
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @*</div>*@
+                            <div>
+                                <input class="btn btn-dark mt-5" type="submit" name="Submit" value="Submit" />
+                            </div>
+
+                            @*aqamde--------------------------*@
+                        </form>
                     </div>
-                    <form asp-action="shop" asp-controller="Home" enctype="multipart/form-data" method="post">
-                        <div class="shop__sidebar__accordion">
-                            <div class="accordion" id="accordionExample">
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
-                                    </div>
-                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                                        @*Category filter------------------------*@
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__categories">
-                                                <ul class="nice-scroll">
-                                                    @foreach (var categories in Model.Categories)
-                                                    {
-                                                    <li>
-                                                        <input id="@categories.name" type="checkbox"
-                                                               class="checkbox_selector category"
-                                                               value="@categories.name" />
-                                                        <label for="@categories.name">@categories.name</label>
-
-                                                    </li>
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @*Brand filter------------------------*@
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__brand">
-                                                <ul>
-                                                    @foreach (var brands in Model.Brands)
-                                                    {
-                                                    <li>
-                                                        <input id="@brands.name" type="checkbox" class="brand checkbox_selector" value="@brands.name" />
-                                                        <label for="@brands.name">@brands.name</label>
-
-                                                    </li>
-
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
-                                    </div>
-                                    @*Price filter---------------------------*@
-                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__price">
-                                                <ul>
-                                                    @foreach (var Price in Model.PriceList)
-                                                    {
-                                                    <li>
-                                                        <input id="@Price" type="checkbox" value="@Price" />
-                                                        <label for="@Price">$@(Price-50)-$@Price</label>
-
-                                                    </li>
-
-                                                    }
-
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @*Size Filter---------------------------*@
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseFour">Size</a>
-                                    </div>
-                                    <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__size">
-                                                @foreach (var size in Model.TextSizes)
-                                                {
-                                                    <input id=@size.name asp-for="SelectedSize" type="checkbox" value="@size.name">
-                                                    <label for="@size.name"> @size.name </label>
-
-
-
-                                                }
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @*<div class="card">
-                        <div class="card-heading">
-                            <a data-toggle="collapse" data-target="#collapseFive">Colors</a>
-                        </div>
-                        <div id="collapseFive" class="collapse show" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <div class="shop__sidebar__color">
-                                    <label class="c-1" for="sp-1">
-                                        <input type="radio" id="sp-1">
-                                    </label>
-                                    <label class="c-2" for="sp-2">
-                                        <input type="radio" id="sp-2">
-                                    </label>
-                                    <label class="c-3" for="sp-3">
-                                        <input type="radio" id="sp-3">
-                                    </label>
-                                    <label class="c-4" for="sp-4">
-                                        <input type="radio" id="sp-4">
-                                    </label>
-                                    <label class="c-5" for="sp-5">
-                                        <input type="radio" id="sp-5">
-                                    </label>
-                                    <label class="c-6" for="sp-6">
-                                        <input type="radio" id="sp-6">
-                                    </label>
-                                    <label class="c-7" for="sp-7">
-                                        <input type="radio" id="sp-7">
-                                    </label>
-                                    <label class="c-8" for="sp-8">
-                                        <input type="radio" id="sp-8">
-                                    </label>
-                                    <label class="c-9" for="sp-9">
-                                        <input type="radio" id="sp-9">
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
-                                    </div>
-                                    <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-
-                                            <div class="shop__sidebar__tags">
-                                                @foreach (var Tag in Model.Tags)
-                                                {
-
-                                                    <input id="@Tag" asp-for="TagFilter" type="checkbox" value="@Tag" />
-                                                    <label for="@Tag">@Tag</label>
-
-
-
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @*</div>*@
-                        <div>
-                            <input class="btn btn-dark mt-5" type="submit" name="Submit" value="Submit" />
-                        </div>
-
-                        @*aqamde--------------------------*@
-                    </form>
-                </div>
                 </div>
                 <div class="col-lg-9">
                     <div class="shop__product__option">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="shop__product__option__left">
-                                    <p>Showing 1-@Model.PageSize of @Model.ProductCount results</p>
-                                </div>
+
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="shop__product__option__right">
@@ -234,47 +195,27 @@
                                         </div>
                                     </div>
 
-                                    @*<form asp-action="Shop" asp-controller="Home" method="post">
 
-                            <select asp-for="SortOrder">
-
-                                <option value="Low To High">Low To High</option>
-                                <option value="High To Low">High To Low</option>
-
-
-                            </select>
-
-                        </form>*@
                                 </div>
                             </div>
                         </div>
                     </div>
-                  
-                    
+
+
                     @*normal Shop*@
-            
-                <div id="ProductList">
-                    @await Html.PartialAsync("_ProductListing", Model.products)
-                </div>
+
+                    <div id="ProductList">
+                        @await Html.PartialAsync("_ProductListing", Model.products)
+                    </div>
                     @*Pagination-----------------------------*@
                     <div class="row">
                         <div class="col-lg-12">
 
 
                             <div class="pagination">
-                                @*<ul>
-                                    <li class="page-item previous-page"><a class="page-link">Prev</a></li>
-                                    <li class="page-item current-page"><a class="page-link">1</a></li>
-                                    <li class="page-item dots"><a class="page-link">...</a></li>
-                                    <li class="page-item current-page"><a class="page-link">5</a></li>
-                                    <li class="page-item current-page"><a class="page-link">6</a></li>
-                                    <li class="page-item dots"><a class="page-link">...</a></li>
-                                    <li class="page-item current-page"><a class="page-link">10</a></li>
-                                    <li class="page-item next-page"><a class="page-link">Next</a></li>
-                                </ul>*@
 
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -282,8 +223,7 @@
         </div>
     </section>
     <!-- Shop Section End -->
-
-   <!-- Search Begin -->
+    <!-- Search Begin -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
@@ -302,7 +242,7 @@
 
     $(document).ready(function () {
         $("#searchField").on("keyup", function () {
-           var searchValue = this.value;
+            var searchValue = this.value;
             var searchList = $("#pagination-content .content");
             if (searchList.length !== 0 && searchList !== undefined && searchList !== null) {
                 Array.from(searchList).forEach(function (result, index) {
@@ -327,7 +267,7 @@
             $.ajax({
                 url: 'CustomFilter',
                 type: 'GET',
-                data: { CategoryName: categoryName,BrandName:brandName},
+                data: { CategoryName: categoryName, BrandName: brandName },
                 success: function (result) {
                     $("#ProductList").html(result);
                 }
@@ -336,14 +276,14 @@
         function get_filter(class_name) {
             var filter;
             $('.' + class_name + ':checked').each(function () {
-                filter=($(this).val());
+                filter = ($(this).val());
             });
-            return filter;           
+            return filter;
         };
         $(".checkbox_selector").change(function () {
             filter_data();
         })
-       
+
     });
 </script>
 

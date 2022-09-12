@@ -118,6 +118,7 @@ namespace WebApplicationCrud.Controllers
                        
                         var path = "product";
                         var tempListOfImages = new List<Image>();
+                        int counter = 0;
                         foreach (var Image in Productinfo.images)
                         {
                             var imgname = await _filemanager.SaveImageAsync(Image,path);
@@ -127,7 +128,7 @@ namespace WebApplicationCrud.Controllers
                             };
                           
                             tempListOfImages.Add(img);
-                           
+                            counter++;
                         }
                         tempProductInfo.Images = tempListOfImages;
                         tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.Thumbnail].Imagename;

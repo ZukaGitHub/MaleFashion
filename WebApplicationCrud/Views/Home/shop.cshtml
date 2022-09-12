@@ -39,11 +39,13 @@
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
 
-                            <input id="searchField" type="text" />
                             <span class="icon_search"></span>
+                            <input id="searchField" class="form-group form-control" style="display:inline;width:auto" type="text" />
+
 
 
                         </div>
+                        
                         <form asp-action="shop" asp-controller="Home" enctype="multipart/form-data" method="post">
                             <div class="shop__sidebar__accordion">
                                 <div class="accordion" id="accordionExample">

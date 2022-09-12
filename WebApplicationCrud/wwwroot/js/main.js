@@ -246,7 +246,7 @@
             $(".pagination li").slice(1, -1).remove();
             getPageList(totalPages, currentPage, paginationSize).forEach(item => {
                 $("<li>").addClass("page-item").addClass(item ? "currentPage" : "dots")
-                    .toggleClass("activePage", item === currentPage).append($("<a>").addClass("page-link")
+                    .toggleClass("activePage", item === currentPage).append($("<a>")
                         .attr({ href: "javascript:void(0)" }).text(item || "...")).insertBefore(".next-page");
             });
             $(".previous-page").toggleClass("disable", currentPage === 1);
@@ -254,8 +254,8 @@
 
         }
         $(".pagination").append(
-            $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Prev")),
-           $("<li>").addClass("page-item").addClass("next-page").append($("<a>").addClass("page-link").attr({ href: "javascript:void(0)" }).text("Next"))
+            $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").attr({ href: "javascript:void(0)" }).text("Prev")),
+           $("<li>").addClass("page-item").addClass("next-page").append($("<a>").attr({ href: "javascript:void(0)" }).text("Next"))
 
         );
         $("pagination-content").show();

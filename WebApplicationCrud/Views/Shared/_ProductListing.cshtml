@@ -1,9 +1,6 @@
 ﻿@model List<Product>
 
-@{
-    List<Product> products = ViewData["Products"] as List<Product>;
-    List<Thumbnail> thumbnails = ViewData["Thumbnails"] as List<Thumbnail>;
-}
+
 <div class="pagination-content" id="pagination-content">
     @foreach (var prod in Model)
     {
@@ -14,19 +11,28 @@
                 <div class="product__item ">
                     <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
 
-                        <div class="product__item__pic set-bg">
-                          
-                                @{
-                                    string image_path="";
-                                    if (string.IsNullOrEmpty(prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()))
-                                    {
+                        <div id="@prod.id"class="product__item__pic set-bg" >
+
+                            @{
+                                string image_path = "";
+                                if (!string.IsNullOrEmpty(prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()))
+                                {
 
 
-                                        image_path = $"/img/productAndBlogAddedImages{prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()}";
-                                    }
+
+                                    image_path = $"img/productAndBlogAddedImages/{prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()}";
+
+                                    <img  src="~/@image_path" />
                                 }
-                                <img src="@image_path" />
-                            
+                                else
+                                {
+                                    <img src="~/img/Default_Product.jpg" />
+                                }
+
+                            }
+
+
+
 
                             <ul class="product__hover">
                                 <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
@@ -54,17 +60,17 @@
                         
 
 
-                        <div class="product__color__select">
-                            <label for="pc-4">
-                                <input type="radio" id="pc-4">
-                            </label>
-                            <label class="active black" for="pc-5">
-                                <input type="radio" id="pc-5">
-                            </label>
-                            <label class="grey" for="pc-6">
-                                <input type="radio" id="pc-6">
-                            </label>
-                        </div>
+                            <div id="product__color__select" class="product__color__select">
+                                @foreach (var productInfo in prod.ProductInfos)
+                                {
+                                    <label  for="@productInfo.ProductInfoThumbnailName">
+                                        <input class="colorChange" type="radio" id="@productInfo.ProductInfoThumbnailName" style="background-color:@productInfo.color">
+                                    </label>
+
+                                }
+
+
+                            </div>
                     </div>
 
                 </div>
@@ -73,3 +79,19 @@
         </div>
     }
 </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".colorChange").change(function () {
+            console.log("mesiji",this);
+            var src = "img/productAndBlogAddedImages/" + $(this).id;
+            this.parentElement.classList.toggle("active");
+            $("#productThumbnail").attr("src", src);
+           
+
+        })
+    })
+  
+</script>

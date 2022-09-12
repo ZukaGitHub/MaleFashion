@@ -1954,17 +1954,20 @@ ol {
 .product__details__tab__content__item p {
 	margin-bottom: 0;
 }
-.pagination{
-	text-align:center;
-	margin:30px 30px 60px;
-	user-select:none;
-
+.pagination {
+	text-align: center;
+	margin: 30px 30px 60px;
+	user-select: none;
+	align-content: center;
+	justify-content: center;
 }
-.pagination li{
-	display:inline-block;
-	box-shadow:0 5px 25px rgb(1 1 1/10%);
-	margin:5px;
-}
+	.pagination li {
+		display: inline-block;
+		box-shadow: 0 5px 25px rgb(1 1 1/10%);
+		margin: 5px;
+		border-radius: 50%;
+		padding: 0 10px 0 10px;
+	}
 .pagination li a{
 	color:white;
 	text-decoration:none;
@@ -1976,13 +1979,18 @@ ol {
 	background:black;
     cursor:pointer;
 	width:80px;
+	
+	
 	border-radius:45px;
 	transition:0.3s ease;
 
 }
-.previous-page:hover{
-	transform:translateX(-5px);
-}
+	.previous-page a, .next-page a{
+		color:white !important;
+	}
+	.previous-page:hover {
+		transform: translateX(-5px);
+	}
 	.next-page:hover {
 		transform: translateX(5px);
 	}
@@ -1994,7 +2002,8 @@ ol {
 
 }
 .activePage{
-	background:red;
+	background:black;
+	
 }
 .disable{
 	background:#ccc;

@@ -41,7 +41,7 @@ namespace WebApplicationCrud.Data.FileManager
                 return false;
             }
         }
-        public async Task<string> SaveImageAsync(IFormFile Image,string path)
+        public async Task<string> SaveImageAsync(IFormFile Image,string path,string counter)
         {
             path = _imagePath;
             try

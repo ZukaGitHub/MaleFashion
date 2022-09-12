@@ -51,8 +51,18 @@
                 <div class="col-lg-4 col-md-6 col-sm-6">
                     @foreach (var post in Model.Posts)
                     {
+
+
                     <div class="blog__item">
-                        <div class="blog__item__pic set-bg" data-setbg="img/productAndBlogAddedImages/@post.Image"></div>
+                        @if (post.Image != null)
+                        {
+                            <div class="blog__item__pic set-bg" data-setbg="../img/productAndBlogAddedImages/@post.Image"></div>
+                        }
+                        else
+                        {
+                            <div class="blog__item__pic set-bg" data-setbg="../img/Default_Blog.png"></div>
+                        }
+
                         <div class="blog__item__text">
                             <span><img src="~/img/icon/calendar.png" alt="">@post.Created</span>
                             <h5>@post.Title</h5>
@@ -92,8 +102,8 @@
     <script src="~/js/jquery.countdown.min.js"></script>
     <script src="~/js/jquery.slicknav.js"></script>
     <script src="~/js/mixitup.min.js"></script>
-    <script src="~/js/owl.carousel.min.js"></script>
-    <script src="~/js/main.js"></script>*@
+    <script src="~/js/owl.carousel.min.js"></script>*@
+    <script src="~/js/main.js"></script>
 </body>
 
 </html>

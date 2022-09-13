@@ -118,20 +118,24 @@ namespace WebApplicationCrud.Controllers
                        
                         var path = "product";
                         var tempListOfImages = new List<Image>();
-                        int counter = 0;
-                        foreach (var Image in Productinfo.images)
+
+                        var imgnames = await _filemanager.SaveImagesAsync(Productinfo.images, path);
+                        if (imgnames != null)
                         {
-                            var imgname = await _filemanager.SaveImageAsync(Image,path);
-                            var img = new Image()
+                            foreach (var Image in imgnames)
                             {
-                                Imagename = imgname,
-                            };
-                          
-                            tempListOfImages.Add(img);
-                            counter++;
+
+                                var img = new Image()
+                                {
+                                    Imagename = Image,
+                                };
+
+                                tempListOfImages.Add(img);
+
+                            }
+                            tempProductInfo.Images = tempListOfImages;
+                            tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.Thumbnail].Imagename;
                         }
-                        tempProductInfo.Images = tempListOfImages;
-                        tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.Thumbnail].Imagename;
 
                         foreach (var StockAndSize in Productinfo.stockVms)
                         {
@@ -231,16 +235,43 @@ namespace WebApplicationCrud.Controllers
         {
             if (IsItProductId == ProductInfoId)
             {
-                var currentproduct = _ctx.Products.SingleOrDefault(s => s.id == ProductInfoId);
-                _ctx.Products.Remove(currentproduct);
-                await _ctx.SaveChangesAsync();
+                var currentproduct = _ctx.Products.Include(d=>d.Images).SingleOrDefault(s => s.id == ProductInfoId);
+
+                if(currentproduct!=null)
+                {
+                    if (currentproduct.ProductInfos != null)
+                    {
+                        var images = currentproduct.ProductInfos.SelectMany(s => s.Images).ToList();
+                        if (images != null)
+                        {
+                            _ctx.RemoveRange(images);
+                            var imagenames = images.Select(d => d.Imagename).ToList();
+                            _filemanager.DeleteImages(imagenames);
+                        }
+                    }
+                    _ctx.Products.Remove(currentproduct);
+                    await _ctx.SaveChangesAsync();
+                   
+                }
                 return RedirectToAction("Index");
             }
             else
             {
-                var CurrentProduct = _ctx.ProductInfos.SingleOrDefault(s => s.id == ProductInfoId);
-                _ctx.ProductInfos.Remove(CurrentProduct);
-                await _ctx.SaveChangesAsync();
+                var currentProductInfo = _ctx.ProductInfos.Include(d=>d.Images).SingleOrDefault(s => s.id == ProductInfoId);
+                    if(currentProductInfo!=null)
+                    {
+                    if (currentProductInfo.Images != null)
+                    {
+                        var images = currentProductInfo.Images;
+                        _ctx.Images.RemoveRange(images);
+                        var imagenames = images.Select(s => s.Imagename).ToList();
+                        _filemanager.DeleteImages(imagenames);
+                    }
+                    _ctx.ProductInfos.Remove(currentProductInfo);
+                    await _ctx.SaveChangesAsync();
+                     }
+               
+              
                 return RedirectToAction("Index");
             }
         }

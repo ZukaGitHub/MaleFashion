@@ -19,7 +19,7 @@ namespace WebApplicationCrud.Data.FileManager
             _imagePath = config["Path:Images"];
           
           
-
+            
         }
 
         public FileStream Imagestream(string Image)
@@ -41,7 +41,29 @@ namespace WebApplicationCrud.Data.FileManager
                 return false;
             }
         }
-        public async Task<string> SaveImageAsync(IFormFile Image,string path,string counter)
+        public bool RemoveImages(List<string> images)
+        {
+            
+            try
+            {
+                foreach (var image in images)
+                {
+
+
+                    var file = Path.Combine(_imagePath, image);
+                    if (File.Exists(file))
+                        File.Delete(file);
+                   
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+        public async Task<string> SaveImageAsync(IFormFile Image,string path)
         {
             path = _imagePath;
             try
@@ -63,6 +85,39 @@ namespace WebApplicationCrud.Data.FileManager
             catch (Exception)
             {
                 return "error";
+            }
+        }
+        public async Task<List<string>> SaveImagesAsync(List<IFormFile> Images, string path)
+        {
+            path = _imagePath;
+            var filenames = new List<string>();
+            try
+            {
+                for (int i = 0; i < Images.Count; i++)
+                {
+
+
+                    var save_path = Path.Combine(path);
+                    if (!Directory.Exists(save_path))
+                    {
+                        Directory.CreateDirectory(save_path);
+                    }
+                
+                    var filename = $"img_{DateTime.Now.ToString("dd-mm-yy-hh-mm-ss")}{"_" + i}{"_"+Images[i].FileName}";
+                    using (var filestream = new FileStream(Path.Combine(save_path, filename), FileMode.Create))
+                    {
+                        await Images[i].CopyToAsync(filestream);
+                    }
+                    filenames.Add(filename);
+                   
+                }
+                return filenames;
+            }
+            catch (Exception e)
+            {
+                var error = new List<string>();
+                error.Add(e.Message);
+                return error;
             }
         }
         public string DeleteImages(List<string> Imagenames)

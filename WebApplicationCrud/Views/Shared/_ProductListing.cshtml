@@ -22,11 +22,11 @@
 
                                     image_path = $"img/productAndBlogAddedImages/{prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()}";
 
-                                    <img  src="~/@image_path" />
+                                    <img id="img @prod.id" src="~/@image_path" />
                                 }
                                 else
                                 {
-                                    <img src="~/img/Default_Product.jpg" />
+                                    <img id="img @prod.id" src="~/img/Default_Product.jpg" />
                                 }
 
                             }
@@ -60,12 +60,18 @@
                         
 
 
-                            <div id="product__color__select" class="product__color__select">
+                            <div class="product__color__select">
                                 @foreach (var productInfo in prod.ProductInfos)
                                 {
-                                    <label  for="@productInfo.ProductInfoThumbnailName">
-                                        <input class="colorChange" type="radio" id="@productInfo.ProductInfoThumbnailName" style="background-color:@productInfo.color">
-                                    </label>
+                                <label for="@productInfo.color"  style="background-color:@productInfo.color">
+                                    <input class="colorChange" 
+                                           data-imgsrcid="img @prod.id"
+                                           data-imgname="@productInfo.ProductInfoThumbnailName"
+                                           type="radio" 
+                                           name="colorSelect"
+                                           id="@productInfo.color"
+                                           style="background-color:@productInfo.color">
+                                </label>
 
                                 }
 
@@ -85,10 +91,19 @@
 <script>
     $(document).ready(function () {
         $(".colorChange").change(function () {
-            console.log("mesiji",this);
-            var src = "img/productAndBlogAddedImages/" + $(this).id;
-            this.parentElement.classList.toggle("active");
-            $("#productThumbnail").attr("src", src);
+          
+            srcId = this.dataset.imgsrcid;
+            imgname = this.dataset.imgname;
+            var colors = document.querySelectorAll(".colorChange");
+            colors.forEach(color => {
+                color.parentElement.classList.remove("active");
+            })
+            var src = "../img/productAndBlogAddedImages/" + imgname;
+            if (this.checked) {
+                this.parentElement.classList.add("active");
+            }
+          
+            document.getElementById(srcId).src = src;
            
 
         })

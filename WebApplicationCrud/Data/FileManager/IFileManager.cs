@@ -8,7 +8,8 @@ namespace WebApplicationCrud.Data.FileManager
     public interface IFileManager
     {
         FileStream Imagestream(string Image);
-        Task<string> SaveImageAsync(IFormFile Image,string path,string counter);
+        Task<string> SaveImageAsync(IFormFile Image,string path);
+        Task<List<string>> SaveImagesAsync(List<IFormFile> Images,string path);
         string SaveThumbnail(IFormFile Thumbnail,string path);
 
         FileStream Thumbnailstream(string Image);

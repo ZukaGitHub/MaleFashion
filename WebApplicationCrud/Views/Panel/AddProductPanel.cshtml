@@ -1,5 +1,4 @@
 ﻿
-
 <head>
     <link href="~/css/Panel/AddProduct.css" rel="stylesheet" />
 </head>
@@ -13,16 +12,17 @@
                         <div class="loader"></div>
                     </div>
                     <button class="btn btn-success mt-5 mb-5" v-on:click="AddNewProductInfo()">
-                        Add New ProductInfo
+                        Add New productInfo
                     </button>
-                    <div v-for="(productInfo,Index) in ProductInfos">
-                        <h3 style="display:inline"> New ProductInfo  (index:{{ Index +1}})  </h3>
+                    <div v-for="(product,Index) in Products">
+                        <h3 style="display:inline"> New productInfo  (index:{{ Index +1}})  </h3>
                         <span class="float-right btn-danger removeProductBtn" v-on:click="RemoveProductInfo(Index)">X</span>
 
 
                         @{
                             List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
                             List<Category> Categories = ViewData["Categories"] as List<Category>;
+                            List<TextSize> Sizes = ViewData["Sizes"] as List<TextSize>;
                         }
                     <div class="grid-container">
 
@@ -33,7 +33,7 @@
                                 {
                                     <li>
                                         <label for="@Brandss[i].name">@Brandss[i].name</label>
-                                        <input id="@Brandss[i].name"  type="radio" value="@Brandss[i].name" v-model="productInfo.Brand" />
+                                        <input id="@Brandss[i].name"  type="radio" value="@Brandss[i].name" v-model="product.Brand" />
                                     </li>
 
                                 }
@@ -49,7 +49,7 @@
                                 {
                                     <li>
                                         <label for="@Categories[i].name" >@Categories[i].name</label>
-                                        <input id="@Categories[i].name"  type="radio" value="@Categories[i].name" v-model="productInfo.Category" />
+                                        <input id="@Categories[i].name"  type="radio" value="@Categories[i].name" v-model="product.Category" />
                                     </li>
 
                                 }
@@ -62,19 +62,19 @@
                                     <div class="col-lg-8">
                                         <div class="product__details__text form-group">
                                             <h4>SalePercentage</h4>
-                                            <input class="form-control" type="number" v-model="productInfo.salePercentage" />
+                                            <input class="form-control" type="number" v-model="product.salePercentage" />
                                             @*Name----------------------------------------*@
                                             <h4>name</h4>
-                                            <input class="form-control" type="text" v-model="productInfo.name" v-on:input="productInfo.Index=Index" />
+                                            <input class="form-control" type="text" v-model="product.name" v-on:input="product.Index=Index" />
                                             @*Price----------------------------------------*@
                                             <h4>Price</h4>
-                                            <input class="form-control" type="number" v-model="productInfo.price" />
+                                            <input class="form-control" type="number" v-model="product.price" />
                                            
                                                 @*Tags---------------------------------------------------------------*@
                                                 <h4>Tags</h4>
-                                                <input class="form-control" type="text" v-model="productInfo.Tagnames" />
+                                                <input class="form-control" type="text" v-model="product.Tagnames" />
                                                 <h4>Description</h4>
-                                                <input class="form-control" type="text" v-model="productInfo.Description" />
+                                                <input class="form-control" type="text" v-model="product.Description" />
                                           
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                         </div>
                     </div>
                         <div>
-                            <div v-for="(ProductDetail,Indexx) in productInfo.ProductDetails">
+                            <div v-for="(productInfo,Indexx) in product.ProductInfos">
 
                                 <table>
 
@@ -92,11 +92,13 @@
                                             {{Index +  1 }}
                                             Colors-{{Indexx + 1}}
                                         </th>
-                                        <th @*v-if="ProductDetail.Color.length>0"*@>
+                                        <th>
+                                            @*v-if="productInfo.Color.length>0"*@
                                             Sizes
 
                                         </th>
-                                        <th @*v-if="ProductDetail.Sizes.length>0"*@>
+                                        <th>
+                                            @*v-if="productInfo.Sizes.length>0"*@
                                             Stock
                                         </th>
                                         <th >
@@ -113,37 +115,39 @@
                                                 <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
 
                                                 <label>Color</label>
-                                                <input v-model="ProductDetail.Color" type="color" v-on:keyup.enter="ProductDetail.Index=Indexx" />
+                                                <input v-model="productInfo.Color" type="color" v-on:keyup.enter="productInfo.Index=Indexx" />
 
                                             </div>
                                         </td>
-                                        <td @*v-if="ProductDetail.Color.length>0"*@>
+                                        <td>
+                                            @*v-if="productInfo.Color.length>0"*@
                                             <div>
                                                 <div class="AdminPanelSizes">
 
 
-                                                    @for (int j = 0; j < Model.Sizes.Count; j++)
+                                                    @for (int j = 0; j < Sizes.Count; j++)
                                                     {
                                                         <label>
                                                             <input type="checkbox"
-                                                                   value="@Model.Sizes[j].Text" v-model="ProductDetail.Sizes"
+                                                                   value="@Sizes[j].name" v-model="productInfo.Sizes"
                                                                    v-on:change="PopulateStocks(Index,Indexx,this.event)" />
 
-                                                            <span>@Model.Sizes[j].Text</span>
+                                                            <span>@Sizes[j].name</span>
                                                         </label>
                                                     }
                                                 </div>
                                             </div>
                                         </td>
-                                        <td @*v-if="ProductDetail.Sizes.length>0"*@>
+                                        <td>
+                                            @*v-if="productInfo.Sizes.length>0"*@
                                             <div>
                                                 @*Computed Properties biiiiiiitch*@
                                                 <div>
-                                                    <div v-for="(sizes,indexxx) in ProductDetail.Sizes">
+                                                    <div v-for="(sizes,indexxx) in productInfo.Sizes">
 
 
-                                                        {{sizes}}-<input type="number" v-on:input="ProductDetail.stock[indexxx].SizeName=sizes"
-                                                                         v-model="ProductDetail.stock[indexxx].number" />
+                                                        {{sizes}}-<input type="number" v-on:input="productInfo.stock[indexxx].SizeName=sizes"
+                                                                         v-model="productInfo.stock[indexxx].number" />
 
 
 
@@ -153,41 +157,42 @@
 
                                         </td>
                                         @*multiple instances of same components updates only one key*@
-                                        <td @*v-if="ProductDetail.stock.length>0"*@>
+                                    <td>
+                                        @*v-if="productInfo.stock.length>0"*@
+                                        @*@@dragenter.prevent="toggleActive"
+        @@dragleave.prevent="toggleActive"
+        @@dragover.prevent
+        @@drop.prevent="toggleActive"
+        ::class="{'active-dropzone':productInfo.active}"
+                                        *@
 
-                                            @*@@dragenter.prevent="toggleActive"
-                            @@dragleave.prevent="toggleActive"
-                            @@dragover.prevent
-                            @@drop.prevent="toggleActive"
-                            ::class="{'active-dropzone':ProductDetail.active}"
-                                            *@
+                                        @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
 
-                                            @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
+                                        <div v-on:drop="drop(this.event,Indexx,Index)"
+                                             v-on:change="SelectFiles(Index,Indexx,this.event)"
+                                             @@dragleave.prevent="toggleActive(Index,Indexx)"
+                                             @@dragover.prevent
+                                             @@drop.prevent="toggleActive(Index,Indexx)"
+                                             ::class="{'active-dropzone':productInfo.active}"
+                                             class="DropzoneC">
 
-                                            <div v-on:drop="drop(this.event,Indexx,Index)"
-                                                 v-on:change="SelectFiles(Index,Indexx,this.event)"
-                                                 @@dragleave.prevent="toggleActive(Index,Indexx)"
-                                                 @@dragover.prevent
-                                                 @@drop.prevent="toggleActive(Index,Indexx)"
-                                                 ::class="{'active-dropzone':ProductDetail.active}"
-                                                 class="DropzoneC">
-
-                                                <span>Drag And Drop File</span>
-                                                <span>Or</span>
-                                                <label for="DropzoneFile">Select File</label>
-                                                <input type="file" id="DropzoneFile" class="selectFiles" multiple />
-                                            </div>
-                                            <div v-for="(File,index) in ProductDetail.dropzoneFiles" class="file-info">
+                                            <span>Drag And Drop File</span>
+                                            <span>Or</span>
+                                            <label for="DropzoneFile">Select File</label>
+                                            <input type="file" id="DropzoneFile" class="selectFiles" multiple />
+                                        </div>
+                                        <div class="ImageField">
+                                            <div v-for="(File,index) in productInfo.dropzoneFiles" class="file-info">
                                                 File:{{File.name}}
                                                 <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
                                             </div>
-                                            <div v-for="(Image,index) in ProductDetail.dropzoneFilesUrl">
-                                                <label>
-                                                    <input type="radio" :value=index v-model="ProductDetail.Thumbnail" />
-                                                    <img :src="Image" />
-                                                </label>
+                                            <div class="UploadedImage"  v-for="(Image,index) in productInfo.dropzoneFilesUrl">
+                                                <input type="radio" :value=index v-model="productInfo.Thumbnail" />
+                                                <img :src="Image" />
+
                                             </div>
-                                        </td>
+                                        </div>
+                                    </td>
                                     </tr>
 
                                 </table>
@@ -195,7 +200,7 @@
                         </div>
                     </div>
 
-                        @*Submit Button----------------------------------------------*@
+                      
                         <button class="btn-danger submitBtn" v-on:click="sendToServer">Submit</button>
 
                      
@@ -208,220 +213,4 @@
 
 
 
-<script defer>
-    var app = new Vue({
-        el: '.VueModel',
-
-        data: {
-            ProductInfos: [
-                {
-                    name: '',
-                    Category: '',
-                    price: '',
-                    Tagnames: '',
-                    Index: '',
-                    Brand: '',
-                    Description: '',
-                    salePercentage: '',
-                    ProductDetails: [
-                        {
-                            Color: '',
-                            Sizes: [],
-                            Thumbnail: '',
-                            stock: [],
-                            dropzoneFiles: [],
-                            dropzoneFilesUrl: [],
-                            Index: '',
-                            IndexInfo: '',
-                        }
-                    ],
-                }
-            ]
-        },
-
-        methods: {
-            sendToServer: function () {
-                let formdata = new FormData()
-
-                formdata.append('yle', 'lteeeeeee')
-
-                for (let i = 0; i < this.ProductInfos.length; i++) {
-                    formdata.append("productVms[" + i + "].name", this.ProductInfos[i].name)
-                    formdata.append("productVms[" + i + "].Category", this.ProductInfos[i].Category)
-                    formdata.append("productVms[" + i + "].Tagnames", this.ProductInfos[i].Tagnames)
-                    formdata.append("productVms[" + i + "].price", this.ProductInfos[i].price)
-                    formdata.append("productVms[" + i + "].Brand", this.ProductInfos[i].Brand)
-                    formdata.append("productVms[" + i + "].Description", this.ProductInfos[i].Description)
-                    formdata.append("productVms[" + i + "].salepercentage", this.ProductInfos[i].salePercentage)
-                    for (let j = 0; j < this.ProductInfos[i].ProductDetails.length; j++) {
-                        formdata.append("productVms[" + i + "].productInfoVms[" + j + "].color", this.ProductInfos[i].ProductDetails[j].Color)
-                        formdata.append("productVms[" + i + "].productInfoVms[" + j + "].sizes", this.ProductInfos[i].ProductDetails[j].Sizes)
-                        formdata.append("productVms[" + i + "].productInfoVms[" + j + "].Thumbnail", this.ProductInfos[i].ProductDetails[j].Thumbnail)
-                        for (let g = 0; g < this.ProductInfos[i].ProductDetails[j].dropzoneFiles.length; g++) {
-                            formdata.append("productVms[" + i + "].productInfoVms[" + j + "].images", this.ProductInfos[i].ProductDetails[j].dropzoneFiles[g])
-                        }
-                        for (let h = 0; h < this.ProductInfos[i].ProductDetails[j].stock.length; h++) {
-                            formdata.append
-                                ("productVms[" + i + "].productInfoVms[" + j + "].stockVms[" + h + "].sizeName",
-                                    this.ProductInfos[i].ProductDetails[j].stock[h].SizeName)
-                            formdata.append
-                                ("productVms[" + i + "].productInfoVms[" + j + "].stockVms[" + h + "].number",
-                                    this.ProductInfos[i].ProductDetails[j].stock[h].number)
-                        }
-                    }
-                }
-
-                axios({
-                    method: 'post',
-                    url: '/Panel/AddProductPanel',
-
-
-                    data: formdata
-
-                })
-                    .then(function (response) {
-                        alert("product was added");
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-
-            },
-            drop(e, ProdInfoIndex, ProdDetailsIndex) {
-                console.log(e)
-
-
-                this.ProductInfos[ProdInfoIndex]
-                    .ProductDetails[ProdDetailsIndex].
-                    dropzoneFiles.push(e.dataTransfer.files[0])
-
-                let url = URL.createObjectURL(e.dataTransfer.files[0])
-                this.ProductInfos[ProdInfoIndex]
-                    .ProductDetails[ProdDetailsIndex]
-                    .dropzoneFilesUrl.push(url)
-
-            },
-            SelectFiles(ProdInfoIndex, ProdDetailsIndex, e) {
-                console.log(e)
-                console.log(ProdInfoIndex, ProdDetailsIndex)
-
-                for (let i = 0; i < e.target.files.length; i++) {
-
-                    this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
-                        dropzoneFiles.push(e.target.files[i])
-
-                    let url = URL.createObjectURL(e.target.files[i])
-                    this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
-                        dropzoneFilesUrl.push(url)
-
-                }
-
-
-            },
-
-            AddNewProductInfo: function () {
-                this.ProductInfos.push({
-
-                    name: '',
-                    Index: '',
-                    Category: '',
-                    price: '',
-                    Tagnames: '',
-                    Brand: '',
-                    Description: '',
-                    ProductDetails: [
-                        {
-                            Color: '',
-                            Sizes: [],
-                            stock: [],
-                            dropzoneFiles: [],
-                            active: false,
-                            dropzoneFilesUrl: [],
-
-                            Index: '',
-                            IndexInfo: '',
-
-
-
-                        }]
-                    ,
-
-
-                })
-            },
-            PopulateStocks: function (ProdInfoIndex, ProdDetailsIndex, event) {
-
-                console.log(event)
-                console.log(ProdInfoIndex, ProdDetailsIndex)
-                if (event.target.checked) {
-                    this.ProductInfos[ProdInfoIndex]
-                        .ProductDetails[ProdDetailsIndex]
-                        .stock.push({ SizeName: event.target.value, number: '' })
-                }
-                else {
-
-
-
-
-                    for (let i = 0; i < this.ProductInfos[ProdInfoIndex]
-                        .ProductDetails[ProdDetailsIndex].stock.length; i++) {
-                        if (this.ProductInfos[ProdInfoIndex]
-                            .ProductDetails[ProdDetailsIndex].stock[i].SizeName == event.target.value) {
-                            this.ProductInfos[ProdInfoIndex]
-                                .ProductDetails[ProdDetailsIndex].stock.splice(i, 1)
-                        }
-
-                    }
-
-
-
-
-                }
-
-
-
-            },
-            AddNewProductDetail: function (Index) {
-
-
-                this.ProductInfos[Index].ProductDetails.push({
-                    Color: '',
-                    Sizes: [],
-                    stock: [],
-                    dropzoneFiles: [],
-
-                    dropzoneFilesUrl: [],
-
-                    Index: '',
-                    IndexInfo: '',
-
-
-                })
-            },
-            jandaba: function (e) {
-                console.log(e)
-            },
-            RemoveImage(e, index, ProdInfoIndex, ProdDetailsIndex) {
-                this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
-                    dropzoneFiles.splice(index, 1)
-                this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailsIndex].
-                    dropzoneFilesUrl.splice(index, 1)
-                console.log(e)
-            },
-
-            RemoveProductInfo(Index) {
-                this.ProductInfos.splice(Index, 1)
-            },
-            RemoveProductDetail(DetailIndex, InfoIndex) {
-                console.log()
-                this.ProductInfos[InfoIndex].ProductDetails.splice(DetailIndex, 1)
-            },
-
-            toggleActive(ProdInfoIndex, ProdDetailIndex) {
-                this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailIndex].active =
-                    !this.ProductInfos[ProdInfoIndex].ProductDetails[ProdDetailIndex].active
-            }
-        }
-
-    })
-</script>
+<script src="~/js/addOrEditProduct.js" defer></script>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
 using WebApplicationCrud.Models;
 using WebApplicationCrud.ViewModels;
+using WebApplicationCrud.ViewModels.PanelVMs;
 
 namespace WebApplicationCrud.Controllers
 {
@@ -45,57 +47,48 @@ namespace WebApplicationCrud.Controllers
      
 
         [HttpGet]
-        public IActionResult AddProductPanel()
+        public IActionResult AddProductPanel(int?[] productIds)
 
         {
+           
             var Brandss = _ctx.Brands.ToList();
             var Categories = _ctx.Categories.ToList();
+            var Sizes = _ctx.TextSizes.ToList();
+
+            ViewData["Sizes"] = Sizes;
 
             ViewData["Brandss"] = Brandss;
             ViewData["Categories"] = Categories;
-            var TextSizes = _ctx.TextSizes.ToList();
-            var temp = new List<SelectListItem>();
-            var temp2 = new List<string>();
-            foreach (var Item in TextSizes)
+
+            if (productIds != null)
             {
-                var SelectedItem = new SelectListItem()
-                {
-                    Value = Item.id.ToString(),
-                    Text = Item.name
 
-                };
-                string selecteditem2 = Item.name;
-                temp2.Add(selecteditem2);
-
-                temp.Add(SelectedItem);
             }
-            this.Sizes = temp;
 
 
-            return View(new AddProductVMget()
-            {
-                Sizes = Sizes,
-                Sizes2 = temp2
-            });
+            return View();
 
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> AddProductPanel(AddProductVMpost vm)
+        public async Task<IActionResult> AddProductPanel(string jsonProducts,ProductImagesVm productImages)
         {
+
+            AddProductVMpost vm = JsonConvert.DeserializeObject<AddProductVMpost>(jsonProducts);
+
             var VMproducts = new List<Product>();
             if (vm != null)
             {
-                for (int i = 0; i < vm.productVms.Count; i++)
+                for (int i = 0; i < vm.Products.Count; i++)
                 {
 
-                    if (vm.productVms[i].salePercentage == null)
+                    if (vm.Products[i].SalePercentage == null)
                     {
                         VMproducts[i].SalePercentage = 0;
 
                     }
-                    var newTagNames = vm.productVms[i].tagnames.Split(' ');
+                    var newTagNames = vm.Products[i].Tagnames.Split(' ');
 
                     var productInfos = new List<ProductInfo>();
                     var Tags = new List<Tag>();
@@ -111,33 +104,33 @@ namespace WebApplicationCrud.Controllers
                     ViewData["Brandss"] = Brandss;
 
 
-                    foreach (var Productinfo in vm.productVms[i].productInfoVms)
+                    foreach (var Productinfo in vm.Products[i].ProductInfos)
                     {
                         var tempProductInfo = new ProductInfo();
-                        tempProductInfo.color = Productinfo.color;
+                        tempProductInfo.color = Productinfo.Color;
                        
                         var path = "product";
                         var tempListOfImages = new List<Image>();
 
-                        var imgnames = await _filemanager.SaveImagesAsync(Productinfo.images, path);
-                        if (imgnames != null)
-                        {
-                            foreach (var Image in imgnames)
-                            {
+                        //var imgnames = await _filemanager.SaveImagesAsync(Productinfo.images, path);
+                        //if (imgnames != null)
+                        //{
+                        //    foreach (var Image in imgnames)
+                        //    {
 
-                                var img = new Image()
-                                {
-                                    Imagename = Image,
-                                };
+                        //        var img = new Image()
+                        //        {
+                        //            Imagename = Image,
+                        //        };
 
-                                tempListOfImages.Add(img);
+                        //        tempListOfImages.Add(img);
 
-                            }
-                            tempProductInfo.Images = tempListOfImages;
-                            tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.Thumbnail].Imagename;
-                        }
+                        //    }
+                        //    tempProductInfo.Images = tempListOfImages;
+                        //    tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.].Imagename;
+                        //}
 
-                        foreach (var StockAndSize in Productinfo.stockVms)
+                        foreach (var StockAndSize in Productinfo.Stock)
                         {
                             var tempStockandSize = new ProductInfoStockAndSize()
                             {
@@ -151,17 +144,17 @@ namespace WebApplicationCrud.Controllers
                         }
                         productInfos.Add(tempProductInfo);
                     }
-                    var salepercentage = int.Parse(vm.productVms[i].salePercentage);
+                    var salepercentage = int.Parse(vm.Products[i].SalePercentage);
                     var product = new Product()
                     {
-                        name = vm.productVms[i].name,
-                        desc = vm.productVms[i].description,
-                        BrandName = vm.productVms[i].brand,
-                        price = vm.productVms[i].price,
-                        CategoryName = vm.productVms[i].category,
+                        name = vm.Products[i].Name,
+                        desc = vm.Products[i].Description,
+                        BrandName = vm.Products[i].Brand,
+                        price = vm.Products[i].Price,
+                        CategoryName = vm.Products[i].Category,
                         ProductInfos = productInfos,
-                        SalePercentage = int.Parse(vm.productVms[i].salePercentage),
-                        NewPrice = (vm.productVms[i].price * (100 - salepercentage) / 100),
+                        SalePercentage = int.Parse(vm.Products[i].SalePercentage),
+                        NewPrice = (vm.Products[i].Price * (100 - salepercentage) / 100),
                         Tags = Tags,
                         OwnerId = _userManager.GetUserId(HttpContext.User)
                     
@@ -172,7 +165,7 @@ namespace WebApplicationCrud.Controllers
                 }
 
                 _ctx.AddRange(VMproducts);
-                _ctx.SaveChanges();
+                await _ctx.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             else
@@ -218,19 +211,8 @@ namespace WebApplicationCrud.Controllers
 
 
         //    return RedirectToAction("Index");
+
         //}
-
-        public IActionResult EditProduct(int ProductId)
-        {
-            var currentproduct = _ctx.Products.SingleOrDefault(s => s.id == ProductId);
-
-
-            //Coming Soon-------------------------------------------------
-
-
-
-            return View();
-        }
         public async Task<IActionResult> Remove(int ProductInfoId, int? IsItProductId)
         {
             if (IsItProductId == ProductInfoId)

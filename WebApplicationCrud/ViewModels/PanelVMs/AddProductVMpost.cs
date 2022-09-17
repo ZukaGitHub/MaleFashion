@@ -4,44 +4,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplicationCrud.Models;
 
 namespace WebApplicationCrud.ViewModels
 {
     public class AddProductVMpost
-    {
-
-       
-       
-       
-      
-
-        public List<productVm> productVms { get; set; }
+    { 
+        public List<productVm> Products { get; set; }
     }
 
 
 
     public class productVm
-    {
-       
-        public string name { get; set; }
-        public string category { get; set; }
-        public string tagnames { get; set; }
-       
-        public float price { get; set; }
-        public string brand { get; set; }
-        public string description { get; set; }
-        public string salePercentage { get; set; }
-        public List<productInfoVm> productInfoVms { get; set; }
+    {       
+        public int? Id { get; set; }
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string Tagnames { get; set; }       
+        public float Price { get; set; }
+        public string Brand { get; set; }
+        public string Description { get; set; }
+        public string SalePercentage { get; set; }
+        public List<productInfoVm> ProductInfos { get; set; }
     }
 
     public class productInfoVm
     {
-        public string color { get; set; }
-        public string[] sizes { get; set; }
-
-        public List<IFormFile> images { get; set; }
-        public int Thumbnail { get; set; }
-        public List<stockVm> stockVms { get; set; }
+        public string Color { get; set; }
+     
+        public List<Image> Images { get; set; }       
+        public List<stockVm> Stock { get; set; }
 
 
     }

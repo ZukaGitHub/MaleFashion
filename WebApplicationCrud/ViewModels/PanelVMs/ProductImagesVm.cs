@@ -8,8 +8,12 @@ namespace WebApplicationCrud.ViewModels.PanelVMs
 {
     public class ProductImagesVm
     {
-        public List<RoomImagesVm> RoomImagesVms { get; set; }
 
+        public List<ProductImages> ProductImages { get; set; }
+    }
+    public class ProductImages
+    {
+        public List<RoomImagesVm> RoomImagesVms { get; set; }
     }
     public class RoomImagesVm
     {

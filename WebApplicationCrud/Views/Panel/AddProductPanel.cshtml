@@ -1,4 +1,4 @@
-﻿
+﻿@model int[]
 <head>
     <link href="~/css/Panel/AddProduct.css" rel="stylesheet" />
 </head>
@@ -23,65 +23,66 @@
                             List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
                             List<Category> Categories = ViewData["Categories"] as List<Category>;
                             List<TextSize> Sizes = ViewData["Sizes"] as List<TextSize>;
+                          
                         }
-                    <div class="grid-container">
+                        <div class="grid-container">
 
-                        <div class="grid-item form-group">
-                            <h3>Brands</h3>
-                            <ul class="form-check">
-                                @for (int i = 0; i < Brandss.Count; i++)
-                                {
-                                    <li>
-                                        <label for="@Brandss[i].name">@Brandss[i].name</label>
-                                        <input id="@Brandss[i].name"  type="radio" value="@Brandss[i].name" v-model="product.Brand" />
-                                    </li>
+                            <div class="grid-item form-group">
+                                <h3>Brands</h3>
+                                <ul class="form-check">
+                                    @for (int i = 0; i < Brandss.Count; i++)
+                                    {
+                                        <li>
+                                            <label for="@Brandss[i].name">@Brandss[i].name</label>
+                                            <input id="@Brandss[i].name" type="radio" value="@Brandss[i].name" v-model="product.Brand" />
+                                        </li>
 
-                                }
-                            </ul>
-                        </div>
+                                    }
+                                </ul>
+                            </div>
 
 
-                        <div class="grid-item form-group">
-                            <h3>Categories</h3>
-                            <ul>
+                            <div class="grid-item form-group">
+                                <h3>Categories</h3>
+                                <ul>
 
-                                @for (int i = 0; i < Categories.Count; i++)
-                                {
-                                    <li>
-                                        <label for="@Categories[i].name" >@Categories[i].name</label>
-                                        <input id="@Categories[i].name"  type="radio" value="@Categories[i].name" v-model="product.Category" />
-                                    </li>
+                                    @for (int i = 0; i < Categories.Count; i++)
+                                    {
+                                        <li>
+                                            <label for="@Categories[i].name">@Categories[i].name</label>
+                                            <input id="@Categories[i].name" type="radio" value="@Categories[i].name" v-model="product.Category" />
+                                        </li>
 
-                                }
-                            </ul>
+                                    }
+                                </ul>
 
-                        </div>
-                        <div class="grid-item product__details__content form-group">
-                            <div class="container">
-                                <div class="row d-flex justify-content-center">
-                                    <div class="col-lg-8">
-                                        <div class="product__details__text form-group">
-                                            <h4>SalePercentage</h4>
-                                            <input class="form-control" type="number" v-model="product.salePercentage" />
-                                            @*Name----------------------------------------*@
-                                            <h4>name</h4>
-                                            <input class="form-control" type="text" v-model="product.name" v-on:input="product.Index=Index" />
-                                            @*Price----------------------------------------*@
-                                            <h4>Price</h4>
-                                            <input class="form-control" type="number" v-model="product.price" />
-                                           
+                            </div>
+                            <div class="grid-item product__details__content form-group">
+                                <div class="container">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-lg-8">
+                                            <div class="product__details__text form-group">
+                                                <h4>SalePercentage</h4>
+                                                <input class="form-control" type="number" v-model="product.salePercentage" />
+                                                @*Name----------------------------------------*@
+                                                <h4>name</h4>
+                                                <input class="form-control" type="text" v-model="product.name" v-on:input="product.Index=Index" />
+                                                @*Price----------------------------------------*@
+                                                <h4>Price</h4>
+                                                <input class="form-control" type="number" v-model="product.price" />
+
                                                 @*Tags---------------------------------------------------------------*@
                                                 <h4>Tags</h4>
                                                 <input class="form-control" type="text" v-model="product.Tagnames" />
                                                 <h4>Description</h4>
                                                 <input class="form-control" type="text" v-model="product.Description" />
-                                          
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                         <div>
                             <div v-for="(productInfo,Indexx) in product.ProductInfos">
 
@@ -101,7 +102,7 @@
                                             @*v-if="productInfo.Sizes.length>0"*@
                                             Stock
                                         </th>
-                                        <th >
+                                        <th>
                                             Images
                                         </th>
 
@@ -114,8 +115,8 @@
                                                 </span>
                                                 <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
 
-                                                <label>Color</label>
-                                                <input v-model="productInfo.Color" type="color" v-on:keyup.enter="productInfo.Index=Indexx" />
+                                                @*<label>Color</label>
+                                                    <input v-model="productInfo.Color" value="#ffffff" type="color" v-on:keyup.enter="productInfo.Index=Indexx" />*@
 
                                             </div>
                                         </td>
@@ -157,42 +158,42 @@
 
                                         </td>
                                         @*multiple instances of same components updates only one key*@
-                                    <td>
-                                        @*v-if="productInfo.stock.length>0"*@
-                                        @*@@dragenter.prevent="toggleActive"
-        @@dragleave.prevent="toggleActive"
-        @@dragover.prevent
-        @@drop.prevent="toggleActive"
-        ::class="{'active-dropzone':productInfo.active}"
-                                        *@
+                                        <td>
+                                            @*v-if="productInfo.stock.length>0"*@
+                                            @*@@dragenter.prevent="toggleActive"
+                                                @@dragleave.prevent="toggleActive"
+                                                @@dragover.prevent
+                                                @@drop.prevent="toggleActive"
+                                                ::class="{'active-dropzone':productInfo.active}"
+                                            *@
 
-                                        @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
+                                            @*<div v-on:drop="drop(this.event,index,indexx)" v-on:change="SelectFiles(index,indexx,this.event)" :key=Indexx>*@
 
-                                        <div v-on:drop="drop(this.event,Indexx,Index)"
-                                             v-on:change="SelectFiles(Index,Indexx,this.event)"
-                                             @@dragleave.prevent="toggleActive(Index,Indexx)"
-                                             @@dragover.prevent
-                                             @@drop.prevent="toggleActive(Index,Indexx)"
-                                             ::class="{'active-dropzone':productInfo.active}"
-                                             class="DropzoneC">
+                                            <div v-on:drop="drop(this.event,Indexx,Index)"
+                                                 v-on:change="SelectFiles(Index,Indexx,this.event)"
+                                                 @@dragleave.prevent="toggleActive(Index,Indexx)"
+                                                 @@dragover.prevent
+                                                 @@drop.prevent="toggleActive(Index,Indexx)"
+                                                 ::class="{'active-dropzone':productInfo.active}"
+                                                 class="DropzoneC">
 
-                                            <span>Drag And Drop File</span>
-                                            <span>Or</span>
-                                            <label for="DropzoneFile">Select File</label>
-                                            <input type="file" id="DropzoneFile" class="selectFiles" multiple />
-                                        </div>
-                                        <div class="ImageField">
-                                            <div v-for="(File,index) in productInfo.dropzoneFiles" class="file-info">
-                                                File:{{File.name}}
-                                                <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
+                                                <span>Drag And Drop File</span>
+                                                <span>Or</span>
+                                                <label for="DropzoneFile">Select File</label>
+                                                <input type="file" id="DropzoneFile" class="selectFiles" multiple />
                                             </div>
-                                            <div class="UploadedImage"  v-for="(Image,index) in productInfo.dropzoneFilesUrl">
-                                                <input type="radio" :value=index v-model="productInfo.Thumbnail" />
-                                                <img :src="Image" />
+                                            <div class="ImageField">
+                                                <div v-for="(File,index) in productInfo.dropzoneFiles" class="file-info">
+                                                    File:{{File.name}}
+                                                    <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
+                                                </div>
+                                                <div class="UploadedImage" v-for="(Image,index) in productInfo.dropzoneFilesUrl">
+                                                    <input type="radio" :value=index v-model="productInfo.Thumbnail" />
+                                                    <img :src="Image" />
 
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
                                     </tr>
 
                                 </table>
@@ -200,17 +201,243 @@
                         </div>
                     </div>
 
-                      
-                        <button class="btn-danger submitBtn" v-on:click="sendToServer">Submit</button>
 
-                     
-                    </div>
+                    <button class="btn-danger submitBtn" v-on:click="sendToServer">Submit</button>
+
+
                 </div>
-               </div>
-            
+            </div>
+    </div>
+
 </body>
 
 
 
 
-<script src="~/js/addOrEditProduct.js" defer></script>
+<script  defer>
+    var app = new Vue({
+        el: '.VueModel',
+
+        data: {
+            Products: [
+                {
+                    id: '',
+                    name: '',
+                    Category: '',
+                    price: '',
+                    Tagnames: '',
+                    Index: '',
+                    Brand: '',
+                    Description: '',
+                    salePercentage: '',
+                    ProductInfos: [
+                        {
+                            Color: '',
+                            Sizes: [],
+                            Thumbnail: '',
+                            StocksAndSizes: [{
+                                Size: '',
+                                Stock: '',
+                            }],
+                            stock: [],
+                            dropzoneFiles: [],
+                            dropzoneFilesUrl: [],
+                            Index: '',
+                            IndexInfo: '',
+                        }
+                    ],
+                }
+            ]
+        },
+
+        methods: {
+            sendToServer: function () {
+                let formdata = new FormData()
+
+                formdata.append("jsonProducts", JSON.stringify(this.Products))
+                for (let i = 0; i < this.Products.length; i++) {
+                    for (let j = 0; j < this.Products[i].ProductInfos.length; j++) {
+                        formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].ProductIndex", i)
+                        formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].ThumbnailIndex", this.Products[i].ProductInfos[j].Thumbnail)
+                        for (let g = 0; g < this.Products[i].ProductInfos[j].dropzoneFiles.length; g++) {
+                            formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].RoomImages", this.Products[i].ProductInfos[j].dropzoneFiles[g])
+                        }
+
+                    }
+                }
+
+                axios({
+                    method: 'post',
+                    url: '/Panel/AddProductPanel',
+                    data: formdata
+
+                })
+                    .then(function (response) {
+                        alert("product was added");
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+
+            },
+            getProductsToEdit: function (ids) {
+                if (ids != null) {
+                    let formdata = new FormData()
+                    formdata.append("productIds", ids)
+                    axios({
+                        method: 'get',
+                        url: 'GetEditProducts',
+                        data: formdata
+
+                    }).then(function (response) {
+                        console.log("response", response)
+                    })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+                }
+            },
+
+            drop(e, ProdInfoIndex, ProdDetailsIndex) {
+                console.log(e)
+
+
+                this.Products[ProdInfoIndex]
+                    .ProductInfos[ProdDetailsIndex].
+                    dropzoneFiles.push(e.dataTransfer.files[0])
+
+                let url = URL.createObjectURL(e.dataTransfer.files[0])
+                this.Products[ProdInfoIndex]
+                    .ProductInfos[ProdDetailsIndex]
+                    .dropzoneFilesUrl.push(url)
+
+            },
+            SelectFiles(ProdInfoIndex, ProdDetailsIndex, e) {
+                console.log(e)
+                console.log(ProdInfoIndex, ProdDetailsIndex)
+
+                for (let i = 0; i < e.target.files.length; i++) {
+
+                    this.Products[ProdInfoIndex].ProductInfos[ProdDetailsIndex].
+                        dropzoneFiles.push(e.target.files[i])
+
+                    let url = URL.createObjectURL(e.target.files[i])
+                    this.Products[ProdInfoIndex].ProductInfos[ProdDetailsIndex].
+                        dropzoneFilesUrl.push(url)
+
+                }
+
+
+            },
+
+            AddNewProductInfo: function () {
+                this.Products.push({
+
+                    name: '',
+                    Index: '',
+                    Category: '',
+                    price: '',
+                    Tagnames: '',
+                    Brand: '',
+                    Description: '',
+                    ProductInfos: [
+                        {
+                            Color: '',
+
+                            Sizes: [],
+                            stock: [],
+                            dropzoneFiles: [],
+                            active: false,
+                            dropzoneFilesUrl: [],
+
+                            Index: '',
+                            IndexInfo: '',
+
+
+
+                        }]
+                    ,
+
+
+                })
+            },
+            PopulateStocks: function (ProdInfoIndex, ProdDetailsIndex, event) {
+
+                console.log(event)
+                console.log(ProdInfoIndex, ProdDetailsIndex)
+                if (event.target.checked) {
+                    this.Products[ProdInfoIndex]
+                        .ProductInfos[ProdDetailsIndex]
+                        .stock.push({ SizeName: event.target.value, number: '' })
+                }
+                else {
+
+
+
+
+                    for (let i = 0; i < this.ProductInfos[ProdInfoIndex]
+                        .ProductInfos[ProdDetailsIndex].stock.length; i++) {
+                        if (this.Products[ProdInfoIndex]
+                            .ProductInfos[ProdDetailsIndex].stock[i].SizeName == event.target.value) {
+                            this.Products[ProdInfoIndex]
+                                .ProductInfos[ProdDetailsIndex].stock.splice(i, 1)
+                        }
+
+                    }
+
+
+
+
+                }
+
+
+
+            },
+            AddNewProductDetail: function (Index) {
+
+
+                this.Products[Index].ProductInfos.push({
+                    Color: '',
+                    Sizes: [],
+                    stock: [],
+                    dropzoneFiles: [],
+
+                    dropzoneFilesUrl: [],
+
+                    Index: '',
+                    IndexInfo: '',
+
+
+                })
+            },
+            RemoveImage(e, index, ProdInfoIndex, ProdDetailsIndex) {
+                this.Products[ProdInfoIndex].ProductInfos[ProdDetailsIndex].
+                    dropzoneFiles.splice(index, 1)
+                this.Products[ProdInfoIndex].ProductInfos[ProdDetailsIndex].
+                    dropzoneFilesUrl.splice(index, 1)
+                console.log(e)
+            },
+
+            RemoveProductInfo(Index) {
+                this.ProductInfos.splice(Index, 1)
+            },
+            RemoveProductDetail(DetailIndex, InfoIndex) {
+                console.log()
+                this.Products[InfoIndex].ProductInfos.splice(DetailIndex, 1)
+            },
+
+            toggleActive(ProdInfoIndex, ProdDetailIndex) {
+                this.Products[ProdInfoIndex].ProductInfos[ProdDetailIndex].active =
+                    !this.Products[ProdInfoIndex].ProductInfos[ProdDetailIndex].active
+            }
+        },
+        mounted() {
+            if (@Model[0]!= null) {
+                this.getProductsToEdit(@Model[0])
+            }
+        }
+
+    })
+
+</script>

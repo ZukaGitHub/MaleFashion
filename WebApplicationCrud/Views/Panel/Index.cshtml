@@ -2,48 +2,222 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Sidebar 04</title>w
+    <title>List Of Products</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/js/DatatableAssets/extensions/filter-control/bootstrap-table-filter-control.min.css" />
+    <link href="~/js/DatatableAssets/bootstrap-table.css" rel="stylesheet" />
+
 </head>
 <body>
 
     <div class="wrapper d-flex align-items-stretch">
-      <partial name="_AdministrationSidebar">
-       
-        <!-- Page Content  -->
-        <div id="content" class="p-4 p-md-5 pt-5">
-            <h2 class="mb-4">Sidebar #04</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            @for (int i = 0; i < Model.MyProducts.Count; i++)
-            {
-                <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
-                <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
-                for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count; j++)
+        <partial name="_AdministrationSidebar">
+
+            <!-- Page Content  -->
+            <div id="content" class="p-4 p-md-5 pt-5">
+                <h2 class="mb-4">List Of Products</h2>
+
+
+
+                <table id="productsTable"
+                       data-toggle="table"
+                       data-pagination="true"
+                       data-search="true"
+                       data-show-fullscreen="true"
+                       data-show-toggle="true"
+                       data-toolbar="#toolbar"
+                       data-advanced-search="false"
+                       data-id-table="advancedTable"
+                       data-filter-control="true"
+                       data-filter-show-clear="true">
+
+                    >
+                    <thead>
+                        <tr>
+                            <th data-field="Id">Id</th>
+                            <th data-field="Name">Name</th>
+                            <th data-field="Pictures">Pictures</th>
+                            <th data-field="Category">Category</th>
+                            <th data-field="Brand">Brand</th>
+                            <th data-field="Tags">Tags</th>
+                            <th data-field="Price" data-sortable="true">Price</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.MyProducts.Count > 0)
+                        {
+                            @foreach (var product in Model.MyProducts)
+                            {
+                                <tr>
+                                    <td>
+                                        @product.id
+                                    </td>
+                                    <td>
+                                        @product.name
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>@product.CategoryName</td>
+                                    <td>
+                                        @product.brand.name
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        @product.price
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+
+
+
+                @for (int i = 0; i < Model.MyProducts.Count; i++)
                 {
-                    <div>
+                    <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
+                    <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
+                    for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count; j++)
+                    {
+                        <div>
 
-                        <a asp-action="EditProductInfo" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Edit Product</a>
-                        <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Remove Product</a>
-                        <p>@Model.MyProducts[i].name</p>
-                        @*<p>@Model.MyProducts[i].ProductInfos[j].Size</p>*@
-                        <p>@Model.MyProducts[i].ProductInfos[j].color</p>
-                        @*<p>@Model.MyProducts[i].ProductInfos[j].Quantity</p>
-                    <p>@Model.MyProducts[i].ProductInfos[j].SizeText</p>*@
+                            <a asp-action="EditProductInfo" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Edit Product</a>
+                            <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Remove Product</a>
+                            <p>@Model.MyProducts[i].name</p>
+                            @*<p>@Model.MyProducts[i].ProductInfos[j].Size</p>*@
+                            <p>@Model.MyProducts[i].ProductInfos[j].color</p>
+                            @*<p>@Model.MyProducts[i].ProductInfos[j].Quantity</p>
+                                <p>@Model.MyProducts[i].ProductInfos[j].SizeText</p>*@
 
-                        ------------------------------------------------------------------------
+                            ------------------------------------------------------------------------
 
-                    </div>
+                        </div>
+                    }
                 }
-            }
-        </div>
+            </div>
     </div>
 
-   
+
 </body>
 </html>
 
+<script src="~/js/DatatableAssets/bootstrap-table.min.js"></script>
+<script src="~/js/DatatableAssets/extensions/toolbar/bootstrap-table-toolbar.min.js"></script>
+<script src="~/js/DatatableAssets/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var table = $('#table')
+    var TempId = 0;
+    function actionFormatter(index, row) {
+        var html = []
+        $.each(row, function (key, value) {
+            if (key == 'Id') {
+                html.push('<a class="edit" href = "/Admin/UpdateOfferHotel/' + value + '" title="Edit This Row"><i class="fa fa-edit"></i></a>')
+                html.push('  ')
+                html.push('<span onclick="AssignValue(' + value + ')" title="Delete This Row" data-toggle="modal" data-target="#RemoveRowModal"><i class="fa fa-trash"></i></span>')
+                html.push('  ')
+                html.push('<a class="read" href = "/Home/SpecificOfferPage/' + value + '" title="View This Row"><i class="fa fa-search"></i></a>')
+
+            }
+        })
+        return html.join('')
+    }
+
+    /*   href = " / Admin / RemoveOfferHotel / ' + value + '"*/
+
+    $('#remove').on('click', function () {
+        var ids = $.map(table.bootstrapTable('getSelections'), function (row) {
+
+            return row.Id
+
+        })
+        if (ids != null) {
+            console.log("Clicked Remove")
+            let formdata = new FormData()
+            for (let i = 0; i < ids.length; i++) {
+                formdata.append("ids[" + i + "]", ids[i])
+            }
+            axios({
+                method: 'post',
+                url: '/Admin/RemoveOffers',
+                data: formdata
+            })
+                .then(function (response) {
+                    console.log(response);
+                    window.location.reload();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            console.log(ids)
+        }
+        else {
+            alert("You Havent Selected anything")
+        }
+
+    })
+
+
+    $('#removerow').on('click', function () {
+        let formdata = new FormData()
+        formdata.append("id", TempId)
+
+        axios({
+            method: 'post',
+            url: '/Admin/RemoveOfferHotel',
+            data: formdata
+        })
+            .then(function (response) {
+                console.log(response);
+                window.location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    })
+
+
+    $('#displayOffers').on('click', function () {
+        var ids = $.map(table.bootstrapTable('getSelections'), function (row) {
+
+            return row.Id
+
+        })
+        if (ids != null) {
+            console.log("clicked Display")
+            let formdata = new FormData()
+            for (let i = 0; i < ids.length; i++) {
+                formdata.append("ids[" + i + "]", ids[i])
+            }
+            axios({
+                method: 'post',
+                url: '/Admin/DisplayFourOffers',
+                data: formdata
+            })
+                .then(function (response) {
+                    console.log(response);
+                    window.location.reload();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            console.log(ids)
+        }
+        else {
+            alert("You Havent Selected anything")
+        }
+    })
+
+    function AssignValue(id) {
+        TempId = id;
+        console.log(TempId);
+
+    }
+</script>

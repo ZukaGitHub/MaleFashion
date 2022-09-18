@@ -50,7 +50,11 @@ namespace WebApplicationCrud.Controllers
         public IActionResult AddProductPanel(int?[] productIds)
 
         {
-           
+
+
+            int[] ProductIds = new int[] { 1, 2, 3 };
+
+          
             var Brandss = _ctx.Brands.ToList();
             var Categories = _ctx.Categories.ToList();
             var Sizes = _ctx.TextSizes.ToList();
@@ -60,8 +64,10 @@ namespace WebApplicationCrud.Controllers
             ViewData["Brandss"] = Brandss;
             ViewData["Categories"] = Categories;
 
-            if (productIds != null)
+            if (ProductIds != null)
             {
+                return View(ProductIds);
+
 
             }
 
@@ -69,14 +75,41 @@ namespace WebApplicationCrud.Controllers
             return View();
 
         }
+        [HttpGet]
+        public async Task<IActionResult> GetEditProducts(int?[] ids)
+        {
+            var products = new List<Product>();
+            for (int i = 0; i < ids.Count(); i++)
+            {
+                if (_ctx.Products.SingleOrDefault(s=>s.id==ids[i])==null)
+                {
+                    continue;
+                }
+                var product = _ctx.Products.SingleOrDefault(p => p.id == ids[i]);
+                products.Add(product);
+            }
+         
+
+            if (products.Count > 0)
+            {
+                var productsJson = JsonConvert.SerializeObject(products);
+                return new JsonResult(productsJson);
+            }
+            return StatusCode(500);
+           
+        }
 
 
         [HttpPost]
         public async Task<IActionResult> AddProductPanel(string jsonProducts,ProductImagesVm productImages)
         {
 
-            AddProductVMpost vm = JsonConvert.DeserializeObject<AddProductVMpost>(jsonProducts);
+            List<productVm> productVms = JsonConvert.DeserializeObject<List<productVm>>(jsonProducts);
 
+            var vm = new AddProductVMpost()
+            {
+                Products = productVms
+            };
             var VMproducts = new List<Product>();
             if (vm != null)
             {
@@ -101,7 +134,7 @@ namespace WebApplicationCrud.Controllers
 
                     }
                     var Brandss = _ctx.Brands.ToList();
-                    ViewData["Brandss"] = Brandss;
+                    ViewBag["Brandss"] = Brandss;
 
 
                     foreach (var Productinfo in vm.Products[i].ProductInfos)
@@ -174,45 +207,7 @@ namespace WebApplicationCrud.Controllers
             }
             
         }
-        //[HttpGet]
-        //public IActionResult EditProductInfo(int ProductInfoId)
-        //{
-        //    var CurrentProduct = _ctx.ProductInfos.SingleOrDefault(s => s.id == ProductInfoId);
-        //    var EditProduct = new EditInfoViewModel
-        //    {
-        //        id = ProductInfoId,
-        //        color = CurrentProduct.color,
-        //        Size = CurrentProduct.Size,
-        //        Quantity = CurrentProduct.Quantity,
-        //        SizeText = CurrentProduct.SizeText
-        //    };
-
-        //    return View(EditProduct);
-        //}
-        //[HttpPost]
-        //public IActionResult EditProductInfo(EditInfoViewModel vm)
-        //{
-
-        //    var ProductInfo = new ProductInfo
-        //    {
-        //        color = vm.color,
-        //        id = vm.id,
-        //        Quantity = vm.Quantity,
-        //        Size = vm.Size,
-        //        SizeText = vm.SizeText
-        //    };
-
-
-        //    _ctx.ProductInfos.Add(ProductInfo);
-        //    _ctx.SaveChanges();
-
-
-
-
-
-        //    return RedirectToAction("Index");
-
-        //}
+        
         public async Task<IActionResult> Remove(int ProductInfoId, int? IsItProductId)
         {
             if (IsItProductId == ProductInfoId)

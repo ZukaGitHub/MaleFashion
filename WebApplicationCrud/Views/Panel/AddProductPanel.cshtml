@@ -1,4 +1,4 @@
-﻿@model int[]
+﻿@model AddProductVMget
 <head>
     <link href="~/css/Panel/AddProduct.css" rel="stylesheet" />
 </head>
@@ -19,22 +19,17 @@
                         <span class="float-right btn-danger removeProductBtn" v-on:click="RemoveProductInfo(Index)">X</span>
 
 
-                        @{
-                            List<Brand> Brandss = ViewData["Brandss"] as List<Brand>;
-                            List<Category> Categories = ViewData["Categories"] as List<Category>;
-                            List<TextSize> Sizes = ViewData["Sizes"] as List<TextSize>;
-                          
-                        }
+                     
                         <div class="grid-container">
 
                             <div class="grid-item form-group">
                                 <h3>Brands</h3>
                                 <ul class="form-check">
-                                    @for (int i = 0; i < Brandss.Count; i++)
+                                    @for (int i = 0; i < Model.Brands.Count; i++)
                                     {
                                         <li>
-                                            <label for="@Brandss[i].name">@Brandss[i].name</label>
-                                            <input id="@Brandss[i].name" type="radio" value="@Brandss[i].name" v-model="product.Brand" />
+                                            <label for="@Model.Brands[i].name">@Model.Brands[i].name</label>
+                                            <input id="@Model.Brands[i].name" type="radio" value="@Model.Brands[i].name" v-model="product.Brand" />
                                         </li>
 
                                     }
@@ -46,11 +41,11 @@
                                 <h3>Categories</h3>
                                 <ul>
 
-                                    @for (int i = 0; i < Categories.Count; i++)
+                                    @for (int i = 0; i < Model.Categories.Count; i++)
                                     {
                                         <li>
-                                            <label for="@Categories[i].name">@Categories[i].name</label>
-                                            <input id="@Categories[i].name" type="radio" value="@Categories[i].name" v-model="product.Category" />
+                                            <label for="@Model.Categories[i].name">@Model.Categories[i].name</label>
+                                            <input id="@Model.Categories[i].name" type="radio" value="@Model.Categories[i].name" v-model="product.Category" />
                                         </li>
 
                                     }
@@ -126,14 +121,14 @@
                                                 <div class="AdminPanelSizes">
 
 
-                                                    @for (int j = 0; j < Sizes.Count; j++)
+                                                    @for (int j = 0; j < Model.Sizes.Count; j++)
                                                     {
                                                         <label>
                                                             <input type="checkbox"
-                                                                   value="@Sizes[j].name" v-model="productInfo.Sizes"
+                                                                   value="@Model.Sizes[j].name" v-model="productInfo.Sizes"
                                                                    v-on:change="PopulateStocks(Index,Indexx,this.event)" />
 
-                                                            <span>@Sizes[j].name</span>
+                                                            <span>@Model.Sizes[j].name</span>
                                                         </label>
                                                     }
                                                 </div>
@@ -280,13 +275,13 @@
                     });
 
             },
-            getProductsToEdit: function (ids) {
-                if (ids != null) {
+            getProductToEdit: function (id) {
+                if (id != null) {
                     let formdata = new FormData()
-                    formdata.append("productIds", ids)
+                    formdata.append("productId", id)
                     axios({
                         method: 'get',
-                        url: 'GetEditProducts',
+                        url: 'GetEditProduct',
                         data: formdata
 
                     }).then(function (response) {
@@ -433,8 +428,8 @@
             }
         },
         mounted() {
-            if (@Model[0]!= null) {
-                this.getProductsToEdit(@Model[0])
+            if (@Model.EditProductId!= null) {
+                this.getProductToEdit(@Model.EditProductId)
             }
         }
 

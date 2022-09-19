@@ -33,7 +33,10 @@ namespace WebApplicationCrud.Controllers
         public IActionResult Index()
         {
             var OwnerId = _userManager.GetUserId(HttpContext.User);
-            var MyProducts = _ctx.Products.Where(s => s.OwnerId == OwnerId).Include(g => g.ProductInfos).ToList();
+            var MyProducts = _ctx.Products.Where(s => s.OwnerId == OwnerId)
+                .Include(s=>s.Images)
+                .Include(s=>s.Tags)
+                .Include(g => g.ProductInfos).ThenInclude(s=>s.Images).ToList();
             var ViewModel = new PanelIndexViewModel()
             {
                 MyProducts = MyProducts
@@ -47,36 +50,35 @@ namespace WebApplicationCrud.Controllers
      
 
         [HttpGet]
-        public IActionResult AddProductPanel(int?[] productIds)
+        public IActionResult AddProductPanel(int? productId)
 
         {
-
-
-            int[] ProductIds = new int[] { 1, 2, 3 };
-
-          
+      
             var Brandss = _ctx.Brands.ToList();
             var Categories = _ctx.Categories.ToList();
             var Sizes = _ctx.TextSizes.ToList();
 
-            ViewData["Sizes"] = Sizes;
-
-            ViewData["Brandss"] = Brandss;
-            ViewData["Categories"] = Categories;
-
-            if (ProductIds != null)
+            var ViewModel = new AddProductVMget()
             {
-                return View(ProductIds);
+                Brands = Brandss,
+                Categories = Categories,
+                Sizes = Sizes,
+            };
 
+            if (productId != null)
+            {
+                ViewModel.EditProductId = productId;
+
+                return View(ViewModel);
 
             }
 
 
-            return View();
+            return View(ViewModel);
 
         }
         [HttpGet]
-        public async Task<IActionResult> GetEditProducts(int?[] ids)
+        public async Task<IActionResult> GetEditProduct(List<int> ids)
         {
             var products = new List<Product>();
             for (int i = 0; i < ids.Count(); i++)
@@ -208,13 +210,14 @@ namespace WebApplicationCrud.Controllers
             
         }
         
-        public async Task<IActionResult> Remove(int ProductInfoId, int? IsItProductId)
+        public async Task<IActionResult> Remove(List<int> productIds)
         {
-            if (IsItProductId == ProductInfoId)
-            {
-                var currentproduct = _ctx.Products.Include(d=>d.Images).SingleOrDefault(s => s.id == ProductInfoId);
 
-                if(currentproduct!=null)
+            foreach (var Id in productIds)
+            {
+                var currentproduct = _ctx.Products.Include(d => d.Images).SingleOrDefault(s => s.id == Id);
+
+                if (currentproduct != null)
                 {
                     if (currentproduct.ProductInfos != null)
                     {
@@ -228,29 +231,12 @@ namespace WebApplicationCrud.Controllers
                     }
                     _ctx.Products.Remove(currentproduct);
                     await _ctx.SaveChangesAsync();
-                   
+
                 }
-                return RedirectToAction("Index");
             }
-            else
-            {
-                var currentProductInfo = _ctx.ProductInfos.Include(d=>d.Images).SingleOrDefault(s => s.id == ProductInfoId);
-                    if(currentProductInfo!=null)
-                    {
-                    if (currentProductInfo.Images != null)
-                    {
-                        var images = currentProductInfo.Images;
-                        _ctx.Images.RemoveRange(images);
-                        var imagenames = images.Select(s => s.Imagename).ToList();
-                        _filemanager.DeleteImages(imagenames);
-                    }
-                    _ctx.ProductInfos.Remove(currentProductInfo);
-                    await _ctx.SaveChangesAsync();
-                     }
-               
-              
                 return RedirectToAction("Index");
-            }
+            
+           
         }
     }
 }

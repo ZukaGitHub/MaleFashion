@@ -13,17 +13,70 @@
 
 </head>
 <body>
-
+    <div class="modal" id="RemoveRowModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title"> Please Confirm</h2>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Remove This Row?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="removerow" class="btn btn-danger">Remove</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="RemoveRowsModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title"> Please Confirm</h2>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Remove Selected Rows?
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="remove" class="btn btn-danger">Remove</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="wrapper d-flex align-items-stretch">
         <partial name="_AdministrationSidebar">
 
             <!-- Page Content  -->
-            <div id="content" class="p-4 p-md-5 pt-5">
+            <div id="content" class="p-4 p-md-5 pt-5 container">
                 <h2 class="mb-4">List Of Products</h2>
+                <div id="toolbar">
+                    <button class="btn btn-danger"
+                            data-toggle="modal"
+                            data-target="#RemoveRowsModal">
+                        Remove Selected Rows
+                    </button>
+                    <button class="btn btn-dark"
+                            id="EditTheseRows"
+                            data-toggle="modal"
+                            data-target="#AppointRowsModal">
+                        Edit These Rows
+                    </button>
+                </div>
 
 
-
-                <table id="productsTable"
+                <table id="table"
                        data-toggle="table"
                        data-pagination="true"
                        data-search="true"
@@ -35,9 +88,10 @@
                        data-filter-control="true"
                        data-filter-show-clear="true">
 
-                    >
+
                     <thead>
                         <tr>
+                            <th data-filed="state" data-checkbox="true"></th>
                             <th data-field="Id">Id</th>
                             <th data-field="Name">Name</th>
                             <th data-field="Pictures">Pictures</th>
@@ -45,6 +99,7 @@
                             <th data-field="Brand">Brand</th>
                             <th data-field="Tags">Tags</th>
                             <th data-field="Price" data-sortable="true">Price</th>
+                            <th data-field="action" data-formatter="actionFormatter">Actions</th>
 
                         </tr>
                     </thead>
@@ -55,21 +110,35 @@
                             {
                                 <tr>
                                     <td>
+                                    </td>
+                                    <td>
                                         @product.id
                                     </td>
                                     <td>
                                         @product.name
                                     </td>
-                                    <td>
+                                    <td style="max-width:200px !important">
+                                        @{
+                                            var image_path = product.ProductInfos[0].Images == null ? "Default_Product.jpg" : product.ProductInfos[0].Images[0].Imagename;
+                                        }
+                                        <img src="~/img/productAndBlogAddedImages/@image_path " />
                                     </td>
                                     <td>@product.CategoryName</td>
                                     <td>
-                                        @product.brand.name
+                                        @product.BrandName
                                     </td>
                                     <td>
+                                        @foreach (var tag in product.Tags)
+                                        {
+                                            <p>@tag.TagName</p>
+                                        }
                                     </td>
                                     <td>
                                         @product.price
+                                    </td>
+                                    <td>
+                                        
+                                      
                                     </td>
                                 </tr>
                             }
@@ -80,27 +149,7 @@
 
 
 
-                @for (int i = 0; i < Model.MyProducts.Count; i++)
-                {
-                    <a asp-action="EditProduct" asp-controller="Panel" asp-route-ProductId="@Model.MyProducts[i].id">Edit Whole ProductLine</a>
-                    <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].id" asp-route-IsItProductId="@Model.MyProducts[i].id">Remove Whole ProductLine</a>
-                    for (int j = 0; j < Model.MyProducts[i].ProductInfos.Count; j++)
-                    {
-                        <div>
-
-                            <a asp-action="EditProductInfo" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Edit Product</a>
-                            <a asp-action="Remove" asp-controller="Panel" asp-route-ProductInfoId="@Model.MyProducts[i].ProductInfos[j].id">Remove Product</a>
-                            <p>@Model.MyProducts[i].name</p>
-                            @*<p>@Model.MyProducts[i].ProductInfos[j].Size</p>*@
-                            <p>@Model.MyProducts[i].ProductInfos[j].color</p>
-                            @*<p>@Model.MyProducts[i].ProductInfos[j].Quantity</p>
-                                <p>@Model.MyProducts[i].ProductInfos[j].SizeText</p>*@
-
-                            ------------------------------------------------------------------------
-
-                        </div>
-                    }
-                }
+              
             </div>
     </div>
 
@@ -114,23 +163,24 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     var table = $('#table')
-    var TempId = 0;
+    var TempId;
+
     function actionFormatter(index, row) {
         var html = []
         $.each(row, function (key, value) {
             if (key == 'Id') {
-                html.push('<a class="edit" href = "/Admin/UpdateOfferHotel/' + value + '" title="Edit This Row"><i class="fa fa-edit"></i></a>')
-                html.push('  ')
-                html.push('<span onclick="AssignValue(' + value + ')" title="Delete This Row" data-toggle="modal" data-target="#RemoveRowModal"><i class="fa fa-trash"></i></span>')
-                html.push('  ')
-                html.push('<a class="read" href = "/Home/SpecificOfferPage/' + value + '" title="View This Row"><i class="fa fa-search"></i></a>')
+
+                html.push('<a href="Panel/Remove/' + value + '" title="Delete This Row" onclick="AssignId('+ value +')" data-toggle="modal" data-target="#RemoveRowModal"><i class="fa fa-trash"></i></a>')
+                html.push('<a href="Panel/AddProductPanel/' + value + '"><i class="fa fa-edit"></i></a>')
+                html.push('<a href="Home/ProductPanel/' + value + '"><i class="fa fa-search"></i></a>')
+
 
             }
         })
         return html.join('')
     }
 
-    /*   href = " / Admin / RemoveOfferHotel / ' + value + '"*/
+
 
     $('#remove').on('click', function () {
         var ids = $.map(table.bootstrapTable('getSelections'), function (row) {
@@ -138,15 +188,15 @@
             return row.Id
 
         })
-        if (ids != null) {
+        if (ids != null && ids.length>0) {
             console.log("Clicked Remove")
             let formdata = new FormData()
             for (let i = 0; i < ids.length; i++) {
-                formdata.append("ids[" + i + "]", ids[i])
+                formdata.append("productIds[" + i + "]", ids[i])
             }
             axios({
                 method: 'post',
-                url: '/Admin/RemoveOffers',
+                url: '/Panel/Remove',
                 data: formdata
             })
                 .then(function (response) {
@@ -164,14 +214,16 @@
 
     })
 
-
+    function AssignId(id) {
+         this.TempId = id;
+    }
     $('#removerow').on('click', function () {
         let formdata = new FormData()
-        formdata.append("id", TempId)
+        formdata.append("productIds["+ 0 +"]", this.TempId)
 
         axios({
             method: 'post',
-            url: '/Admin/RemoveOfferHotel',
+            url: '/Panel/Remove',
             data: formdata
         })
             .then(function (response) {
@@ -184,40 +236,7 @@
     })
 
 
-    $('#displayOffers').on('click', function () {
-        var ids = $.map(table.bootstrapTable('getSelections'), function (row) {
 
-            return row.Id
 
-        })
-        if (ids != null) {
-            console.log("clicked Display")
-            let formdata = new FormData()
-            for (let i = 0; i < ids.length; i++) {
-                formdata.append("ids[" + i + "]", ids[i])
-            }
-            axios({
-                method: 'post',
-                url: '/Admin/DisplayFourOffers',
-                data: formdata
-            })
-                .then(function (response) {
-                    console.log(response);
-                    window.location.reload();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            console.log(ids)
-        }
-        else {
-            alert("You Havent Selected anything")
-        }
-    })
 
-    function AssignValue(id) {
-        TempId = id;
-        console.log(TempId);
-
-    }
 </script>

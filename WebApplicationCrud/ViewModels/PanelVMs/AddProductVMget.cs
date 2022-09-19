@@ -9,11 +9,12 @@ namespace WebApplicationCrud.ViewModels
 {
     public class AddProductVMget
     {
-      
-     
-        public List<SelectListItem> Sizes { get; set; }
-    
-        public List<string> Sizes2 { get; set; }
-    
+
+
+        public List<Brand> Brands { get; set; }
+        public List<TextSize> Sizes { get; set; }
+        public List<Category> Categories { get; set; }
+        public int? EditProductId { get; set; }
+
     }
 }

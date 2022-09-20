@@ -171,7 +171,7 @@
             if (key == 'Id') {
 
                 html.push('<a href="Panel/Remove/' + value + '" title="Delete This Row" onclick="AssignId('+ value +')" data-toggle="modal" data-target="#RemoveRowModal"><i class="fa fa-trash"></i></a>')
-                html.push('<a href="Panel/AddProductPanel/' + value + '"><i class="fa fa-edit"></i></a>')
+                html.push('<a href="Panel/AddProductPanel?productId=' + value + '"><i class="fa fa-edit"></i></a>')
                 html.push('<a href="Home/ProductPanel/' + value + '"><i class="fa fa-search"></i></a>')
 
 

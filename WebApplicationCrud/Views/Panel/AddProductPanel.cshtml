@@ -209,7 +209,7 @@
 
 
 
-<script  defer>
+<script defer>
     var app = new Vue({
         el: '.VueModel',
 
@@ -277,15 +277,20 @@
             },
             getProductToEdit: function (id) {
                 if (id != null) {
-                    let formdata = new FormData()
-                    formdata.append("productId", id)
+                   
                     axios({
                         method: 'get',
-                        url: 'GetEditProduct',
-                        data: formdata
+                        url: '/Panel/GetEditProduct',
+                        params: {
+                            productId:id
+                        }
 
                     }).then(function (response) {
                         console.log("response", response)
+                        var product=JSON.parse(response.data)
+                        console.log("product", product)
+
+
                     })
                         .catch(function (error) {
                             console.log(error);
@@ -428,7 +433,8 @@
             }
         },
         mounted() {
-            if (@Model.EditProductId!= null) {
+            if (@Model.EditProductId != null) {
+               
                 this.getProductToEdit(@Model.EditProductId)
             }
         }

@@ -14,7 +14,7 @@ namespace WebApplicationCrud.ViewModels
         public List<Brand> Brands { get; set; }
         public List<TextSize> Sizes { get; set; }
         public List<Category> Categories { get; set; }
-        public int? EditProductId { get; set; }
+        public int EditProductId { get; set; }
 
     }
 }

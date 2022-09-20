@@ -34,9 +34,9 @@ namespace WebApplicationCrud.Controllers
         {
             var OwnerId = _userManager.GetUserId(HttpContext.User);
             var MyProducts = _ctx.Products.Where(s => s.OwnerId == OwnerId)
-                .Include(s=>s.Images)
-                .Include(s=>s.Tags)
-                .Include(g => g.ProductInfos).ThenInclude(s=>s.Images).ToList();
+                .Include(s => s.Images)
+                .Include(s => s.Tags)
+                .Include(g => g.ProductInfos).ThenInclude(s => s.Images).ToList();
             var ViewModel = new PanelIndexViewModel()
             {
                 MyProducts = MyProducts
@@ -47,13 +47,13 @@ namespace WebApplicationCrud.Controllers
 
             return View(ViewModel);
         }
-     
+
 
         [HttpGet]
         public IActionResult AddProductPanel(int? productId)
 
         {
-      
+
             var Brandss = _ctx.Brands.ToList();
             var Categories = _ctx.Categories.ToList();
             var Sizes = _ctx.TextSizes.ToList();
@@ -67,7 +67,7 @@ namespace WebApplicationCrud.Controllers
 
             if (productId != null)
             {
-                ViewModel.EditProductId = productId;
+                ViewModel.EditProductId = (int)productId;
 
                 return View(ViewModel);
 
@@ -78,24 +78,54 @@ namespace WebApplicationCrud.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> GetEditProduct(List<int> ids)
+        public async Task<IActionResult> GetEditProduct(int productId)
         {
-            var products = new List<Product>();
-            for (int i = 0; i < ids.Count(); i++)
-            {
-                if (_ctx.Products.SingleOrDefault(s=>s.id==ids[i])==null)
-                {
-                    continue;
-                }
-                var product = _ctx.Products.SingleOrDefault(p => p.id == ids[i]);
-                products.Add(product);
-            }
-         
+           
+            var id = productId;
 
-            if (products.Count > 0)
+            var product = new Product();
+
+
+            product = _ctx.Products.
+                Include(s=>s.ProductInfos)
+                .ThenInclude(s=>s.ProductInfoStockAndSizes)
+                .Include(s=>s.ProductInfos)
+                .ThenInclude(s=>s.Images)                             
+                .SingleOrDefault(p => p.id == id);
+
+
+
+            if (product != null)
             {
-                var productsJson = JsonConvert.SerializeObject(products);
-                return new JsonResult(productsJson);
+                var EditProductVm = new EditProductVm()
+                {
+                    Id = product.id,
+                    Brand = product.BrandName,
+                    Category = product.CategoryName,
+                    Description = product.desc,
+                    Name = product.name,
+                    Price = product.price,
+                   
+
+                };
+               
+               
+                var productInfos = new List<productInfoEditVm>();
+                foreach(var productInfo in product.ProductInfos)
+                {
+                    var productInfoEdit = new productInfoEditVm();
+                    productInfoEdit.Color = productInfo.color;
+                    productInfoEdit.ImageNames = productInfo.Images.Select(s => s.Imagename).ToList();
+                    productInfoEdit.ThumbnailName = productInfo.ProductInfoThumbnailName;
+                    productInfoEdit.StockAndSize = productInfo.ProductInfoStockAndSizes.Select(s => s).ToList();
+                    productInfos.Add(productInfoEdit);
+                    
+                }
+
+                //aqedan gadamape axal modelze imagenameebi ro iyos da axlis damateba ro sheidzlebodes
+                //
+                var productJson = JsonConvert.SerializeObject(product);
+                return new JsonResult(productJson);
             }
             return StatusCode(500);
            
@@ -138,32 +168,43 @@ namespace WebApplicationCrud.Controllers
                     var Brandss = _ctx.Brands.ToList();
                     ViewBag["Brandss"] = Brandss;
 
-
+                    int counter = 0;
                     foreach (var Productinfo in vm.Products[i].ProductInfos)
                     {
+
                         var tempProductInfo = new ProductInfo();
                         tempProductInfo.color = Productinfo.Color;
                        
                         var path = "product";
                         var tempListOfImages = new List<Image>();
 
-                        //var imgnames = await _filemanager.SaveImagesAsync(Productinfo.images, path);
-                        //if (imgnames != null)
-                        //{
-                        //    foreach (var Image in imgnames)
-                        //    {
+                        if (productImages != null)
+                        {
+                            if (productImages.ProductImages[i] != null)
+                            {
+                                var imgnames = await _filemanager.SaveImagesAsync(productImages.ProductImages[i].RoomImagesVms[counter].RoomImages, path);
 
-                        //        var img = new Image()
-                        //        {
-                        //            Imagename = Image,
-                        //        };
+                                if (imgnames != null)
+                                {
+                                    foreach (var Image in imgnames)
+                                    {
 
-                        //        tempListOfImages.Add(img);
+                                        var img = new Image()
+                                        {
+                                            Imagename = Image,
+                                        };
 
-                        //    }
-                        //    tempProductInfo.Images = tempListOfImages;
-                        //    tempProductInfo.ProductInfoThumbnailName = tempListOfImages[Productinfo.].Imagename;
-                        //}
+                                        tempListOfImages.Add(img);
+
+                                    }
+                                    tempProductInfo.Images = tempListOfImages;
+                                    tempProductInfo.ProductInfoThumbnailName = 
+                                        tempListOfImages[productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex].Imagename;
+                                    counter++;
+                                }
+                            }
+                        }
+                       
 
                         foreach (var StockAndSize in Productinfo.Stock)
                         {

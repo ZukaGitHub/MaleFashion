@@ -285,10 +285,20 @@
                             productId:id
                         }
 
-                    }).then(function (response) {
+                    }).then((response) => {
                         console.log("response", response)
                         var product=JSON.parse(response.data)
                         console.log("product", product)
+                        console.log("products", this.Products)
+                        
+                        this.Products[0].Brand = product.Brand
+                        this.Products[0].id = product.id
+                        this.Products[0].price=product.Price
+                        this.Products[0].name = product.Name
+                        this.Products[0].Category = product.Category
+                        this.Products[0].Description = product.Description
+
+                       
 
 
                     })

@@ -105,6 +105,7 @@ namespace WebApplicationCrud.Controllers
                     Description = product.desc,
                     Name = product.name,
                     Price = product.price,
+                    Tagnames = product.Tags == null ? null : product.Tags.Select(s => s.TagName).ToList()
                    
 
                 };
@@ -115,16 +116,17 @@ namespace WebApplicationCrud.Controllers
                 {
                     var productInfoEdit = new productInfoEditVm();
                     productInfoEdit.Color = productInfo.color;
+                   
                     productInfoEdit.ImageNames = productInfo.Images.Select(s => s.Imagename).ToList();
                     productInfoEdit.ThumbnailName = productInfo.ProductInfoThumbnailName;
                     productInfoEdit.StockAndSize = productInfo.ProductInfoStockAndSizes.Select(s => s).ToList();
                     productInfos.Add(productInfoEdit);
                     
                 }
-
+                EditProductVm.ProductInfos = productInfos;
                 //aqedan gadamape axal modelze imagenameebi ro iyos da axlis damateba ro sheidzlebodes
                 //
-                var productJson = JsonConvert.SerializeObject(product);
+                var productJson = JsonConvert.SerializeObject(EditProductVm);
                 return new JsonResult(productJson);
             }
             return StatusCode(500);

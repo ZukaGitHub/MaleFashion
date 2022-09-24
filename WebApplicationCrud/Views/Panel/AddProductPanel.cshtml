@@ -297,7 +297,35 @@
                         this.Products[0].name = product.Name
                         this.Products[0].Category = product.Category
                         this.Products[0].Description = product.Description
+                        var Tagnames = "";
+                        //for (let i = 0; i < product.Tagnames.length; i++) {
+                        //    Tagnames=Tagnames + " " +product.Tagnames[i]
+                        //}
+                        this.Products[0].Tagnames = Tagnames
+                        const und = undefined;
+                      
+                        for (let i = 0; i < product.ProductInfos.length; i++) {
+                            this.Products[0].ProductInfos[i] = {
+                                Color: product.ProductInfos[i].Color,
+                                Sizes: [],
+                                stock:[]
 
+                            };
+                            
+                            product.ProductInfos[i].StockAndSize
+                                .forEach((SizeAndStock) => {
+                                    this.Products[0].ProductInfos[i].Sizes.push(SizeAndStock.SizeName)
+                                    this.Products[0].ProductInfos[i].stock.push({
+                                        SizeName: SizeAndStock.SizeName,
+                                        number: SizeAndStock.stock
+                                    })
+                                })
+                           
+
+                            
+
+                        }
+                      
                        
 
 

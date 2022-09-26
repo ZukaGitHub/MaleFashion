@@ -19,6 +19,6 @@ namespace WebApplicationCrud.ViewModels.PanelVMs
     {
         public int ProductIndex { get; set; }
         public List<IFormFile> RoomImages { get; set; }
-        public int ThumbnailIndex { get; set; }
+        public int? ThumbnailIndex { get; set; }
     }
 }

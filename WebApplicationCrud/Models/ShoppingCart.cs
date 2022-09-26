@@ -34,7 +34,7 @@ namespace WebApplicationCrud.Models
         public void AddToCart(ProductInfo product, int amount, Product Product)
         {
             var shoppingCartItem = _ctx.shoppingCartItems
-                .SingleOrDefault(s => s.ProductInfo.id == product.id
+                .SingleOrDefault(s => s.ProductInfo.Id == product.Id
                 && s.ShoppingCartId == ShoppingCartId
                 && s.ProductInfo.ProductId == product.ProductId);
 
@@ -63,7 +63,7 @@ namespace WebApplicationCrud.Models
         public int RemoveFromCart(ProductInfo product)
         {
             var shoppingCartItem = _ctx.shoppingCartItems
-                .SingleOrDefault(s => s.ProductInfo.id == product.id
+                .SingleOrDefault(s => s.ProductInfo.Id == product.Id
                 && s.ShoppingCartId == ShoppingCartId
                 && s.ProductInfo.ProductId == product.ProductId);
             var localAmount = 0;

@@ -183,7 +183,12 @@
                                                     <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
                                                 </div>
                                                 <div class="UploadedImage" v-for="(Image,index) in productInfo.dropzoneFilesUrl">
-                                                    <input type="radio" :value=index v-model="productInfo.Thumbnail" />
+                                                    <input type="radio"  v-on:click="Thumbnail(index,this.event)" name=thumbnailSelector :value=index v-model="productInfo.Thumbnail" />
+                                                    <img :src="Image" />
+
+                                                </div>
+                                                <div v-if="productInfo.ImageNames.length>0" class="UploadedImage" v-for="(Image,index) in productInfo.ImageNames">
+                                                    <input type="radio" v-on:click="ThumbnailName(ImageName,this.event)"  name=thumbnailSelectorName :value=index v-model="productInfo.ThumbnailEditIndex" />
                                                     <img :src="Image" />
 
                                                 </div>
@@ -229,16 +234,12 @@
                         {
                             Color: '',
                             Sizes: [],
-                            Thumbnail: '',
-                            StocksAndSizes: [{
-                                Size: '',
-                                Stock: '',
-                            }],
+                            Thumbnail: '',                          
                             stock: [],
                             dropzoneFiles: [],
-                            dropzoneFilesUrl: [],
-                            Index: '',
-                            IndexInfo: '',
+                            dropzoneFilesUrl: [],                        
+                            ImageNames: [],
+                            ThumbnailEditIndex:''
                         }
                     ],
                 }
@@ -308,7 +309,8 @@
                             this.Products[0].ProductInfos[i] = {
                                 Color: product.ProductInfos[i].Color,
                                 Sizes: [],
-                                stock:[]
+                                stock: [],
+                                ImageNames:[]
 
                             };
                             
@@ -321,7 +323,10 @@
                                     })
                                 })
                            
+                            product.ProductInfos[i].ImageNames.forEach((imageName) => {
 
+                                this.Products[0].ProductInfos[i].ImageNames.push(imageName)
+                            })
                             
 
                         }
@@ -431,6 +436,25 @@
 
 
 
+            },
+            Thumbnail(index, e) {
+                var radio = document.querySelector('input[type=radio][name=thumbnailSelectorName]:checked');
+                if (radio != null) {
+                    radio.checked = false;
+                }
+                this.Offer.Thumbnail = index;
+            },
+            ThumbnailName(name, e) {
+
+                console.log(e)
+                var radio = document.querySelector('input[type=radio][name=thumbnailSelector]:checked');
+                console.log(radio)
+                if (radio != null) {
+                    radio.checked = false;
+                }
+
+
+                this.Offer.Thumbnail = name;
             },
             AddNewProductDetail: function (Index) {
 

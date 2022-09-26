@@ -10,12 +10,12 @@ namespace WebApplicationCrud.ViewModels
 {
     public class AddProductVMpost
     { 
-        public List<productVm> Products { get; set; }
+        public List<ProductVm> Products { get; set; }
     }
 
 
 
-    public class productVm
+    public class ProductVm
     {       
         public int? Id { get; set; }
         public string Name { get; set; }
@@ -25,23 +25,24 @@ namespace WebApplicationCrud.ViewModels
         public string Brand { get; set; }
         public string Description { get; set; }
         public string SalePercentage { get; set; }
-        public List<productInfoVm> ProductInfos { get; set; }
+        public List<ProductInfoVm> ProductInfos { get; set; }
     }
 
-    public class productInfoVm
+    public class ProductInfoVm
     {
         public string Color { get; set; }
      
         public List<Image> Images { get; set; }       
-        public List<stockVm> Stock { get; set; }
-
+        public List<StockVm> Stock { get; set; }
+        public List<string> ImageNames { get; set; }
+        public int? ThumbnailEditIndex { get; set; }
 
     }
 
-    public class stockVm
+    public class StockVm
     {
 
-        public string sizeName { get; set; }
-        public int number { get; set; }
+        public string SizeName { get; set; }
+        public int Number { get; set; }
     }
 }

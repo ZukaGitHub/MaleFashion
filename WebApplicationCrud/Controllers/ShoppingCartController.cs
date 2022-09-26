@@ -43,7 +43,7 @@ namespace WebApplicationCrud.Controllers
         public RedirectToActionResult AddToShoppingCart(int productid, int productInfoId)
         {
             var Product = _ctx.Products.Include(s => s.ProductInfos).SingleOrDefault(p => p.id == productid);
-            var selectedProduct = Product.ProductInfos.FirstOrDefault(p => p.ProductId == productid && p.id == productInfoId);
+            var selectedProduct = Product.ProductInfos.FirstOrDefault(p => p.ProductId == productid && p.Id == productInfoId);
             //var selectedProduct = _ctx.ProductInfos
             //    .FirstOrDefault(p => p.ProductId == productid && p.id==productInfoId);
             if (selectedProduct != null)
@@ -57,7 +57,7 @@ namespace WebApplicationCrud.Controllers
         public RedirectToActionResult RemoveFromShoppingCart(int productId, int productInfoId)
         {
             var selectedProduct = _ctx.ProductInfos
-                .FirstOrDefault(p => p.ProductId == productId && p.id == productInfoId);
+                .FirstOrDefault(p => p.ProductId == productId && p.Id == productInfoId);
             if (selectedProduct != null)
             {
                 _shoppingCart.RemoveFromCart(selectedProduct);

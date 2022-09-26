@@ -63,14 +63,14 @@
                             <div class="product__color__select">
                                 @foreach (var productInfo in prod.ProductInfos)
                                 {
-                                <label for="@productInfo.color"  style="background-color:@productInfo.color">
+                                <label for="@productInfo.Color"  style="background-color:@productInfo.Color">
                                     <input class="colorChange" 
                                            data-imgsrcid="img @prod.id"
                                            data-imgname="@productInfo.ProductInfoThumbnailName"
                                            type="radio" 
                                            name="colorSelect"
-                                           id="@productInfo.color"
-                                           style="background-color:@productInfo.color">
+                                           id="@productInfo.Color"
+                                           style="background-color:@productInfo.Color">
                                 </label>
 
                                 }

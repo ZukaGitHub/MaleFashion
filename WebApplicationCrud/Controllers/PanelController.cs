@@ -20,8 +20,8 @@ namespace WebApplicationCrud.Controllers
     public class PanelController : Controller
     {
         public List<SelectListItem> Sizes { get; set; }
-        private CRUDdbcontext _ctx;
-        private IFileManager _filemanager;
+        private readonly CRUDdbcontext _ctx;
+        private readonly IFileManager _filemanager;
         private readonly UserManager<IdentityUser> _userManager;
 
         public PanelController(CRUDdbcontext ctx, IFileManager fileManager, UserManager<IdentityUser> userManager)
@@ -105,27 +105,28 @@ namespace WebApplicationCrud.Controllers
                     Description = product.desc,
                     Name = product.name,
                     Price = product.price,
-                    Tagnames = product.Tags == null ? null : product.Tags.Select(s => s.TagName).ToList()
+                    Tagnames = product.Tags?.Select(s => s.TagName).ToList()
                    
 
                 };
                
                
-                var productInfos = new List<productInfoEditVm>();
+                var productInfos = new List<ProductInfoEditVm>();
                 foreach(var productInfo in product.ProductInfos)
                 {
-                    var productInfoEdit = new productInfoEditVm();
-                    productInfoEdit.Color = productInfo.color;
-                   
-                    productInfoEdit.ImageNames = productInfo.Images.Select(s => s.Imagename).ToList();
-                    productInfoEdit.ThumbnailName = productInfo.ProductInfoThumbnailName;
-                    productInfoEdit.StockAndSize = productInfo.ProductInfoStockAndSizes.Select(s => s).ToList();
+                    var productInfoEdit = new ProductInfoEditVm
+                    {
+                        Color = productInfo.Color,
+
+                        ImageNames = productInfo.Images.Select(s => s.Imagename).ToList(),
+                        ThumbnailName = productInfo.ProductInfoThumbnailName,
+                        StockAndSize = productInfo.ProductInfoStockAndSizes.Select(s => s).ToList()
+                    };
                     productInfos.Add(productInfoEdit);
                     
                 }
                 EditProductVm.ProductInfos = productInfos;
-                //aqedan gadamape axal modelze imagenameebi ro iyos da axlis damateba ro sheidzlebodes
-                //
+            
                 var productJson = JsonConvert.SerializeObject(EditProductVm);
                 return new JsonResult(productJson);
             }
@@ -138,7 +139,7 @@ namespace WebApplicationCrud.Controllers
         public async Task<IActionResult> AddProductPanel(string jsonProducts,ProductImagesVm productImages)
         {
 
-            List<productVm> productVms = JsonConvert.DeserializeObject<List<productVm>>(jsonProducts);
+            List<ProductVm> productVms = JsonConvert.DeserializeObject<List<ProductVm>>(jsonProducts);
 
             var vm = new AddProductVMpost()
             {
@@ -155,6 +156,7 @@ namespace WebApplicationCrud.Controllers
                         VMproducts[i].SalePercentage = 0;
 
                     }
+                  
                     var newTagNames = vm.Products[i].Tagnames.Split(' ');
 
                     var productInfos = new List<ProductInfo>();
@@ -162,8 +164,10 @@ namespace WebApplicationCrud.Controllers
 
                     foreach (var tag in newTagNames)
                     {
-                        var Tag = new Tag();
-                        Tag.TagName = tag.ToLower();
+                        var Tag = new Tag
+                        {
+                            TagName = tag.ToLower()
+                        };
                         Tags.Add(Tag);
 
                     }
@@ -174,9 +178,11 @@ namespace WebApplicationCrud.Controllers
                     foreach (var Productinfo in vm.Products[i].ProductInfos)
                     {
 
-                        var tempProductInfo = new ProductInfo();
-                        tempProductInfo.color = Productinfo.Color;
-                       
+                        var tempProductInfo = new ProductInfo
+                        {
+                            Color = Productinfo.Color
+                        };
+
                         var path = "product";
                         var tempListOfImages = new List<Image>();
 
@@ -200,8 +206,13 @@ namespace WebApplicationCrud.Controllers
 
                                     }
                                     tempProductInfo.Images = tempListOfImages;
-                                    tempProductInfo.ProductInfoThumbnailName = 
-                                        tempListOfImages[productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex].Imagename;
+                                    if (productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex!=null)
+                                    {
+
+
+                                        tempProductInfo.ProductInfoThumbnailName =
+                                            tempListOfImages[(int)productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex].Imagename;
+                                    }
                                     counter++;
                                 }
                             }
@@ -212,12 +223,14 @@ namespace WebApplicationCrud.Controllers
                         {
                             var tempStockandSize = new ProductInfoStockAndSize()
                             {
-                                stock = StockAndSize.number,
-                                SizeName = StockAndSize.sizeName,
+                                Stock = StockAndSize.Number,
+                                SizeName = StockAndSize.SizeName,
 
                             };
-                            var tempSizesAndStocks = new List<ProductInfoStockAndSize>();
-                            tempSizesAndStocks.Add(tempStockandSize);
+                            var tempSizesAndStocks = new List<ProductInfoStockAndSize>
+                            {
+                                tempStockandSize
+                            };
                             tempProductInfo.ProductInfoStockAndSizes=tempSizesAndStocks;
                         }
                         productInfos.Add(tempProductInfo);
@@ -237,6 +250,13 @@ namespace WebApplicationCrud.Controllers
                         OwnerId = _userManager.GetUserId(HttpContext.User)
                     
                     };
+                    if (vm.Products[i].Id.HasValue)
+                    {
+                        product.id = (int)vm.Products[i].Id;
+
+                        _ctx.Update(product);
+
+                    }
 
                     VMproducts.Add(product);
                     

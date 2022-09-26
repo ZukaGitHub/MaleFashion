@@ -16,10 +16,10 @@ namespace WebApplicationCrud.ViewModels.PanelVMs
         public string Brand { get; set; }
         public string Description { get; set; }
         public string SalePercentage { get; set; }
-        public List<productInfoEditVm> ProductInfos { get; set; }
+        public List<ProductInfoEditVm> ProductInfos { get; set; }
     }
 
-    public class productInfoEditVm
+    public class ProductInfoEditVm
     {
         public string Color { get; set; }
         public List<ProductInfoStockAndSize> StockAndSize { get; set; }

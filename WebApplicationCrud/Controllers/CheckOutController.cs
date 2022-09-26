@@ -38,7 +38,7 @@ namespace WebApplicationCrud.Controllers
                 OrderDetail.Name = Item.Product.name;
                 //OrderDetail.Size = Item.ProductInfo.Size;
                 //OrderDetail.SizeText = Item.ProductInfo.SizeText;
-                OrderDetail.color = Item.ProductInfo.color;
+                OrderDetail.color = Item.ProductInfo.Color;
                 OrderDetails.Add(OrderDetail);
 
 

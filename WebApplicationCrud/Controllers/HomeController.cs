@@ -18,10 +18,10 @@ namespace WebApplicationCrud.Controllers
 {
     public class HomeController : Controller
     {
-        private IFileManager _fileManager;
-        private CRUDdbcontext _ctx;
+        private readonly IFileManager _fileManager;
+        private readonly CRUDdbcontext _ctx;
         private readonly ShoppingCart _shoppingCart;
-        private IRepository _repo;
+        private readonly IRepository _repo;
 
         public HomeController(
             CRUDdbcontext ctx,
@@ -35,22 +35,17 @@ namespace WebApplicationCrud.Controllers
             _ctx = ctx;
             _shoppingCart = shoppingCart;
         }
-        public class FormViewModel
-        {
-            public int id { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
-        }
+       
         public IActionResult About()
         {
             return View();
         }
         public IActionResult ProductPanel(int id)
         {
-            var product = _ctx.Products.Include(x => x.Tags).FirstOrDefault(x => x.id == id);
+            var product = _ctx.Products.Include(x => x.Tags).FirstOrDefault(x => x.Id == id);
 
 
-            var Images = _ctx.Images.Where(c => c.productid == product.id).ToList();
+            var Images = _ctx.Images.Where(c => c.productid == product.Id).ToList();
 
             //var RelatedProductIds = _ctx.Tags
             //    .Where
@@ -88,16 +83,16 @@ namespace WebApplicationCrud.Controllers
 
             var ViewValues = new ProductPanelViewModel
             {
-                ProductId = product.id,
-                price = product.price,
+                ProductId = product.Id,
+                Price = product.Price,
                 //RelatedProducts = RelatedProductList,
-                category = product.CategoryName,
-                Comments = product.Comments == null ? null : product.Comments.ToList(),
+                Category = product.CategoryName,
+                Comments = product.Comments?.ToList(),
                 Tags = AggregateTags,
                 Images = Images,
-                name = product.name,
-                stock = product.stock,
-                desc = product.desc,
+                Name = product.Name,
+                Stock = product.Stock,
+                Desc = product.Desc,
 
             };
 
@@ -146,7 +141,7 @@ namespace WebApplicationCrud.Controllers
                 ImageName = post.Image,
                 Quote = post.Qoute,
                 Id = post.Id,
-                Comments = post.MainComments == null ? null : post.MainComments.ToList(),
+                Comments = post.MainComments?.ToList(),
                 QuoteAuthor = post.QouteAuthor,
                 Tags = post.Tags,
                 Title = post.Title,
@@ -245,7 +240,7 @@ namespace WebApplicationCrud.Controllers
                 return RedirectToAction("Index");
             }
         }
-        public IActionResult shop(ShopViewModel ViewModel)
+        public IActionResult Shop(ShopViewModel ViewModel)
         {
          
            
@@ -266,12 +261,12 @@ namespace WebApplicationCrud.Controllers
 
             if (!String.IsNullOrEmpty(ViewModel.SearchString))
             {
-                products = products.Where(s => s.name.Contains(ViewModel.SearchString)).ToList();
+                products = products.Where(s => s.Name.Contains(ViewModel.SearchString)).ToList();
             }
            
                 int? ProductCount = products.Count();
                 products = products
-                    .OrderBy(g => g.name)
+                    .OrderBy(g => g.Name)
                     
                 
                     .ToList();
@@ -306,16 +301,16 @@ namespace WebApplicationCrud.Controllers
 
         }
 
-        public IActionResult checkout()
+        public IActionResult Checkout()
         {
             return View();
         }
-        public IActionResult contacts()
+        public IActionResult Contacts()
         {
             return View();
         }
 
-        public IActionResult shoppingcart()
+        public IActionResult Shoppingcart()
         {
             return View();
         }
@@ -372,7 +367,7 @@ namespace WebApplicationCrud.Controllers
 
             if (MaxPrice != null)
             {
-                query = query.Where(prod => prod.price < MaxPrice && prod.price > MaxPrice - 50);
+                query = query.Where(prod => prod.Price < MaxPrice && prod.Price > MaxPrice - 50);
             }
             return View(query.ToList());
 

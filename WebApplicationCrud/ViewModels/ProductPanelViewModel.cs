@@ -8,15 +8,15 @@ namespace WebApplicationCrud.ViewModels
     {
         public int ProductId { get; set; }
         public List<RelatedProductViewModel> RelatedProducts { get; set; }
-        public string brand { get; set; }
-        public List<Image> Images { get; set; }
-        public int stock { get; set; }
-        public string name { get; set; }
-        public float price { get; set; }
+        public string Brand { get; set; }
+        public List<string> Images { get; set; }
+        public int Stock { get; set; }
+        public string Name { get; set; }
+        public float Price { get; set; }
         public string Tags { get; set; }
         public List<MainComment> Comments { get; set; }
 
-        public string category { get; set; }
-        public string desc { get; set; }
+        public string Category { get; set; }
+        public string Desc { get; set; }
     }
 }

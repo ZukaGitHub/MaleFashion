@@ -7,8 +7,8 @@ namespace WebApplicationCrud.Models
 
     {
 
-        public int id { get; set; }
-        public Brand brand { get; set; }
+        public int Id { get; set; }
+        public Brand Brand { get; set; }
         public string BrandName { get; set; }
         public List<Tag> Tags { get; set; }
         public List<ProductInfo> ProductInfos { get; set; }
@@ -16,13 +16,13 @@ namespace WebApplicationCrud.Models
         public List<MainComment> Comments { get; set; }
         public int? SalePercentage { get; set; }
         public string OwnerId { get; set; }
-        public int stock { get; set; }
-        public string name { get; set; }
-        public float price { get; set; }
+        public int Stock { get; set; }
+        public string Name { get; set; }
+        public float Price { get; set; }
         public float? NewPrice { get; set; }
 
         public string CategoryName { get; set; }
-        public string desc { get; set; }
+        public string Desc { get; set; }
 
 
     }

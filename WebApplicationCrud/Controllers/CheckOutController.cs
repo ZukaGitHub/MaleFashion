@@ -33,7 +33,7 @@ namespace WebApplicationCrud.Controllers
             {
 
 
-                OrderDetail.ProductId = Item.Product.id;
+                OrderDetail.ProductId = Item.Product.Id;
                 OrderDetail.Quantity = Item.Amount;
                 OrderDetail.Name = Item.Product.name;
                 //OrderDetail.Size = Item.ProductInfo.Size;

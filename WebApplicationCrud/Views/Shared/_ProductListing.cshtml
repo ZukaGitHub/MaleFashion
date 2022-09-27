@@ -6,13 +6,13 @@
     {
 
 
-        <div data-name="@prod.name" class="row content">
+        <div data-name="@prod.Name" class="row content">
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="product__item ">
-                    <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.id">
+                   
 
-                        <div id="@prod.id"class="product__item__pic set-bg" >
-
+                    <div id="@prod.Id" class="product__item__pic set-bg">
+                        <a asp-action="ProductPanel" asp-controller="Home" asp-route-id="@prod.Id">
                             @{
                                 string image_path = "";
                                 if (!string.IsNullOrEmpty(prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()))
@@ -22,29 +22,29 @@
 
                                     image_path = $"img/productAndBlogAddedImages/{prod.ProductInfos.Select(s => s.ProductInfoThumbnailName).FirstOrDefault()}";
 
-                                    <img id="img @prod.id" src="~/@image_path" />
+                                    <img id="img @prod.Id" src="~/@image_path" />
                                 }
                                 else
                                 {
-                                    <img id="img @prod.id" src="~/img/Default_Product.jpg" />
+                                    <img id="img @prod.Id" src="~/img/Default_Product.jpg" />
                                 }
 
                             }
 
 
 
-
-                            <ul class="product__hover">
-                                <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
-                                <li>
-                                    <a href="#"><img src="../img/icon/compare.png" alt=""> <span>Compare</span></a>
-                                </li>
-                                <li><a href="#"><img src="../img/icon/search.png" alt=""></a></li>
-                            </ul>
-                        </div>
-                    </a>
+                        </a>
+                        <ul class="product__hover">
+                            <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
+                            <li>
+                                <a href="#"><img src="../img/icon/compare.png" alt=""> <span>Compare</span></a>
+                            </li>
+                            <li><a href="#"><img src="../img/icon/search.png" alt=""></a></li>
+                        </ul>
+                    </div>
+                    
                     <div class="product__item__text">
-                        <h6>@prod.name</h6>
+                        <h6>@prod.Name</h6>
 
                         <div class="rating">
                             <i class="fa fa-star-o"></i>
@@ -56,7 +56,7 @@
 
                       
                        
-                            <h5>@prod.price</h5>
+                            <h5>@prod.Price</h5>
                         
 
 
@@ -65,7 +65,7 @@
                                 {
                                 <label for="@productInfo.Color"  style="background-color:@productInfo.Color">
                                     <input class="colorChange" 
-                                           data-imgsrcid="img @prod.id"
+                                           data-imgsrcid="img @prod.Id"
                                            data-imgname="@productInfo.ProductInfoThumbnailName"
                                            type="radio" 
                                            name="colorSelect"

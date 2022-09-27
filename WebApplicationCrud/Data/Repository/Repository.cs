@@ -83,7 +83,7 @@ namespace WebApplicationCrud.Data.Repository
         {
             return _ctx.Products.Include(p => p.Comments)
                     .ThenInclude(mc => mc.SubComments)
-                .FirstOrDefault(p => p.id == id);
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public void RemovePost(int id)

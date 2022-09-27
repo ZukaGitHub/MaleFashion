@@ -8,7 +8,7 @@ namespace WebApplicationCrud.ViewModels
         public int? Size { get; set; }
         public string SizeText { get; set; }
         public int Quantity { get; set; }
-        public string color { get; set; }
+        public string Color { get; set; }
 
         public List<IFormFile> Thumbnails { get; set; }
         public List<IFormFile> Images { get; set; }

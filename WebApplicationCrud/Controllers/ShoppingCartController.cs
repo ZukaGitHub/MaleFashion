@@ -42,7 +42,7 @@ namespace WebApplicationCrud.Controllers
         }
         public RedirectToActionResult AddToShoppingCart(int productid, int productInfoId)
         {
-            var Product = _ctx.Products.Include(s => s.ProductInfos).SingleOrDefault(p => p.id == productid);
+            var Product = _ctx.Products.Include(s => s.ProductInfos).SingleOrDefault(p => p.Id == productid);
             var selectedProduct = Product.ProductInfos.FirstOrDefault(p => p.ProductId == productid && p.Id == productInfoId);
             //var selectedProduct = _ctx.ProductInfos
             //    .FirstOrDefault(p => p.ProductId == productid && p.id==productInfoId);

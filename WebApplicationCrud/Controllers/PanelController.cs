@@ -91,7 +91,7 @@ namespace WebApplicationCrud.Controllers
                 .ThenInclude(s=>s.ProductInfoStockAndSizes)
                 .Include(s=>s.ProductInfos)
                 .ThenInclude(s=>s.Images)                             
-                .SingleOrDefault(p => p.id == id);
+                .SingleOrDefault(p => p.Id == id);
 
 
 
@@ -99,7 +99,7 @@ namespace WebApplicationCrud.Controllers
             {
                 var EditProductVm = new EditProductVm()
                 {
-                    Id = product.id,
+                    Id = product.Id,
                     Brand = product.BrandName,
                     Category = product.CategoryName,
                     Description = product.desc,
@@ -186,6 +186,30 @@ namespace WebApplicationCrud.Controllers
                         var path = "product";
                         var tempListOfImages = new List<Image>();
 
+                        if (Productinfo.ImageNames != null && vm.Products[i].Id!=null)
+                        {
+                            var preEditProduct = _ctx.Products?.Where(s => s.Id == vm.Products[i].Id).SingleOrDefault();
+                            if (preEditProduct != null)
+                            {
+                                var preEditImages = preEditProduct.Images;
+                                var Difference = preEditImages.Select(s => s.Imagename).ToList()
+                                    .Except(Productinfo.ImageNames).ToList();
+                                if (Difference.Count > 0)
+                                {
+                                    _filemanager.DeleteImages(Difference);
+                                    foreach (var image in Difference)
+                                    {
+                                        _ctx.Remove(_ctx.Images.Where(s => s.Imagename == image));
+                                    }
+                                }
+                               
+                                if (Productinfo.ThumbnailEditIndex.HasValue)
+                                {
+                                    tempProductInfo.ProductInfoThumbnailName = Productinfo.ImageNames[(int)Productinfo.ThumbnailEditIndex];
+                                }
+
+                            }
+                        }
                         if (productImages != null)
                         {
                             if (productImages.ProductImages[i] != null)
@@ -252,9 +276,11 @@ namespace WebApplicationCrud.Controllers
                     };
                     if (vm.Products[i].Id.HasValue)
                     {
-                        product.id = (int)vm.Products[i].Id;
+                        product.Id = (int)vm.Products[i].Id;
 
                         _ctx.Update(product);
+                        await _ctx.SaveChangesAsync();
+                        continue;
 
                     }
 
@@ -278,7 +304,7 @@ namespace WebApplicationCrud.Controllers
 
             foreach (var Id in productIds)
             {
-                var currentproduct = _ctx.Products.Include(d => d.Images).SingleOrDefault(s => s.id == Id);
+                var currentproduct = _ctx.Products.Include(d => d.Images).SingleOrDefault(s => s.Id == Id);
 
                 if (currentproduct != null)
                 {

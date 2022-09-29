@@ -14,6 +14,7 @@ using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
 
 using WebApplicationCrud.Models;
+using AutoMapper;
 
 namespace WebApplicationCrud
 {
@@ -65,6 +66,7 @@ namespace WebApplicationCrud
             }); 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddAutoMapper();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<IRepository, Repository>();
             services.AddMemoryCache();

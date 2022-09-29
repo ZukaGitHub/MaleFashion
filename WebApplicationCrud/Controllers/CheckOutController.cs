@@ -9,8 +9,8 @@ namespace WebApplicationCrud.Controllers
 {
     public class CheckOutController : Controller
     {
-        private IFileManager _fileManager;
-        private CRUDdbcontext _ctx;
+        private readonly IFileManager _fileManager;
+        private readonly CRUDdbcontext _ctx;
         private readonly ShoppingCart _shoppingCart;
 
         public CheckOutController(CRUDdbcontext ctx, IFileManager fileManager, ShoppingCart shoppingCart)
@@ -35,7 +35,7 @@ namespace WebApplicationCrud.Controllers
 
                 OrderDetail.ProductId = Item.Product.Id;
                 OrderDetail.Quantity = Item.Amount;
-                OrderDetail.Name = Item.Product.name;
+                OrderDetail.Name = Item.Product.Name;
                 //OrderDetail.Size = Item.ProductInfo.Size;
                 //OrderDetail.SizeText = Item.ProductInfo.SizeText;
                 OrderDetail.color = Item.ProductInfo.Color;

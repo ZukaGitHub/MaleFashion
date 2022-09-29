@@ -10,7 +10,7 @@ namespace WebApplicationCrud.Models
 {
     public class ShoppingCart
     {
-        private CRUDdbcontext _ctx;
+        private readonly CRUDdbcontext _ctx;
 
         public ShoppingCart(CRUDdbcontext ctx)
         {
@@ -111,7 +111,7 @@ namespace WebApplicationCrud.Models
         public float GetShoppingCartTotal()
         {
             var total = _ctx.shoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
-                .Select(c => c.Product.price * c.Amount).Sum();
+                .Select(c => c.Product.Price * c.Amount).Sum();
             return total;
 
         }

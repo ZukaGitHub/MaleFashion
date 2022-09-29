@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using WebApplicationCrud.Models;
 using WebApplicationCrud.Models.BlogModels;
 using WebApplicationCrud.ViewModels;
 using WebApplicationCrud.ViewModels.BlogVMs;
+using WebApplicationCrud.ViewModels.HomeVMs;
 
 namespace WebApplicationCrud.Controllers
 {
@@ -22,18 +24,21 @@ namespace WebApplicationCrud.Controllers
         private readonly CRUDdbcontext _ctx;
         private readonly ShoppingCart _shoppingCart;
         private readonly IRepository _repo;
+        private readonly IMapper _mapper;
 
         public HomeController(
             CRUDdbcontext ctx,
             IFileManager fileManager,
             ShoppingCart shoppingCart,
-             IRepository repo
+             IRepository repo,
+             IMapper mapper
             )
         {
             _repo = repo;
             _fileManager = fileManager;
             _ctx = ctx;
             _shoppingCart = shoppingCart;
+            _mapper = mapper;
         }
        
         public IActionResult About()
@@ -41,60 +46,62 @@ namespace WebApplicationCrud.Controllers
             return View();
         }
         public IActionResult ProductPanel(int id)
-        {
-            var product = _ctx.Products.Include(x => x.Tags).FirstOrDefault(x => x.Id == id);
-
-
-            var Images = _ctx.Images.Where(c => c.productid == product.Id).ToList();
-
-            //var RelatedProductIds = _ctx.Tags
-            //    .Where
-            //    (Tag => Tag.TagName == product.Tags[0].TagName)
-            //    .Select(tag => tag.ProductId).ToList().Take(4);
-            //var RelatedProducts = new List<Product>();
-            //foreach (var Id in RelatedProductIds)
-            //{
-            //    RelatedProducts.Add(_ctx.Products.SingleOrDefault(prod => prod.id == Id));
-
-            //}
-            ////var RelatedProducts = _ctx.Products.Where(prod => prod.Tags.Contains(product.Tags[0])&& prod.Tags.Contains(product.Tags[1])).Take(4).ToList();
-            //var RelatedProductList = new List<RelatedProductViewModel>();
-            //foreach (var RelatedProduct in RelatedProducts)
-            //{
-            //    var RelatedProductView = new RelatedProductViewModel()
-            //    {
-            //        Price = RelatedProduct.price,
-            //        ProductId = RelatedProduct.id,
-            //        Thumbnails = RelatedProduct.ProductInfos[0].Thumbnails,
-            //        ProductInfoId = RelatedProduct.ProductInfos[0].id
-            //    };
-            //    RelatedProductList.Add(RelatedProductView);
-
-            //}
-            List<string> Tags = new List<string>();
-
-            var Temp = product.Tags.ToList();
-            foreach (var TagName in Temp)
+        { 
+            var product = _ctx.Products?
+                 .Include(prod=>prod.ProductInfos)?.ThenInclude(img=>img.Images)?
+                 .Include(prod => prod.ProductInfos)?.ThenInclude(stock=>stock.ProductInfoStockAndSizes)?
+                 .Include(comment=>comment.Comments)?
+                 .Include(x => x.Tags)?.FirstOrDefault(x => x.Id == id);
+            if (product == null)
             {
-                Tags.Add(TagName.TagName);
+                
             }
+            
+            List<string> Tags = product.Tags?.Select(s => s.TagName).ToList();
+            var ViewValues = _mapper.Map<ProductViewModel>(product);
 
-            string AggregateTags = Tags.Aggregate((concat, str) => $"{concat},{str}");
+            //var productInfos = new List<ProductInfoViewModel>();
+            //if (product.ProductInfos != null)
+            //{
+            //    foreach (var Info in product.ProductInfos)
+            //    {
+            //        var prodInfoVm = new ProductInfoViewModel()
+            //        {
+            //            Color = Info.Color,
+            //            ImageNames = Info.Images?.Select(s => s.Imagename).ToList(),
+            //            ProductInfoThumbnailName = Info.ProductInfoThumbnailName,
+            //            Stock = Info.ProductInfoStockAndSizes?.Select(s => new StockVm()
+            //            {
+            //                SizeName = s.SizeName,
+            //                Number=s.Stock
+            //            }).ToList()
+            //        };
+            //        productInfos.Add(prodInfoVm);
+            //    }
+            //}
 
-            var ViewValues = new ProductPanelViewModel
-            {
-                ProductId = product.Id,
-                Price = product.Price,
-                //RelatedProducts = RelatedProductList,
-                Category = product.CategoryName,
-                Comments = product.Comments?.ToList(),
-                Tags = AggregateTags,
-                Images = Images,
-                Name = product.Name,
-                Stock = product.Stock,
-                Desc = product.Desc,
+            //List<ProductViewModel> relatedProducts = new List<ProductViewModel>();
+            //if (Tags != null)
+            //{
+            //    foreach(var tag in Tags)
+            //    {
 
-            };
+            //    }
+            //}
+
+            //var ViewValues = new ProductViewModel
+            //{
+            //    Id = product.Id,
+            //    Price = product.Price,            
+            //    CategoryName = product.CategoryName,
+            //    Comments = product.Comments?.ToList(),
+            //    Tags = Tags,          
+            //    Name = product.Name,
+            //    BrandName=product.BrandName,        
+            //    Description = product.Description,
+            //    ProductInfos=productInfos
+
+            //};
 
 
             return View(ViewValues);

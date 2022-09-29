@@ -102,9 +102,9 @@ namespace WebApplicationCrud.Controllers
                     Id = product.Id,
                     Brand = product.BrandName,
                     Category = product.CategoryName,
-                    Description = product.desc,
-                    Name = product.name,
-                    Price = product.price,
+                    Description = product.Description,
+                    Name = product.Name,
+                    Price = product.Price,
                     Tagnames = product.Tags?.Select(s => s.TagName).ToList()
                    
 
@@ -262,10 +262,10 @@ namespace WebApplicationCrud.Controllers
                     var salepercentage = int.Parse(vm.Products[i].SalePercentage);
                     var product = new Product()
                     {
-                        name = vm.Products[i].Name,
-                        desc = vm.Products[i].Description,
+                        Name = vm.Products[i].Name,
+                        Description = vm.Products[i].Description,
                         BrandName = vm.Products[i].Brand,
-                        price = vm.Products[i].Price,
+                        Price = vm.Products[i].Price,
                         CategoryName = vm.Products[i].Category,
                         ProductInfos = productInfos,
                         SalePercentage = int.Parse(vm.Products[i].SalePercentage),

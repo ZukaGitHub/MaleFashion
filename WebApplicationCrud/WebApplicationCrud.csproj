@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>WR</UserSecretsId>
+    <StartupObject>WebApplicationCrud.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,27 @@
     <EmbeddedResource Remove="wwwroot\vue-upload-multiple-image\**" />
     <None Remove="wwwroot\node_modules\**" />
     <None Remove="wwwroot\vue-upload-multiple-image\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20220929201228_Rena.cs" />
+    <Compile Remove="Migrations\20220929201228_Rena.Designer.cs" />
+    <Compile Remove="Migrations\20220929201426_Renaming.cs" />
+    <Compile Remove="Migrations\20220929201426_Renaming.Designer.cs" />
+    <Compile Remove="Migrations\20220929201724_RenamingByConvention.cs" />
+    <Compile Remove="Migrations\20220929201724_RenamingByConvention.Designer.cs" />
+    <Compile Remove="Migrations\20220929201832_Renaming.cs" />
+    <Compile Remove="Migrations\20220929201832_Renaming.Designer.cs" />
+    <Compile Remove="Migrations\20220929203924_Ren.cs" />
+    <Compile Remove="Migrations\20220929203924_Ren.Designer.cs" />
+    <Compile Remove="Migrations\20220929204145_Rena.cs" />
+    <Compile Remove="Migrations\20220929204145_Rena.Designer.cs" />
+    <Compile Remove="Migrations\20220929204240_rena.cs" />
+    <Compile Remove="Migrations\20220929204240_rena.Designer.cs" />
+    <Compile Remove="Migrations\20220929204652_Rena2.cs" />
+    <Compile Remove="Migrations\20220929204652_Rena2.Designer.cs" />
+    <Compile Remove="Migrations\20220929204723_RenamingByConvention.cs" />
+    <Compile Remove="Migrations\20220929204723_RenamingByConvention.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

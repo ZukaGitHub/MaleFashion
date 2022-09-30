@@ -2,7 +2,7 @@
 {
     public class Thumbnail
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string ThumbnailName { get; set; }
 
         public int ProductId { get; set; }

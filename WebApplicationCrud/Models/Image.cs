@@ -3,8 +3,12 @@
     public class Image
     {
 
-        public int id { get; set; }
+        public int Id { get; set; }
         public string Imagename { get; set; }
-        public int productid { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
+     
+
+
     }
 }

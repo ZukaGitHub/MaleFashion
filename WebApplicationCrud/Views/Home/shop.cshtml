@@ -61,10 +61,10 @@
                                                         @foreach (var categories in Model.Categories)
                                                         {
                                                             <li>
-                                                                <input id="@categories.name" type="checkbox"
+                                                                <input id="@categories.Name" type="checkbox"
                                                                        class="checkbox_selector category"
-                                                                       value="@categories.name" />
-                                                                <label for="@categories.name">@categories.name</label>
+                                                                       value="@categories.Name" />
+                                                                <label for="@categories.Name">@categories.Name</label>
 
                                                             </li>
                                                         }
@@ -85,8 +85,8 @@
                                                         @foreach (var brands in Model.Brands)
                                                         {
                                                             <li>
-                                                                <input id="@brands.name" type="checkbox" class="brand checkbox_selector" value="@brands.name" />
-                                                                <label for="@brands.name">@brands.name</label>
+                                                                <input id="@brands.Name" type="checkbox" class="brand checkbox_selector" value="@brands.Name" />
+                                                                <label for="@brands.Name">@brands.Name</label>
 
                                                             </li>
 
@@ -131,8 +131,8 @@
                                                 <div class="shop__sidebar__size">
                                                     @foreach (var size in Model.TextSizes)
                                                     {
-                                                        <input id=@size.name asp-for="SelectedSize" type="checkbox" value="@size.name">
-                                                        <label for="@size.name"> @size.name </label>
+                                                        <input id=@size.Name asp-for="SelectedSize" type="checkbox" value="@size.Name">
+                                                        <label for="@size.Name"> @size.Name </label>
 
 
 

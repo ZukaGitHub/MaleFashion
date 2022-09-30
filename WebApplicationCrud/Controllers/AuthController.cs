@@ -331,7 +331,7 @@ namespace WebApplicationCrud.Controllers
             {
                 Email = vm.Email,
                 PhoneNum = vm.PhoneNum,
-                address1 = vm.address1,
+                Address1 = vm.address1,
                 FirstName = vm.FirstName,
                 LastName = vm.LastName,
 

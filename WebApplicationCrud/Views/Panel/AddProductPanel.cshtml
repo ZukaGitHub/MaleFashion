@@ -28,8 +28,8 @@
                                     @for (int i = 0; i < Model.Brands.Count; i++)
                                     {
                                         <li>
-                                            <label for="@Model.Brands[i].name">@Model.Brands[i].name</label>
-                                            <input id="@Model.Brands[i].name" type="radio" value="@Model.Brands[i].name" v-model="product.Brand" />
+                                            <label for="@Model.Brands[i].Name">@Model.Brands[i].Name</label>
+                                            <input id="@Model.Brands[i].Name" type="radio" value="@Model.Brands[i].Name" v-model="product.Brand" />
                                         </li>
 
                                     }
@@ -44,8 +44,8 @@
                                     @for (int i = 0; i < Model.Categories.Count; i++)
                                     {
                                         <li>
-                                            <label for="@Model.Categories[i].name">@Model.Categories[i].name</label>
-                                            <input id="@Model.Categories[i].name" type="radio" value="@Model.Categories[i].name" v-model="product.Category" />
+                                            <label for="@Model.Categories[i].Name">@Model.Categories[i].Name</label>
+                                            <input id="@Model.Categories[i].Name" type="radio" value="@Model.Categories[i].Name" v-model="product.Category" />
                                         </li>
 
                                     }
@@ -125,10 +125,10 @@
                                                     {
                                                         <label>
                                                             <input type="checkbox"
-                                                                   value="@Model.Sizes[j].name" v-model="productInfo.Sizes"
+                                                                   value="@Model.Sizes[j].Name" v-model="productInfo.Sizes"
                                                                    v-on:change="PopulateStocks(Index,Indexx,this.event)" />
 
-                                                            <span>@Model.Sizes[j].name</span>
+                                                            <span>@Model.Sizes[j].Name</span>
                                                         </label>
                                                     }
                                                 </div>

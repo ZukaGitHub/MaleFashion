@@ -57,54 +57,23 @@ namespace WebApplicationCrud.Controllers
                 
             }
             
-            List<string> Tags = product.Tags?.Select(s => s.TagName).ToList();
-            var ViewValues = _mapper.Map<ProductViewModel>(product);
+            var mappedProduct = _mapper.Map<ProductViewModel>(product);
 
-            //var productInfos = new List<ProductInfoViewModel>();
-            //if (product.ProductInfos != null)
-            //{
-            //    foreach (var Info in product.ProductInfos)
-            //    {
-            //        var prodInfoVm = new ProductInfoViewModel()
-            //        {
-            //            Color = Info.Color,
-            //            ImageNames = Info.Images?.Select(s => s.Imagename).ToList(),
-            //            ProductInfoThumbnailName = Info.ProductInfoThumbnailName,
-            //            Stock = Info.ProductInfoStockAndSizes?.Select(s => new StockVm()
-            //            {
-            //                SizeName = s.SizeName,
-            //                Number=s.Stock
-            //            }).ToList()
-            //        };
-            //        productInfos.Add(prodInfoVm);
-            //    }
-            //}
-
-            //List<ProductViewModel> relatedProducts = new List<ProductViewModel>();
-            //if (Tags != null)
-            //{
-            //    foreach(var tag in Tags)
-            //    {
-
-            //    }
-            //}
-
-            //var ViewValues = new ProductViewModel
-            //{
-            //    Id = product.Id,
-            //    Price = product.Price,            
-            //    CategoryName = product.CategoryName,
-            //    Comments = product.Comments?.ToList(),
-            //    Tags = Tags,          
-            //    Name = product.Name,
-            //    BrandName=product.BrandName,        
-            //    Description = product.Description,
-            //    ProductInfos=productInfos
-
-            //};
+            if (mappedProduct.ProductInfos != null)
+            {
+                for(int i=0; i< mappedProduct.ProductInfos.Count();i++)
+                {
+                    mappedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(product.ProductInfos[i].ProductInfoStockAndSizes);
+                }
+            }
+          
+            
+          
+          
+          
 
 
-            return View(ViewValues);
+            return View(mappedProduct);
         }
         public IActionResult Blog(int pageNumber, string category, string search)
         {

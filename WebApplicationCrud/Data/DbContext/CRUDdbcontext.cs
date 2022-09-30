@@ -36,24 +36,24 @@ namespace WebApplicationCrud.Data.DbContext
 
 
 
-                new Category { id = 1, name = "Shoes" },
-                new Category { id = 2, name = "T-Shirts" },
-                new Category { id = 3, name = "Jackets" },
-                new Category { id = 4, name = "Trousers" },
-                new Category { id = 5, name = "Accessories" },
-                new Category { id = 6, name = "Kids" },
-                new Category { id = 7, name = "Other" }
+                new Category { Id = 1, Name = "Shoes" },
+                new Category { Id = 2, Name = "T-Shirts" },
+                new Category { Id = 3, Name = "Jackets" },
+                new Category { Id = 4, Name = "Trousers" },
+                new Category { Id = 5, Name = "Accessories" },
+                new Category { Id = 6, Name = "Kids" },
+                new Category { Id = 7, Name = "Other" }
 
 
             );
             builder.Entity<Brand>().HasData(
 
-                new Brand { id = 1, name = "Hermes" },
-                new Brand { id = 2, name = "Prada" },
-                new Brand { id = 3, name = "Chanel" },
-                new Brand { id = 5, name = "Gucci" },
-                new Brand { id = 6, name = "Armani" },
-                new Brand { id = 7, name = "Other" }
+                new Brand { Id = 1, Name = "Hermes" },
+                new Brand { Id = 2, Name = "Prada" },
+                new Brand { Id = 3, Name = "Chanel" },
+                new Brand { Id = 5, Name = "Gucci" },
+                new Brand { Id = 6, Name = "Armani" },
+                new Brand { Id = 7, Name = "Other" }
 
 
 
@@ -61,14 +61,14 @@ namespace WebApplicationCrud.Data.DbContext
                 );
             builder.Entity<TextSize>().HasData
                 (
-                new TextSize { id = 1, name = "XS" },
-                new TextSize { id = 2, name = "S" },
-                new TextSize { id = 3, name = "M" },
-                new TextSize { id = 4, name = "XL" },
-                new TextSize { id = 5, name = "2XL" },
-                new TextSize { id = 6, name = "XXL" },
-                new TextSize { id = 7, name = "3XL" },
-                new TextSize { id = 8, name = "4XL" }
+                new TextSize { Id = 1, Name = "XS" },
+                new TextSize { Id = 2, Name = "S" },
+                new TextSize { Id = 3, Name = "M" },
+                new TextSize { Id = 4, Name = "XL" },
+                new TextSize { Id = 5, Name = "2XL" },
+                new TextSize { Id = 6, Name = "XXL" },
+                new TextSize { Id = 7, Name = "3XL" },
+                new TextSize { Id = 8, Name = "4XL" }
 
 
 

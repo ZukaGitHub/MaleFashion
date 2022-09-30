@@ -14,6 +14,7 @@ namespace WebApplicationCrud
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
+
             try
             {
                 var scope = host.Services.CreateScope();

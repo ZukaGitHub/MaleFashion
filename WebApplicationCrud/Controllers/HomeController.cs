@@ -149,7 +149,7 @@ namespace WebApplicationCrud.Controllers
                 var post = _repo.GetPost(vm.Id);
                 if (vm.MainCommentId == 0)
                 {
-                    post.MainComments = post.MainComments ?? new List<MainComment>();
+                    post.MainComments ??= new List<MainComment>();
 
                     post.MainComments.Add(new MainComment
                     {
@@ -182,7 +182,7 @@ namespace WebApplicationCrud.Controllers
                 var product = _repo.GetProduct(vm.Id);
                 if (vm.MainCommentId == 0)
                 {
-                    product.Comments = product.Comments ?? new List<MainComment>();
+                    product.Comments ??= new List<MainComment>();
 
                     product.Comments.Add(new MainComment
                     {

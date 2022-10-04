@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +31,8 @@ namespace WebApplicationCrud
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CRUDdbcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddControllersWithViews();
+            services.AddDbContext<CRUDdbcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("Production")));
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -64,9 +66,10 @@ namespace WebApplicationCrud
             {
                 options.AppId = "487829986500552";
                 options.AppSecret = "688e5572747e0c333034189752fe0846";
-            }); 
+            });
+            services.AddRazorPages();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+           
             services.AddAutoMapper();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<IRepository, Repository>();
@@ -75,7 +78,7 @@ namespace WebApplicationCrud
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -93,15 +96,19 @@ namespace WebApplicationCrud
 
             app.UseCookiePolicy();
 
-
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
+            
             app.UseSession();
-            app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
+
+        
         }
     }
 }

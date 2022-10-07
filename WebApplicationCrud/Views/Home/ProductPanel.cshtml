@@ -1,4 +1,4 @@
-﻿@model ProductPanelViewModel
+﻿@model ProductViewModel
 
 
 
@@ -41,12 +41,12 @@
 
                             @for (int i = 0; i < Model.Images.Count; i++)
                             {
-                                var image_path = $"/img/productAndBlogAddedImages{Model.Images[i]}";
+                                var image_path = $"img/productAndBlogAddedImages/{Model.Images[i]}";
                                 if (i == 0)
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab" href="#tabs-0" role="tab">
-                                            <div class="product__thumb__pic set-bg" style="background-image:url(../..@image_path)">
+                                            <div class="product__thumb__pic set-bg" style="background-image: url('../../@image_path')">
 
 
                                             </div>
@@ -59,7 +59,7 @@
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabs-@i" role="tab">
-                                            <div class="product__thumb__pic set-bg" style="background-image:url(../..@image_path)">
+                                            <div class="product__thumb__pic set-bg" style="background-image: url('../../@image_path')">
                                             </div>
                                         </a>
                                     </li>
@@ -90,7 +90,7 @@
 
                                     <div class="tab-pane" id="tabs-@i" role="tabpanel">
                                         <div class="product__details__pic__item">
-                                            <img src="@image_path" alt="">
+                                            <img class="big_image" src="@image_path" alt="">
                                         </div>
                                     </div>
                                 }
@@ -176,7 +176,7 @@
                                                </div>
                                          </div>*@
                                 @*asp-route-productInfoId="@product.id"*@
-                                <a asp-action="AddToShoppingCart" asp-controller="ShoppingCart" asp-route-productid="@Model.ProductId" class="primary-btn">+ Add To Cart</a>
+                                <a asp-action="AddToShoppingCart" asp-controller="ShoppingCart" asp-route-productid="@Model.Id" class="primary-btn">+ Add To Cart</a>
 
                             </div>
                             @*wishlist and compare-------------------------------------------------*@
@@ -189,7 +189,7 @@
                                 <img src="~/img/shop-details/details-payment.png" alt="">
                                 <ul>
 
-                                    <li><span>Categories:</span> @Model.Category</li>
+                                    <li><span>Categories:</span> @Model.CategoryName</li>
                                     <li><span>Tag:</span> Clothes, Skin, Body</li>
                                 </ul>
                             </div>
@@ -414,7 +414,7 @@
         @if (User.Identity.IsAuthenticated)
         {
 
-            await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.ProductId, MainCommentId = 0, IsPost = false, IsProduct = true });
+            await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
         }
         else
         {
@@ -462,7 +462,7 @@
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
-                        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.ProductId, MainCommentId = comment.Id, IsPost = false, IsProduct = true });
+                        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = comment.Id, IsPost = false, IsProduct = true });
                     }
                     else
                     {
@@ -479,7 +479,7 @@
         {
             @if (User.Identity.IsAuthenticated)
             {
-                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.ProductId, MainCommentId = 0, IsPost = false, IsProduct = true});
+                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true});
             }
             else
             {
@@ -512,7 +512,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $(".big_image").imagezoomsl({
-            zoomrange: [3, 3];
+            zoomrange: [3, 5]
         });
     });
 </script>

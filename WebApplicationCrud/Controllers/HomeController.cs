@@ -64,7 +64,12 @@ namespace WebApplicationCrud.Controllers
                 for(int i=0; i< mappedProduct.ProductInfos.Count();i++)
                 {
                     mappedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(product.ProductInfos[i].ProductInfoStockAndSizes);
+             
+                
                 }
+
+
+                mappedProduct.Images = mappedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d=>d)).ToList();
             }
           
             

@@ -8,12 +8,17 @@ namespace WebApplicationCrud.ViewModels.HomeVMs
 {
     public class ProductViewModel
     {
+        public ProductViewModel()
+        {
+            this.Images = new List<string>();
+        }
         public int Id { get; set; }
         public string Name { get; set; }
         public float Price { get; set; }
         public float? PreviousPrice { get; set; }
         public int? SalePercentange { get; set; }
         public string Description { get; set; }
+        public List<string> Images { get; set; }
         public DateTime? SaleTimer { get; set; }
         public List<string> Tags { get; set; }
         public List<MainComment> Comments { get; set; }

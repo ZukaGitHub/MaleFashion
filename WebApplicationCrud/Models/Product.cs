@@ -20,7 +20,7 @@ namespace WebApplicationCrud.Models
         public string Name { get; set; }
         public float Price { get; set; }
         public float? NewPrice { get; set; }
-
+        public Category Category { get; set; }
         public string CategoryName { get; set; }
         public string Description { get; set; }
 

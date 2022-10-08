@@ -30,9 +30,18 @@
     </section>
     <!-- Breadcrumb Section End -->
     <!-- Shop Section Begin -->
+
+
+
+    
     <section class="shop spad">
-        <div class="container">
+        <div id="compare">
+
+        </div>
+        <div id="productPanel" class="container">
             <div class="row">
+
+
                 @*aqedan------------------------------------------*@
 
                 <div class="col-lg-3">
@@ -45,7 +54,7 @@
 
 
                         </div>
-                        
+
                         <form asp-action="shop" asp-controller="Home" enctype="multipart/form-data" method="post">
                             <div class="shop__sidebar__accordion">
                                 <div class="accordion" id="accordionExample">
@@ -58,13 +67,13 @@
                                             <div class="card-body">
                                                 <div class="shop__sidebar__categories">
                                                     <ul class="nice-scroll">
-                                                        @foreach (var categories in Model.Categories)
+                                                        @foreach (var category in Model.Categories)
                                                         {
                                                             <li>
-                                                                <input id="@categories.Name" type="checkbox"
+                                                                <input id="@category" type="checkbox"
                                                                        class="checkbox_selector category"
-                                                                       value="@categories.Name" />
-                                                                <label for="@categories.Name">@categories.Name</label>
+                                                                       value="@category" />
+                                                                <label for="@category">@category</label>
 
                                                             </li>
                                                         }
@@ -82,11 +91,11 @@
                                             <div class="card-body">
                                                 <div class="shop__sidebar__brand">
                                                     <ul>
-                                                        @foreach (var brands in Model.Brands)
+                                                        @foreach (var brand in Model.Brands)
                                                         {
                                                             <li>
-                                                                <input id="@brands.Name" type="checkbox" class="brand checkbox_selector" value="@brands.Name" />
-                                                                <label for="@brands.Name">@brands.Name</label>
+                                                                <input id="@brand" type="checkbox" class="brand checkbox_selector" value="@brand" />
+                                                                <label for="@brand">@brand</label>
 
                                                             </li>
 
@@ -131,8 +140,8 @@
                                                 <div class="shop__sidebar__size">
                                                     @foreach (var size in Model.TextSizes)
                                                     {
-                                                        <input id=@size.Name asp-for="SelectedSize" type="checkbox" value="@size.Name">
-                                                        <label for="@size.Name"> @size.Name </label>
+                                                        <input id=@size type="checkbox" value="@size">
+                                                        <label for="@size"> @size </label>
 
 
 
@@ -154,7 +163,7 @@
                                                     @foreach (var Tag in Model.Tags)
                                                     {
 
-                                                        <input id="@Tag" asp-for="TagFilter" type="checkbox" value="@Tag" />
+                                                        <input id="@Tag" type="checkbox" value="@Tag" />
                                                         <label for="@Tag">@Tag</label>
 
 
@@ -286,6 +295,11 @@
             filter_data();
         })
 
+        $(".compare").click(function () {
+            $("#compare").addClass("compare1")
+            $("#productPanel").css("width","75%")
+
+        })
     });
 </script>
 

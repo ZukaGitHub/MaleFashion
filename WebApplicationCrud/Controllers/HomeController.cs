@@ -46,16 +46,82 @@ namespace WebApplicationCrud.Controllers
             return View();
         }
         public IActionResult ProductPanel(int id)
-        { 
-            var product = _ctx.Products?
-                 .Include(prod=>prod.ProductInfos)?.ThenInclude(img=>img.Images)?
-                 .Include(prod => prod.ProductInfos)?.ThenInclude(stock=>stock.ProductInfoStockAndSizes)?
-                 .Include(comment=>comment.Comments)?
-                 .Include(x => x.Tags)?.FirstOrDefault(x => x.Id == id);
+        {
+            var products = _ctx.Products?
+                 .Include(prod => prod.ProductInfos)?.ThenInclude(img => img.Images)?
+                 .Include(prod => prod.ProductInfos)?.ThenInclude(stock => stock.ProductInfoStockAndSizes)?
+                 .Include(comment => comment.Comments)?
+                 .Include(x => x.Tags)?.ToList();
+
+
+          
+            var product=products?.FirstOrDefault(x => x.Id == id);
+
             if (product == null)
             {
-                
+
+                return RedirectToAction("Shop");
+
             }
+            var relatedProducts = products?.Where(s => s.CategoryName == product.CategoryName).Take(4).ToList();
+            var relatedProductsDict = new Dictionary<int, int>();
+            var mappedRelatedProducts = new List<ProductViewModel>();
+            if (relatedProducts != null && relatedProducts.Count>0)
+            {
+                foreach (var relatedProduct in relatedProducts)
+                {
+                    if (relatedProduct.Tags.Intersect(product.Tags)!=null && relatedProduct.Tags.Intersect(product.Tags).Count()>0)
+                    {
+                        relatedProductsDict.Add(relatedProduct.Id, relatedProduct.Tags.Intersect(product.Tags).Count());
+                           
+                    }
+                }
+                
+                if (relatedProductsDict != null && relatedProductsDict.Count > 0)
+                {
+                    relatedProductsDict = relatedProductsDict?.OrderByDescending(s => s.Value).ToDictionary(z => z.Key, d => d.Value);
+
+                    relatedProducts = new List<Product>();
+
+                    for (int i = 0; i < relatedProductsDict.Count(); i++)
+                    {
+                        relatedProducts.Add(products.FirstOrDefault(prod => prod.Id == relatedProductsDict.ElementAt(i).Key));
+                        if (i > 3)
+                        {
+                            break;
+                        }
+                    }
+
+                   
+
+
+                }
+                foreach (var prod in relatedProducts)
+                {
+                    var mappedRelatedProduct = _mapper.Map<ProductViewModel>(prod);
+
+                    if (mappedRelatedProduct.ProductInfos != null)
+                    {
+                        for (int i = 0; i < mappedRelatedProduct.ProductInfos.Count(); i++)
+                        {
+                            mappedRelatedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(prod.ProductInfos[i].ProductInfoStockAndSizes);
+
+
+                        }
+
+
+                        mappedRelatedProduct.Images = mappedRelatedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d => d)).ToList();
+                    }
+
+                    mappedRelatedProducts.Add(mappedRelatedProduct);
+
+                }
+            }
+
+           
+
+
+          
             
             var mappedProduct = _mapper.Map<ProductViewModel>(product);
 
@@ -71,7 +137,9 @@ namespace WebApplicationCrud.Controllers
 
                 mappedProduct.Images = mappedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d=>d)).ToList();
             }
-          
+
+            mappedProduct.RelatedProducts = mappedRelatedProducts;
+
             
           
           
@@ -223,60 +291,59 @@ namespace WebApplicationCrud.Controllers
         }
         public IActionResult Shop(ShopViewModel ViewModel)
         {
-         
-           
-           
 
-
-            var products = _ctx.Products.Include(s => s.Tags)
-                .Include(s=>s.ProductInfos)
-                .Include(d=>d.Comments).ToList();
-            var TagNames = _ctx.Tags.Select(s => s.TagName).ToArray();
-
+            var products = _ctx.Products?
+                  .Include(prod => prod.ProductInfos)?.ThenInclude(img => img.Images)?
+                  .Include(prod => prod.ProductInfos)?.ThenInclude(stock => stock.ProductInfoStockAndSizes)?
+                  .Include(comment => comment.Comments)?
+                  .Include(x => x.Tags)?.ToList();
+  
             Dictionary<string, int> TopTagNamesDict =
-                TagNames.GroupBy(s => s).ToDictionary(g => g.Key.ToString(), g => g.Count());
-            var TopTagNames = TopTagNamesDict.Select(s => s.Key).Take(5).ToList();
-
-
-
-
-            if (!String.IsNullOrEmpty(ViewModel.SearchString))
-            {
-                products = products.Where(s => s.Name.Contains(ViewModel.SearchString)).ToList();
-            }
+                products?.SelectMany(s => s.Tags?.Select(s => s.TagName))
+                .GroupBy(s => s)
+                .ToDictionary(g => g.Key.ToString(), g => g.Count());
+            var TopTagNames = TopTagNamesDict.Select(s => s.Key).Take(5).ToList();         
            
                 int? ProductCount = products.Count();
                 products = products
-                    .OrderBy(g => g.Name)
-                    
-                
+                    .OrderBy(g => g.Name)              
                     .ToList();
 
-                var thumbnails = _ctx.Thumbnails.ToList();
-                var categories = _ctx.Categories.ToList();
-                var brands = _ctx.Brands.ToList();
-                var sizes = _ctx.TextSizes.ToList();
+            var mappedProducts = new List<ProductViewModel>();
+            foreach (var product in products)
+            {
+                var mappedProduct = _mapper.Map<ProductViewModel>(product);
 
-              
-
-                var vm = new ShopViewModel()
+                if (mappedProduct.ProductInfos != null)
                 {
-                    products = products,
-                    thumbnails = thumbnails,
-                    Categories = categories,
-                    Brands = brands,
-                    TextSizes = sizes,                
-                  
+                    for (int i = 0; i < mappedProduct.ProductInfos.Count(); i++)
+                    {
+                        mappedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(product.ProductInfos[i].ProductInfoStockAndSizes);
+
+
+                    }
+
+
+                    mappedProduct.Images = mappedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d => d)).ToList();
+                }
+                mappedProducts.Add(mappedProduct);
+            }
+
+
+            var sizes = _ctx.TextSizes.ToList();
+            var shopViewModel = new ShopViewModel()
+                {
+                    products = mappedProducts,                   
+                    Categories = mappedProducts?.Select(s=>s.CategoryName)?.ToList(),
+                    Brands = mappedProducts?.Select(b=>b.BrandName)?.ToList(),
+                    TextSizes =sizes?.Select(s=>s.Name)?.ToList(),                              
                     Tags = TopTagNames
 
                 };
 
-                ViewData["Products"] = products;
+          
 
-
-                ViewData["Thumbnails"] = thumbnails;
-
-                return View(vm);
+                return View(shopViewModel);
             
 
 
@@ -300,32 +367,11 @@ namespace WebApplicationCrud.Controllers
         {
             return View();
         }
-        [HttpGet("img/product/ProductImages/{Image}")]
-        public IActionResult Image(string Image)
-        {
-            var mime = Image.Substring(Image.LastIndexOf('.') + 1);
-            return new FileStreamResult(_fileManager.Imagestream(Image), $"ProductImages/{mime} ");
-        }
-        [HttpGet("img/product/Thumbnails/{Image}")]
-        public IActionResult Thumbnail(string Thumbnail)
-        {
-            var mime = Thumbnail.Substring(Thumbnail.LastIndexOf('.') + 1);
-            return new FileStreamResult(_fileManager.Thumbnailstream(Thumbnail), $"Thumbnails/{mime} ");
-        }
-
-
-
-
+     
         public IActionResult Post(int id) =>
             View(_repo.GetPost(id));
 
-        //[HttpGet("/Image/{image}")]
-        //[ResponseCache(CacheProfileName = "Monthly")]
-        //public IActionResult Image(string image) =>
-        //     new FileStreamResult(
-        //         _fileManager.ImageStream(image),
-        //         $"image/{image.Substring(image.LastIndexOf('.') + 1)}");
-
+      
         [HttpGet]
         public IActionResult CustomFilter(string CategoryName, string BrandName, int? MaxPrice, string SelectedSize)
         {

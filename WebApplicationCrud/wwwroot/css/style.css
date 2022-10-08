@@ -110,6 +110,14 @@ ol {
   Helper CSS
 -----------------------*/
 
+
+.compare1{
+	width:300px;
+	position:fixed;
+	background-color:black;
+	height:100vh;
+
+}
 .section-title {
 	margin-bottom: 45px;
 	text-align: center;

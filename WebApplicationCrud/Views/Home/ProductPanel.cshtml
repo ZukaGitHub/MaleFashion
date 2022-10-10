@@ -121,11 +121,16 @@
                             </div>
 
                             @*price---------------------------------------*@
-                            <h3>$@Model.Price <span>70.00</span></h3>
+                        <h3>
+                            $@Model.Price
+
+                            @if (Model.PreviousPrice.HasValue)
+                            {
+                                <span>@Model.PreviousPrice</span>
+                            }
+                        </h3>
                             <p>
-                                Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
-                                cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
-                                with placket.
+                               @Model.Description
                             </p>
                             <div class="product__details__option">
                                 @*size---------------------------------------------------*@
@@ -190,7 +195,11 @@
                                 <ul>
 
                                     <li><span>Categories:</span> @Model.CategoryName</li>
-                                    <li><span>Tag:</span> Clothes, Skin, Body</li>
+                                    <li><span>Tag:</span> @foreach (var tag in Model.Tags) { 
+                                    
+                                        @tag,
+                                   
+                                    }</li>
                                 </ul>
                             </div>
                         </div>
@@ -202,20 +211,14 @@
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                       role="tab">Description</a>
+                                       role="tab">Detailed Description</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">
-                                        Customer
-                                        Previews(5)
+                                      Additional Information
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">
-                                        Additional
-                                        information
-                                    </a>
-                                </li>
+                              
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabs-5" role="tabpanel">
@@ -226,45 +229,14 @@
                                             ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
                                             pharetras loremos.
                                         </p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>
-                                                A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                                a touchscreen and touchpad.
-                                            </p>
-                                            <p>
-                                                As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                                $350.00, a new Pocket PC can now be purchased.
-                                            </p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>
-                                                Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                                worn all year round.
-                                            </p>
-                                        </div>
+                                     
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tabs-6" role="tabpanel">
                                     <div class="product__details__tab__content">
                                         <div class="product__details__tab__content__item">
                                             <h5>Products Infomation</h5>
-                                            <p>
+                                            <p class="note">
                                                 A Pocket PC is a handheld computer, which features many of the same
                                                 capabilities as a modern PC. These handy little devices allow
                                                 individuals to retrieve and store e-mail messages, create a contact
@@ -273,71 +245,10 @@
                                                 accompanied with specific software to operate the unit and must feature
                                                 a touchscreen and touchpad.
                                             </p>
-                                            <p>
-                                                As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                                $350.00, a new Pocket PC can now be purchased.
-                                            </p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>
-                                                Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                                worn all year round.
-                                            </p>
-                                        </div>
+                                           
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tabs-7" role="tabpanel">
-                                    <div class="product__details__tab__content">
-                                        <p class="note">
-                                            Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                            solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                            ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                            pharetras loremos.
-                                        </p>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Products Infomation</h5>
-                                            <p>
-                                                A Pocket PC is a handheld computer, which features many of the same
-                                                capabilities as a modern PC. These handy little devices allow
-                                                individuals to retrieve and store e-mail messages, create a contact
-                                                file, coordinate appointments, surf the internet, exchange text messages
-                                                and more. Every product that is labeled as a Pocket PC must be
-                                                accompanied with specific software to operate the unit and must feature
-                                                a touchscreen and touchpad.
-                                            </p>
-                                            <p>
-                                                As is the case with any new technology product, the cost of a Pocket PC
-                                                was substantial during it’s early release. For approximately $700.00,
-                                                consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                                These days, customers are finding that prices have become much more
-                                                reasonable now that the newness is wearing off. For approximately
-                                                $350.00, a new Pocket PC can now be purchased.
-                                            </p>
-                                        </div>
-                                        <div class="product__details__tab__content__item">
-                                            <h5>Material used</h5>
-                                            <p>
-                                                Polyester is deemed lower quality due to its none natural quality’s. Made
-                                                from synthetic materials, not natural like wool. Polyester suits become
-                                                creased easily and are known for not being breathable. Polyester suits
-                                                tend to have a shine to them compared to wool and cotton suits, this can
-                                                make the suit look cheap. The texture of velvet is luxurious and
-                                                breathable. Velvet is a great choice for dinner party jacket and can be
-                                                worn all year round.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+                        
                             </div>
                         </div>
                     </div>
@@ -355,114 +266,90 @@
             @*Related Products Should Match Through Tags not ProductInfos----------------------------*@
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 class="related-title">Related Product</h3>
+                    <h3 class="related-title">Related Products</h3>
                 </div>
             </div>
-            <div class="row">
+            <div>
 
-                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" style="background-image:url(../../img/product/product-1.jpg)">
-
-                            @*New Label-------------------------------------------*@
-                            @*<span class="label">New</span>*@
-
-                            @*Wishlist and Compare-----------------------------------------------*@
-
-
-                            @*<ul class="product__hover">
-                                    <li><a href="#"><img src="~/img/icon/heart.png" alt=""></a></li>
-                                    <li><a href="#"><img src="~/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-
-                                </ul>*@
-                        </div>
-                        <div class="product__item__text">
-                            <h6>Piqué Biker Jacket</h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
-                            @*Rating Number 2------------------------------------------*@
-                            @*<div class="rating">
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                </div>*@
-                            <h5>$67.24</h5>
-                            <div class="product__color__select">
-                                <label for="pc-1">
-                                    <input type="radio" id="pc-1">
-                                </label>
-                                <label class="active black" for="pc-2">
-                                    <input type="radio" id="pc-2">
-                                </label>
-                                <label class="grey" for="pc-3">
-                                    <input type="radio" id="pc-3">
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                @await Html.PartialAsync("_ProductListing", Model.RelatedProducts)
 
             </div>
         </div>
     </section>
 
     <!-- Related Section End -->
-    <nav class="comment-section">
-        @if (User.Identity.IsAuthenticated)
-        {
+    <section>
+        <div class="container">
+            <nav class="comment-section">
+                @if (User.Identity.IsAuthenticated)
+                {
 
-            await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
-        }
-        else
-        {
+                    await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
+                }
+                else
+                {
 
-            <div>
-                <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this awesome post!
+                    <div>
+                        <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this awesome post!
 
-            </div>
-        }
-
-
-        @if (Model.Comments != null)
-        {
-            @foreach (var comment in Model.Comments)
-            {
-
-                <div class="Comment">
-
-                    <span><img src="" class="rounded-circle" /></span>
-                    <span style="font-weight:bold">@comment.Author</span>
-                    <span style="font-style:italic">@comment.Created</span>
-                    <button id="@comment.Id" class="replyButton" onclick="SubCommentsCollapse(this.id)">
-                        <span><i class="fa fa-reply"></i> reply</span>
-                    </button>
-                    <p>
-                        @comment.Message
-                    </p>
-                </div>
-                <div class="subComment inactiveSection" id="subComments+@comment.Id" style="margin-left: 50px;">
+                    </div>
+                }
 
 
-
-
-                    @foreach (var subComment in comment.SubComments)
+                @if (Model.Comments != null)
+                {
+                    @foreach (var comment in Model.Comments)
                     {
-                        <div class="Comment">
-                            <span><img src="" class="rounded-circle" /></span>
-                            <span style="font-weight:bold">@subComment.Author</span>
-                            <span style="font-style:italic">@subComment.Created</span>
 
+                        <div class="Comment">
+
+                            <span><img src="" class="rounded-circle" /></span>
+                            <span style="font-weight:bold">@comment.Author</span>
+                            <span style="font-style:italic">@comment.Created</span>
+                            <button id="@comment.Id" class="replyButton" onclick="SubCommentsCollapse(this.id)">
+                                <span><i class="fa fa-reply"></i> reply</span>
+                            </button>
                             <p>
-                                @subComment.Message
+                                @comment.Message
                             </p>
                         </div>
+                        <div class="subComment inactiveSection" id="subComments+@comment.Id" style="margin-left: 50px;">
+
+
+
+
+                            @foreach (var subComment in comment.SubComments)
+                            {
+                                <div class="Comment">
+                                    <span><img src="" class="rounded-circle" /></span>
+                                    <span style="font-weight:bold">@subComment.Author</span>
+                                    <span style="font-style:italic">@subComment.Created</span>
+
+                                    <p>
+                                        @subComment.Message
+                                    </p>
+                                </div>
+                            }
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = comment.Id, IsPost = false, IsProduct = true });
+                            }
+                            else
+                            {
+                                <div>
+                                    <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this post
+
+                                </div>
+
+                            }
+                        </div>
                     }
+                }
+                else
+                {
                     @if (User.Identity.IsAuthenticated)
                     {
-                        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = comment.Id, IsPost = false, IsProduct = true });
+                        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
                     }
                     else
                     {
@@ -472,26 +359,11 @@
                         </div>
 
                     }
-                </div>
-            }
-        }
-        else
-        {
-            @if (User.Identity.IsAuthenticated)
-            {
-                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true});
-            }
-            else
-            {
-                <div>
-                    <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this post
 
-                </div>
-
-            }
-
-        }
-    </nav>
+                }
+            </nav>
+        </div>
+    </section>
     <!-- Search Begin -->
     <div class="search-model">
         <div class="h-100 d-flex align-items-center justify-content-center">

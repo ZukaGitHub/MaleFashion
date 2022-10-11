@@ -121,14 +121,11 @@
                             </div>
 
                             @*price---------------------------------------*@
-                        <h3>
-                            $@Model.Price
+                            <h3>$@Model.Price <span>@if (Model.PreviousPrice.HasValue) {
 
-                            @if (Model.PreviousPrice.HasValue)
-                            {
-                                <span>@Model.PreviousPrice</span>
+                                @Model.PreviousPrice
                             }
-                        </h3>
+                                 </span></h3>
                             <p>
                                @Model.Description
                             </p>
@@ -136,42 +133,35 @@
                                 @*size---------------------------------------------------*@
                                 <div class="product__details__option__size">
                                     <span>Size:</span>
-                                    <label for="xxl">
-                                        xxl
-                                        <input type="radio" id="xxl">
-                                    </label>
-                                    <label class="active" for="xl">
-                                        xl
-                                        <input type="radio" id="xl">
-                                    </label>
-                                    <label for="l">
-                                        l
-                                        <input type="radio" id="l">
-                                    </label>
-                                    <label for="sm">
-                                        s
-                                        <input type="radio" id="sm">
-                                    </label>
+
+
+                                    @*
+                                        
+                                    take care of this size color selector
+                                        *@
+                                    @for (int i = 0; i < Model.SizeNames.Count; i++)
+                                    {
+                                      
+
+                                            <label class="@Model.ProductInfos[i].Color" for="@Model.ProductInfos[i].Stock[j].SizeName">
+                                                @Model.ProductInfos[i].Stock[j].SizeName
+                                                <input type="radio" id="@Model.ProductInfos[i].Stock[j].SizeName">
+                                            </label>
+                                        
+
+
+                                    }
                                 </div>
                                 @*COlors----------------------------------------------------*@
-                                <div class="product__details__option__color">
-                                    <span>Color:</span>
-                                    <label class="c-1" for="sp-1">
-                                        <input type="radio" id="sp-1">
+                            <div class="product__details__option__color">
+                                <span>Color:</span>
+                                @for (int i = 0; i < Model.ProductInfos.Count; i++)
+                                {
+                                    <label class="c-1" style="background-color:@Model.ProductInfos[i].Color" for="@Model.ProductInfos[i].Color">
+                                        <input type="radio" id="@Model.ProductInfos[i].Color">
                                     </label>
-                                    <label class="c-2" for="sp-2">
-                                        <input type="radio" id="sp-2">
-                                    </label>
-                                    <label class="c-3" for="sp-3">
-                                        <input type="radio" id="sp-3">
-                                    </label>
-                                    <label class="c-4" for="sp-4">
-                                        <input type="radio" id="sp-4">
-                                    </label>
-                                    <label class="c-9" for="sp-9">
-                                        <input type="radio" id="sp-9">
-                                    </label>
-                                </div>
+                                }
+                            </div>
                             </div>
                             @*add to cart-----------------------------------------------*@
                             <div class="product__details__cart__option">
@@ -196,10 +186,9 @@
 
                                     <li><span>Categories:</span> @Model.CategoryName</li>
                                     <li><span>Tag:</span> @foreach (var tag in Model.Tags) { 
-                                    
-                                        @tag,
-                                   
-                                    }</li>
+                                        @tag<p> </p>
+                                    }
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -211,7 +200,7 @@
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                       role="tab">Detailed Description</a>
+                                       role="tab">Description</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">
@@ -246,6 +235,8 @@
                                                 a touchscreen and touchpad.
                                             </p>
                                            
+                                        </div>
+                                      
                                     </div>
                                 </div>
                         

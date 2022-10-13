@@ -1352,37 +1352,7 @@ ol {
 	background: #0b090c;
 }
 
-.shop__sidebar__color label.c-2 {
-	background: #20315f;
-}
 
-.shop__sidebar__color label.c-3 {
-	background: #f1af4d;
-}
-
-.shop__sidebar__color label.c-4 {
-	background: #636068;
-}
-
-.shop__sidebar__color label.c-5 {
-	background: #57594d;
-}
-
-.shop__sidebar__color label.c-6 {
-	background: #e8bac4;
-}
-
-.shop__sidebar__color label.c-7 {
-	background: #d6c1d7;
-}
-
-.shop__sidebar__color label.c-8 {
-	background: #ed1c24;
-}
-
-.shop__sidebar__color label.c-9 {
-	background: #ffffff;
-}
 
 .shop__sidebar__color label:after {
 	position: absolute;
@@ -1634,22 +1604,26 @@ ol {
 	position: relative;
 }
 
-.product__details__pic__item a {
-	height: 56px;
-	width: 56px;
-	border: 4px solid #ffffff;
-	border-radius: 50%;
-	font-size: 20px;
-	color: #ffffff;
-	line-height: 48px;
-	text-align: center;
-	display: inline-block;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-top: -28px;
-	margin-left: -28px;
+.product__details__pic__item i {
+	font-size:10px;
+	color:black;
 }
+	.product__details__pic__item a {
+		height: 56px;
+		width: 56px;
+		border: 2px solid black;
+		border-radius: 50%;
+		font-size: 20px;
+		color: #ffffff;
+		line-height: 48px;
+		text-align: center;
+		display: inline-block;
+		position: absolute;
+		right: 0;
+		transform: translateY(-30px);
+		margin-top: -28px;
+		margin-left: -28px;
+	}
 
 .product__details__text {
 	text-align: center;
@@ -1724,11 +1698,16 @@ ol {
 	cursor: pointer;
 }
 
-.product__details__option__size label.active {
+.product__details__option__size label:hover {
 	background: #111111;
 	color: #ffffff;
 	border-color: #111111;
 }
+	.product__details__option__size input[type="radio"]:checked + label {
+		background: #111111;
+		color: #ffffff;
+		border-color: #111111;
+	}
 
 .product__details__option__size label input {
 	position: absolute;
@@ -1761,24 +1740,10 @@ ol {
 }
 
 .product__details__option__color label.c-1 {
-	background: #0b090c;
+	
 }
+	
 
-.product__details__option__color label.c-2 {
-	background: #20315f;
-}
-
-.product__details__option__color label.c-3 {
-	background: #f1af4d;
-}
-
-.product__details__option__color label.c-4 {
-	background: #ed1c24;
-}
-
-.product__details__option__color label.c-9 {
-	background: #ffffff;
-}
 
 .product__details__option__color label:after {
 	position: absolute;
@@ -2015,7 +1980,11 @@ ol {
 }
 .disable{
 	background:#ccc;
+	pointer-events:none;
 }
+.sizes {
+}
+
 .pagination-content{
 
 }
@@ -3878,6 +3847,7 @@ ol {
 		margin-right: 0;
 		margin-bottom: 25px;
 	}
+		
 	.product__details__last__option h5:before {
 		width: 440px;
 	}

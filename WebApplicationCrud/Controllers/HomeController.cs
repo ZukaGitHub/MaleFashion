@@ -139,7 +139,7 @@ namespace WebApplicationCrud.Controllers
             }
 
             mappedProduct.RelatedProducts = mappedRelatedProducts;
-            mappedProduct.SizeNames = _ctx.Brands?.Select(s => s.Name).ToList();
+            mappedProduct.SizeNames = _ctx.TextSizes?.Select(s => s.Name).ToList();
 
             
           

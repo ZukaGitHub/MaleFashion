@@ -380,12 +380,12 @@ namespace WebApplicationCrud.Controllers
 
 
             var query = _ctx.Products.AsQueryable();
-            if (!String.IsNullOrEmpty(CategoryName))
+            if (!String.IsNullOrWhiteSpace(CategoryName))
             {
                 query = query.Where(prod => prod.CategoryName == CategoryName);
             }
 
-            if (!String.IsNullOrEmpty(BrandName))
+            if (!String.IsNullOrWhiteSpace(BrandName))
             {
                 query = query.Where(prod => prod.BrandName == BrandName);
             }
@@ -393,10 +393,7 @@ namespace WebApplicationCrud.Controllers
 
 
 
-            if (MaxPrice != null)
-            {
-                query = query.Where(prod => prod.Price < MaxPrice && prod.Price > MaxPrice - 50);
-            }
+           
             return View(query.ToList());
 
 

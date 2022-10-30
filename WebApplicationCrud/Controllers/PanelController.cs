@@ -164,6 +164,10 @@ namespace WebApplicationCrud.Controllers
 
                     foreach (var tag in newTagNames)
                     {
+                        if (String.IsNullOrWhiteSpace(tag))
+                        {
+                            continue;
+                        }
                         var Tag = new Tag
                         {
                             TagName = tag.ToLower()

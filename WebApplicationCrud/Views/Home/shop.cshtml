@@ -44,7 +44,7 @@
 
                 @*aqedan------------------------------------------*@
 
-                <div class="col-lg-3">
+                <div class="col-lg-5">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
 
@@ -113,7 +113,7 @@
                                         <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <div class="shop__sidebar__price">
-                                                    <ul>
+                                                    @*<ul>
                                                         @foreach (var Price in Model.PriceList)
                                                         {
                                                             <li>
@@ -125,7 +125,28 @@
                                                         }
 
 
-                                                    </ul>
+                                                    </ul>*@
+
+                                                    <div id="priceRangeSlider">
+                                                        <div class="container">
+                                                            <div class="min-value numberVal">
+                                                                <input type="number" name="minNumber" value="2500" min="0" max="10000" disabled />
+
+                                                            </div>
+
+                                                            &nbsp;
+                                                            <div class="range-slider">
+                                                                <div class="progressBar"></div>
+                                                                <input type="range" name="rangeSlider" class="range-min" min="0" max="10000" value="2500" />
+                                                                <input  type="range" name="rangeSlider" class="range-max" min="0" max="10000" value="7500" />
+                                                            </div>
+                                                            &nbsp;
+                                                            <div class="max-value numberVal">
+                                                                <input type="number" name="maxNumber" value="7500" min="0" max="10000" disabled />
+                                                            </div>
+
+                                                        </div>
+                                                    </div> 
                                                 </div>
                                             </div>
                                         </div>
@@ -185,7 +206,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-9">
+                <div class="col-lg-7">
                     <div class="shop__product__option">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -299,6 +320,42 @@
             $("#compare").addClass("compare1")
             $("#productPanel").css("width","75%")
 
+        })
+
+
+
+        const range = document.querySelectorAll('.range-slider input');
+        console.log("range", range);
+        progress = document.querySelector('.range-slider .progressBar');
+        let gap = 1000;
+        const inputValue = document.querySelectorAll('.numberVal input');
+        console.log("progress", progress);
+        range.forEach(input => {
+            input.addEventListener('input', e => {
+                console.log("es e a ", e);
+                let minrange = parseInt(range[0].value),
+                    maxrange = parseInt(range[1].value);
+                console.log("es min", minrange);
+                console.log("es max", maxrange);
+                if (maxrange - minrange < gap) {
+                    if (e.target.className === "range-min") {
+                        range[0].value = maxrange - gap;
+
+                    }
+                    else {
+                        range[1].value = minrange + gap;
+
+                    }
+
+                }
+                else {
+                    progress.style.left = (minrange / range[0].max) * 100 + '%';
+                    progress.style.right = 100 - (maxrange / range[1].max) * 100 + '%';
+                    inputValue[0].value = minrange;
+                    inputValue[1].value = maxrange;
+                }
+
+            })
         })
     });
 </script>

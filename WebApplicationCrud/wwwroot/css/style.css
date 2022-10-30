@@ -24,6 +24,7 @@
 8.  Latest Section
 9.  Contact
 10.  Footer Style
+	11.Star Rating
 -------------------------------------------------------------------*/
 
 /*----------------------------------------*/
@@ -1245,7 +1246,7 @@ ol {
 	display: block;
 }
 
-.shop__sidebar__categories ul,
+.shop__sidebar__categories ul, 
 .shop__sidebar__price ul,
 .shop__sidebar__brand ul {
 	height: 225px;
@@ -1253,7 +1254,7 @@ ol {
 .shop__sidebar__categories input,
 .shop__sidebar__price input,
 .shop__sidebar__brand input{
-	visibility:hidden;
+	/*visibility:hidden;*/
 	
 }
 .shop__sidebar__categories label,
@@ -4060,6 +4061,99 @@ ol {
 	transition:.3s ease all;
 	
 }
+/*      Star Rating       */
+
+.star-rating {
+	display:flex;
+	align-content:center;
+	justify-content:center;
+}
+.star-rating input[type="radio"]{
+	visibility:hidden;
+}
+.star-rating label{
+	transition:all 0.2s ease;
+	font-size:30px;
+	color:gray;
+
+}
+	.star-rating input:not(:checked) ~ label:hover,
+	.star-rating input:not(:checked) ~ label:hover ~ label
+	{
+		color: #fd4;
+	}
+	.star-rating input:checked ~ label {
+		color: #fd4;
+	}
+
+
+
+
+/*      Price Range Filter    */
+#priceRangeSlider .container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+}
+
+	#priceRangeSlider .container input [type="number"] {
+		width: 50px;
+		height: 30px;
+		background: #fff;
+		border: 1px solid #fff;
+		font-size: 15px;
+		font-weight: 700;
+		text-align: center;
+		border-radius: 5px;
+	}
+		#priceRangeSlider .container input [type="number"] ::-webkit-outer-spin-button,
+		#priceRangeSlider .container input [type="number"] ::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+		}
+	#priceRangeSlider .container .range-slider{
+		position:relative;
+		width:200px;
+		height:5px;
+		background:#ddd;
+		outline:none;
+		top:1px;
+		margin:10px;
+
+
+	}
+	#priceRangeSlider .container .range-slider .progressBar {
+		left: 25%;
+		right: 25%;
+		height: 100%;
+		background: #17a288;
+		border-radius: 50px;
+		position: absolute;
+	}
+	#priceRangeSlider .container .range-slider input[type="range"]{
+		position:absolute;
+		top:-8px;
+		left:-5px;
+		width:101%;
+		-webkit-appearance:none;
+		pointer-events:none;
+		background:none;
+		outline:none;
+
+	}
+		#priceRangeSlider .container .range-slider input::-webkit-slider-thumb{
+			pointer-events: auto;
+			-webkit-appearance: none;
+			width: 17px;
+			height: 17px;
+			background: #17a288;
+			border-radius: 50px;
+		}
+
+
+
+
 /*didebulo gmerto es ushveba*/ 
 /*.DropzoneC label{
 	padding:8px 12px;

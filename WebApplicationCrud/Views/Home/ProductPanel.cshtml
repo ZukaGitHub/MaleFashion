@@ -120,14 +120,14 @@
                         <div class="product__details__text">
                             <h4>@Model.Name</h4>
                             <div class="rating">
-                                @*rating------------------------------------*@
-                                @*<i class="fa fa-star"></i>
-                                     <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                                
+                                <i class="fa fa-star"></i>
+                                 <i class="fa fa-star"></i>
+                                  <i class="fa fa-star"></i>
                                     <i class="fa fa-star"></i>
                                     <i class="fa fa-star-o"></i>
-                                         <span> - 5 Reviews</span>
-                                *@
+                                      
+                                
                             </div>
 
                             @*price---------------------------------------*@
@@ -293,16 +293,30 @@
             @if (User.Identity.IsAuthenticated)
             {
 
-                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
-            }
-            else
-            {
-
-                <div>
-                    <a class="font-weight-bold" asp-action="Login" asp-controller="Auth"> Sign In </a> <p class="note">to comment on this awesome post!</p>
-
+                <div class="star-rating">
+                    <input type="radio" name="rate" id="rate-1">
+                    <label for="rate-1" class="fa fa-star"></label>
+                    <input type="radio" name="rate" id="rate-2">
+                    <label for="rate-2" class="fa fa-star"></label>
+                    <input type="radio" name="rate" id="rate-3">
+                    <label for="rate-3" class="fa fa-star"></label>
+                    <input type="radio" name="rate" id="rate-4">
+                    <label for="rate-4" class="fa fa-star"></label>
+                    <input type="radio" name="rate" id="rate-5">
+                    <label for="rate-5" class="fa fa-star"></label>                    
                 </div>
-            }
+       
+
+        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
+    }
+    else
+    {
+
+        <div>
+            <a class="font-weight-bold" asp-action="Login" asp-controller="Auth"> Sign In </a> <p class="note">to comment on this awesome post!</p>
+
+        </div>
+    }
 
 
             @if (Model.Comments != null)
@@ -370,9 +384,9 @@
                 }
 
             }
-        </nav>
-    </div>
-</section>
+            </nav>
+            </div>
+        </section>
 <!-- Search Begin -->
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
@@ -397,7 +411,7 @@
         });
         var ProductInfos = @Json.Serialize(Model.ProductInfos)
             console.log("ProductInfos", ProductInfos);
-        
+
         for (let i = 0; i < ProductInfos.length; i++) {
             var sizeNames = []
             for (let j = 0; j < ProductInfos[i].stock.length; j++) {
@@ -408,14 +422,14 @@
             }
             document.getElementById(ProductInfos[i].color).dataset.sizes = sizeNames
         }
-       
+
 
         $(".c-1").on("click", function (e) {
             if (e.target.nodeName === 'LABEL') return;
-            
+
             if (e.target.dataset.sizes != null) {
                 if (Array.isArray(e.target.dataset.sizes)) {
-                   
+
                     document.querySelectorAll(".sizes").classList.add("disable")
 
                     for (let i = 0; i < e.target.dataset.sizes.length; i++) {
@@ -423,15 +437,25 @@
                     }
                 }
                 if (typeof (e.target.dataset.sizes) === 'string') {
-                    
+
                     document.querySelectorAll(".sizes").forEach(size => size.classList.add("disable"));
                     document.getElementById(e.target.dataset.sizes).parentElement.classList.remove("disable")
                 }
             }
-           
+
         })
 
 
+
+
+
+       
     });
+
+
+
+
+    
+
 </script>
 <script src="~/js/lightbox.min.js"></script>

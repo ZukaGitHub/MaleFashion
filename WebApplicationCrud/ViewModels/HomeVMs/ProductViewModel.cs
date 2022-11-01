@@ -18,6 +18,7 @@ namespace WebApplicationCrud.ViewModels.HomeVMs
         public float? PreviousPrice { get; set; }
         public int? SalePercentange { get; set; }
         public string Description { get; set; }
+        public int? StarRate { get; set; }
         public List<string> SizeNames { get; set; }
         public List<string> Images { get; set; }
         public DateTime? SaleTimer { get; set; }

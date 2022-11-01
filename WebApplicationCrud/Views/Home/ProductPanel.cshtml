@@ -120,14 +120,32 @@
                         <div class="product__details__text">
                             <h4>@Model.Name</h4>
                             <div class="rating">
-                                
-                                <i class="fa fa-star"></i>
-                                 <i class="fa fa-star"></i>
-                                  <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                                @if (Model.StarRate.HasValue)
+                                {
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        if (i <Model.StarRate)
+                                        {
+                                            <i class="fa fa-star"></i>
+
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-star-o"></i>
+
+                                        }
+                                    }
+                                }
+                                else
+                                { <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
-                                      
-                                
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+
+                                }
+
+
                             </div>
 
                             @*price---------------------------------------*@
@@ -294,16 +312,16 @@
             {
 
                 <div class="star-rating">
-                    <input type="radio" name="rate" id="rate-1">
-                    <label for="rate-1" class="fa fa-star"></label>
-                    <input type="radio" name="rate" id="rate-2">
-                    <label for="rate-2" class="fa fa-star"></label>
-                    <input type="radio" name="rate" id="rate-3">
-                    <label for="rate-3" class="fa fa-star"></label>
-                    <input type="radio" name="rate" id="rate-4">
-                    <label for="rate-4" class="fa fa-star"></label>
-                    <input type="radio" name="rate" id="rate-5">
-                    <label for="rate-5" class="fa fa-star"></label>                    
+                    <input type="radio"  name="rate" id="rate-1">
+                    <label for="rate-1" data-rate="5" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                    <input type="radio"   name="rate" id="rate-2">
+                    <label for="rate-2" data-rate="4" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                    <input type="radio"   name="rate" id="rate-3">
+                    <label for="rate-3" data-rate="3" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                    <input type="radio"   name="rate" id="rate-4">
+                    <label for="rate-4" data-rate="2" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                    <input type="radio"  name="rate" id="rate-5">
+                    <label for="rate-5" data-rate="1" data-Id="@Model.Id"class="fa fa-star rate"></label>                    
                 </div>
        
 
@@ -443,6 +461,16 @@
                 }
             }
 
+        })
+        $(".rate").on("click", function (e) {
+            console.log("e",e)
+            if (e.target.nodeName === 'INPUT') return;
+            $.ajax({
+                url: 'StarRating',
+                type: 'Post',
+                data: { ProductId: e.target.dataset.id, Rate: e.target.dataset.rate },
+              
+            });
         })
 
 

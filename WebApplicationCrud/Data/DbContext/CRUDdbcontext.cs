@@ -17,6 +17,7 @@ namespace WebApplicationCrud.Data.DbContext
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<PaymentInfo> PaymentInfos { get; set; }
+        public DbSet<UserRating> UserRatings { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Brand> Brands { get; set; }

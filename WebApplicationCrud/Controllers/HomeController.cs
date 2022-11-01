@@ -124,7 +124,14 @@ namespace WebApplicationCrud.Controllers
           
             
             var mappedProduct = _mapper.Map<ProductViewModel>(product);
+            var StarRate = _ctx.UserRatings?.Where(s => s.ProductId == product.Id)?.Select(s => s.Rate)?.Average();
 
+
+            if (StarRate.HasValue)
+            {
+                mappedProduct.StarRate = (int)Math.Round((double)StarRate);
+            }
+            
             if (mappedProduct.ProductInfos != null)
             {
                 for(int i=0; i< mappedProduct.ProductInfos.Count();i++)
@@ -314,6 +321,13 @@ namespace WebApplicationCrud.Controllers
             foreach (var product in products)
             {
                 var mappedProduct = _mapper.Map<ProductViewModel>(product);
+                var StarRate = _ctx.UserRatings?.Where(s => s.ProductId == product.Id)?.Select(s => s.Rate)?.Average();
+                
+              
+                if (StarRate.HasValue)
+                {
+                    mappedProduct.StarRate = (int)Math.Round((double)StarRate);
+                }
 
                 if (mappedProduct.ProductInfos != null)
                 {
@@ -349,7 +363,37 @@ namespace WebApplicationCrud.Controllers
 
 
         }
+        [HttpPost]
+        public async Task<IActionResult> StarRating(int? productId,int? rate)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (productId.HasValue && rate.HasValue && userId != null)
+            {
+                var prevUserRating = _ctx.UserRatings?.Where(s => s.ProductId == productId && s.UserId == userId)?.SingleOrDefault();
+                if (prevUserRating != null)
+                {
+                    prevUserRating.Rate = (int)rate;
+                    _ctx.UserRatings.Update(prevUserRating);
+                   await _ctx.SaveChangesAsync();
+                    return View();
+                }
+                if (_ctx.Products.Where(s => s.Id == (int)productId) != null)
+                {
+                    var userRating = new UserRating()
+                    {
+                        UserId = userId,
+                        ProductId = (int)productId,
+                        Rate = (int)rate
+                    };
+                    _ctx.UserRatings.Add(userRating);
+                    await _ctx.SaveChangesAsync();
+                    return View();
+                }
+            }
 
+            //test this functionality-----------------------------------------------------
+            return View();
+        }
         public IActionResult Checkout()
         {
             return View();

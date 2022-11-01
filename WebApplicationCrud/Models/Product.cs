@@ -4,8 +4,9 @@ using WebApplicationCrud.Models.BlogModels;
 namespace WebApplicationCrud.Models
 {
     public class Product
-
-    {
+      
+{
+       
 
         public int Id { get; set; }
         public Brand Brand { get; set; }
@@ -15,8 +16,8 @@ namespace WebApplicationCrud.Models
         public List<Image> Images { get; set; }
         public List<MainComment> Comments { get; set; }
         public int? SalePercentage { get; set; }
-        public string OwnerId { get; set; }
-      
+        public float? StarRate { get; set; }
+        public string OwnerId { get; set; }      
         public string Name { get; set; }
         public float Price { get; set; }
         public float? NewPrice { get; set; }

@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.Smtp;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.Identity;
 using WebApplicationCrud.ViewModels;
 
 namespace WebApplicationCrud.Controllers
 {
     public class AuthController : Controller
     {
-        private SignInManager<IdentityUser> _signInManager;
-        private UserManager<IdentityUser> _userManager;
+        private SignInManager<ApplicationUser> _signInManager;
+        private UserManager<ApplicationUser> _userManager;
         private CRUDdbcontext _ctx;
         private RoleManager<IdentityRole> _roleManager;
-        public AuthController(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+        public AuthController(SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             CRUDdbcontext ctx,
             RoleManager<IdentityRole> roleManager)
         {
@@ -155,7 +156,7 @@ namespace WebApplicationCrud.Controllers
 
                     if (user == null)
                     {
-                        user = new IdentityUser
+                        user = new ApplicationUser
                         {
                             UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
                             Email = info.Principal.FindFirstValue(ClaimTypes.Email)
@@ -320,7 +321,7 @@ namespace WebApplicationCrud.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel vm)
         {
-            var user = new IdentityUser
+            var user = new ApplicationUser
             {
                 Email = vm.Email,
                 UserName = vm.UserName,

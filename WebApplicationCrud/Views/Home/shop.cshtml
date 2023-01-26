@@ -44,7 +44,7 @@
 
                 @*aqedan------------------------------------------*@
 
-                <div class="col-lg-5">
+                <div class="col-lg-3">
                     <div class="shop__sidebar">
                         <div class="shop__sidebar__search">
 
@@ -62,7 +62,7 @@
                                         <div class="card-heading">
                                             <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
                                         </div>
-                                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        <div id="collapseOne" class="collapse show" >
                                             @*Category filter------------------------*@
                                             <div class="card-body">
                                                 <div class="shop__sidebar__categories">
@@ -87,7 +87,7 @@
                                         <div class="card-heading">
                                             <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
                                         </div>
-                                        <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                        <div id="collapseTwo" class="collapse show" >
                                             <div class="card-body">
                                                 <div class="shop__sidebar__brand">
                                                     <ul>
@@ -110,40 +110,30 @@
                                             <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
                                         </div>
                                         @*Price filter---------------------------*@
-                                        <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                        <div id="collapseThree" class="collapse show" >
                                             <div class="card-body">
                                                 <div class="shop__sidebar__price">
-                                                    @*<ul>
-                                                        @foreach (var Price in Model.PriceList)
-                                                        {
-                                                            <li>
-                                                                <input id="@Price" type="checkbox" value="@Price" />
-                                                                <label for="@Price">$@(Price-50)-$@Price</label>
-
-                                                            </li>
-
-                                                        }
-
-
-                                                    </ul>*@
+                                                   
 
                                                     <div id="priceRangeSlider">
                                                         <div class="container">
-                                                            <div class="min-value numberVal">
-                                                                <input type="number" name="minNumber" value="2500" min="0" max="10000" disabled />
+                                                            <div class="range-min-max">
+                                                                <div class="min-value numberVal">
+                                                                    <input type="number" name="minNumber" value="0" min="0" max="1000" disabled />
 
+                                                                </div>
+                                                                <div class="max-value numberVal">
+                                                                    <input type="number" name="maxNumber" value="1000" min="0" max="1000" disabled />
+                                                                </div>
                                                             </div>
-
-                                                            &nbsp;
+                                                          
                                                             <div class="range-slider">
                                                                 <div class="progressBar"></div>
-                                                                <input type="range" name="rangeSlider" class="range-min" min="0" max="10000" value="2500" />
-                                                                <input  type="range" name="rangeSlider" class="range-max" min="0" max="10000" value="7500" />
+                                                                <input type="range" name="rangeSlider" class="range-min" min="0" max="1000" value="0" />
+                                                                <input type="range" name="rangeSlider" class="range-max" min="0" max="1000" value="1000" />
                                                             </div>
-                                                            &nbsp;
-                                                            <div class="max-value numberVal">
-                                                                <input type="number" name="maxNumber" value="7500" min="0" max="10000" disabled />
-                                                            </div>
+                                                            
+
 
                                                         </div>
                                                     </div> 
@@ -156,12 +146,12 @@
                                         <div class="card-heading">
                                             <a data-toggle="collapse" data-target="#collapseFour">Size</a>
                                         </div>
-                                        <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
+                                        <div id="collapseFour" class="collapse show" >
                                             <div class="card-body">
                                                 <div class="shop__sidebar__size">
                                                     @foreach (var size in Model.TextSizes)
                                                     {
-                                                        <input id=@size type="checkbox" value="@size">
+                                                        <input id=@size class="checkbox_selector size" type="checkbox" value="@size">
                                                         <label for="@size"> @size </label>
 
 
@@ -177,14 +167,14 @@
                                         <div class="card-heading">
                                             <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
                                         </div>
-                                        <div id="collapseSix" class="collapse show" data-parent="#accordionExample">
+                                        <div id="collapseSix" class="collapse show" >
                                             <div class="card-body">
 
                                                 <div class="shop__sidebar__tags">
                                                     @foreach (var Tag in Model.Tags)
                                                     {
 
-                                                        <input id="@Tag" type="checkbox" value="@Tag" />
+                                                        <input id="@Tag" class="checkbox_selector tag" type="checkbox" value="@Tag" />
                                                         <label for="@Tag">@Tag</label>
 
 
@@ -206,7 +196,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-7">
+                <div class="col-lg-9">
                     <div class="shop__product__option">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -220,10 +210,10 @@
                                             Sort By Price
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" asp-action="Shop" asp-controller="Home" asp-route-SortOrder="Featured">Featured</a>
-                                            <a class="dropdown-item" asp-action="Shop" asp-controller="Home" asp-route-SortOrder="High To Low">High To Low</a>
+                                            <a class="dropdown-item dropdown_selector">Featured</a>
+                                            <a class="dropdown-item dropdown_selector">High To Low</a>
 
-                                            <a class="dropdown-item" asp-action="Shop" asp-controller="Home" asp-route-SortOrder="Low To High">Low To High</a>
+                                            <a class="dropdown-item dropdown_selector" >Low To High</a>
                                         </div>
                                     </div>
 
@@ -273,6 +263,7 @@
 
 
     $(document).ready(function () {
+        var filterValue = "";
         $("#searchField").on("keyup", function () {
             var searchValue = this.value;
             var searchList = $("#pagination-content .content");
@@ -294,25 +285,55 @@
 
         function filter_data() {
 
-            var brandName = get_filter("brand");
-            var categoryName = get_filter("category");
+            var brandNames = get_filter("brand");
+            var categoryNames = get_filter("category");
+            var tagNames = get_filter("tag");
+            var sizeNames = get_filter("size");
+            var filterSort = filterValue;
+            
+            const range = document.querySelectorAll('.range-slider input');
+            let minprice = parseInt(range[0].value);
+             let  maxprice = parseInt(range[1].value);
+
+           
+
+            var data ={
+                CategoryNames: categoryNames,
+                BrandNames: brandNames,
+                MinPrice: minprice,
+                MaxPrice: maxprice,
+                SelectedSizes: sizeNames,
+                SelectedTags: tagNames,
+                FilterSort: filterSort
+            }
+            console.log(data);
+           
             $.ajax({
-                url: 'CustomFilter',
-                type: 'GET',
-                data: { CategoryName: categoryName, BrandName: brandName },
+                url: "@Url.Action("CustomFilter","Home")",
+                type: 'POST',
+                data:data ,
+              
                 success: function (result) {
                     $("#ProductList").html(result);
                 }
             });
         };
         function get_filter(class_name) {
-            var filter;
+            
+            var filterArr=[];
             $('.' + class_name + ':checked').each(function () {
+              
                 filter = ($(this).val());
+                filterArr.push(filter);
             });
-            return filter;
+            return filterArr;
         };
         $(".checkbox_selector").change(function () {
+            filter_data();
+        })
+        $(".dropdown_selector").click(function (event) {
+            filterValue = event.target.innerText;
+            console.log("oeeee", event.target.innerText);
             filter_data();
         })
 
@@ -327,16 +348,15 @@
         const range = document.querySelectorAll('.range-slider input');
         console.log("range", range);
         progress = document.querySelector('.range-slider .progressBar');
-        let gap = 1000;
+        let gap = 10;
         const inputValue = document.querySelectorAll('.numberVal input');
         console.log("progress", progress);
         range.forEach(input => {
             input.addEventListener('input', e => {
-                console.log("es e a ", e);
+               
                 let minrange = parseInt(range[0].value),
                     maxrange = parseInt(range[1].value);
-                console.log("es min", minrange);
-                console.log("es max", maxrange);
+              
                 if (maxrange - minrange < gap) {
                     if (e.target.className === "range-min") {
                         range[0].value = maxrange - gap;
@@ -355,8 +375,15 @@
                     inputValue[1].value = maxrange;
                 }
 
+             
             })
+            input.addEventListener('mouseup',function (){
+             
+                filter_data();
+            })
+          
         })
+        
     });
 </script>
 

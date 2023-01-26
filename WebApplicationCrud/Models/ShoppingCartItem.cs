@@ -8,5 +8,6 @@
         public ProductInfo ProductInfo { get; set; }
         public int Amount { get; set; }
         public string ShoppingCartId { get; set; }
+        public string SizeText { get;  set; }
     }
 }

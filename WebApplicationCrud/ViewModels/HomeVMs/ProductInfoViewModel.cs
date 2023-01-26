@@ -5,6 +5,7 @@ namespace WebApplicationCrud.ViewModels.HomeVMs
 {
     public class ProductInfoViewModel
     {
+        public int? Id { get; set; }
         public List<string> ImageNames { get; set; }
         public string ProductInfoThumbnailName { get; set; }
         public string Color { get; set; }

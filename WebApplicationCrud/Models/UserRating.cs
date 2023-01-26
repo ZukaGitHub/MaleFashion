@@ -8,6 +8,7 @@ namespace WebApplicationCrud.Models
 {
     public class UserRating
     {
+        public int Id { get; set; }
         public string UserId { get; set; }
         public Product Product { get; set; }
         public int ProductId { get; set; }

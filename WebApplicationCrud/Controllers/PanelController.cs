@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -8,11 +9,14 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Data.FileManager;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.Identity;
 using WebApplicationCrud.ViewModels;
+using WebApplicationCrud.ViewModels.HomeVMs;
 using WebApplicationCrud.ViewModels.PanelVMs;
 
 namespace WebApplicationCrud.Controllers
@@ -22,13 +26,15 @@ namespace WebApplicationCrud.Controllers
         public List<SelectListItem> Sizes { get; set; }
         private readonly CRUDdbcontext _ctx;
         private readonly IFileManager _filemanager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
 
-        public PanelController(CRUDdbcontext ctx, IFileManager fileManager, UserManager<IdentityUser> userManager)
+        public PanelController(CRUDdbcontext ctx, IFileManager fileManager, UserManager<ApplicationUser> userManager, IMapper mapper)
         {
             _ctx = ctx;
             _filemanager = fileManager;
             _userManager = userManager;
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
@@ -46,6 +52,16 @@ namespace WebApplicationCrud.Controllers
 
 
             return View(ViewModel);
+        }
+        public IActionResult OrderList() {
+
+            var Orders = _ctx.Orders
+                .Include(s => s.OrderDetails)
+                .Include(s => s.user)
+                .ThenInclude(s => s.DeliveryInfo).ToList();
+
+            return View(Orders);
+
         }
 
 
@@ -80,17 +96,18 @@ namespace WebApplicationCrud.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEditProduct(int productId)
         {
-           
+
             var id = productId;
 
             var product = new Product();
 
 
             product = _ctx.Products.
-                Include(s=>s.ProductInfos)
-                .ThenInclude(s=>s.ProductInfoStockAndSizes)
-                .Include(s=>s.ProductInfos)
-                .ThenInclude(s=>s.Images)                             
+                Include(s => s.ProductInfos)
+                .ThenInclude(s => s.ProductInfoStockAndSizes)
+                .Include(s => s.ProductInfos)
+                .ThenInclude(s => s.Images)
+                .Include(s => s.Tags)
                 .SingleOrDefault(p => p.Id == id);
 
 
@@ -106,13 +123,13 @@ namespace WebApplicationCrud.Controllers
                     Name = product.Name,
                     Price = product.Price,
                     Tagnames = product.Tags?.Select(s => s.TagName).ToList()
-                   
+
 
                 };
-               
-               
+
+
                 var productInfos = new List<ProductInfoEditVm>();
-                foreach(var productInfo in product.ProductInfos)
+                foreach (var productInfo in product.ProductInfos)
                 {
                     var productInfoEdit = new ProductInfoEditVm
                     {
@@ -123,20 +140,51 @@ namespace WebApplicationCrud.Controllers
                         StockAndSize = productInfo.ProductInfoStockAndSizes.Select(s => s).ToList()
                     };
                     productInfos.Add(productInfoEdit);
-                    
+
                 }
                 EditProductVm.ProductInfos = productInfos;
-            
+
                 var productJson = JsonConvert.SerializeObject(EditProductVm);
                 return new JsonResult(productJson);
             }
             return StatusCode(500);
-           
+
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Favourites()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var productIds = _ctx.FavouriteProducts?.Where(s => s.ApplicationUser == user).Select(s => s.ProductId).ToList();
+            var products = new List<Product>();
+            if (productIds != null)
+            {
+
+
+                foreach (var id in productIds)
+                {
+                    if (_ctx.Products.Where(i => i.Id == id)?.SingleOrDefault() == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        products.Add(_ctx.Products.Where(i => i.Id == id)?.Include(s=>s.ProductInfos).ThenInclude(s=>s.Images).SingleOrDefault());
+                    }
+                }
+                var mappedProduct = MapProducts(products);
+
+                return View(mappedProduct);
+            }
+            else
+            {
+                return View(new List<ProductViewModel>());
+            }
+        }
 
         [HttpPost]
-        public async Task<IActionResult> AddProductPanel(string jsonProducts,ProductImagesVm productImages)
+        public async Task<IActionResult> AddProductPanel(string jsonProducts, ProductImagesVm productImages)
         {
 
             List<ProductVm> productVms = JsonConvert.DeserializeObject<List<ProductVm>>(jsonProducts);
@@ -156,7 +204,7 @@ namespace WebApplicationCrud.Controllers
                         VMproducts[i].SalePercentage = 0;
 
                     }
-                  
+
                     var newTagNames = vm.Products[i].Tagnames.Split(' ');
 
                     var productInfos = new List<ProductInfo>();
@@ -175,8 +223,8 @@ namespace WebApplicationCrud.Controllers
                         Tags.Add(Tag);
 
                     }
-                    var Brandss = _ctx.Brands.ToList();
-                    ViewBag["Brandss"] = Brandss;
+                    //var Brandss = _ctx.Brands.ToList();
+                    //ViewBag["Brandss"] = Brandss;
 
                     int counter = 0;
                     foreach (var Productinfo in vm.Products[i].ProductInfos)
@@ -190,7 +238,7 @@ namespace WebApplicationCrud.Controllers
                         var path = "product";
                         var tempListOfImages = new List<Image>();
 
-                        if (Productinfo.ImageNames != null && vm.Products[i].Id!=null)
+                        if (Productinfo.ImageNames != null && vm.Products[i].Id != null)
                         {
                             var preEditProduct = _ctx.Products?.Where(s => s.Id == vm.Products[i].Id).SingleOrDefault();
                             if (preEditProduct != null)
@@ -206,7 +254,7 @@ namespace WebApplicationCrud.Controllers
                                         _ctx.Remove(_ctx.Images.Where(s => s.Imagename == image));
                                     }
                                 }
-                               
+
                                 if (Productinfo.ThumbnailEditIndex.HasValue)
                                 {
                                     tempProductInfo.ProductInfoThumbnailName = Productinfo.ImageNames[(int)Productinfo.ThumbnailEditIndex];
@@ -234,7 +282,7 @@ namespace WebApplicationCrud.Controllers
 
                                     }
                                     tempProductInfo.Images = tempListOfImages;
-                                    if (productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex!=null)
+                                    if (productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex != null)
                                     {
 
 
@@ -245,7 +293,7 @@ namespace WebApplicationCrud.Controllers
                                 }
                             }
                         }
-                       
+
 
                         foreach (var StockAndSize in Productinfo.Stock)
                         {
@@ -259,13 +307,14 @@ namespace WebApplicationCrud.Controllers
                             {
                                 tempStockandSize
                             };
-                            tempProductInfo.ProductInfoStockAndSizes=tempSizesAndStocks;
+                            tempProductInfo.ProductInfoStockAndSizes = tempSizesAndStocks;
                         }
                         productInfos.Add(tempProductInfo);
                     }
                     var salepercentage = int.Parse(vm.Products[i].SalePercentage);
                     var product = new Product()
                     {
+                        //Id=(int)vm.Products[i].Id,
                         Name = vm.Products[i].Name,
                         Description = vm.Products[i].Description,
                         BrandName = vm.Products[i].Brand,
@@ -276,7 +325,7 @@ namespace WebApplicationCrud.Controllers
                         NewPrice = (vm.Products[i].Price * (100 - salepercentage) / 100),
                         Tags = Tags,
                         OwnerId = _userManager.GetUserId(HttpContext.User)
-                    
+
                     };
                     if (vm.Products[i].Id.HasValue)
                     {
@@ -289,7 +338,7 @@ namespace WebApplicationCrud.Controllers
                     }
 
                     VMproducts.Add(product);
-                    
+
                 }
 
                 _ctx.AddRange(VMproducts);
@@ -300,9 +349,102 @@ namespace WebApplicationCrud.Controllers
             {
                 return RedirectToAction("Index");
             }
-            
+
         }
-        
+        [HttpPost]
+        public async Task<IActionResult> ToggleFavourite(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var userFavourites = user.FavouriteProducts ?? new List<FavouriteProduct>();
+                if (userFavourites != null && userFavourites.Count() > 0)
+                {
+                    var userFavouritesIds = userFavourites.Select(s => s.ProductId).ToList();
+                    if (userFavouritesIds.Contains(id))
+                    {
+                        var exFavourite = userFavourites.Where(s => s.ProductId == id).Single();
+                        userFavourites.Remove(exFavourite);
+                        user.FavouriteProducts = userFavourites;
+                        await _ctx.SaveChangesAsync();
+                        return View();
+                    }
+                    if (!userFavouritesIds.Contains(id))
+                    {
+                        userFavourites.Add(new FavouriteProduct()
+                        {
+                            userId = user.Id,
+                            ProductId = id
+                        });
+                        user.FavouriteProducts = userFavourites;
+                        await _ctx.SaveChangesAsync();
+                        return View();
+                    }
+                }
+                userFavourites.Add(new FavouriteProduct()
+                {
+                    userId = user.Id,
+                    ProductId = id
+                }) ;
+                user.FavouriteProducts = userFavourites;
+
+                await  _ctx.SaveChangesAsync();
+                return View();
+            }
+            return View();
+        }
+        public List<ProductViewModel> MapProducts(List<Product> products)
+        {
+            var mappedProducts = new List<ProductViewModel>();
+            if (products != null && products.Count() > 0)
+            {
+                foreach (var product in products)
+                {
+                    var mappedProduct = _mapper.Map<ProductViewModel>(product);
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    if (userId != null)
+                    {
+                        var FavouriteProducts = _ctx.FavouriteProducts?.Where(s => s.userId == userId)?.ToList();
+                        if (FavouriteProducts != null && FavouriteProducts.Count() > 0)
+                        {
+                            if (FavouriteProducts.Select(i => i.ProductId).ToList().Contains(product.Id))
+                            {
+                                mappedProduct.IsUserFavourite = true;
+                            }
+                        }
+                    }
+                    var StarRateLinq = _ctx.UserRatings?.Where(s => s.ProductId == product.Id)?.Select(s => s.Rate).ToList();
+                    if (StarRateLinq != null && StarRateLinq.Count() > 0)
+                    {
+                        var StarRate = StarRateLinq?.Average();
+                        if (StarRate.HasValue)
+                        {
+                            mappedProduct.StarRate = (int)Math.Round((double)StarRate);
+                        }
+                    }
+
+
+
+
+                    if (mappedProduct.ProductInfos != null)
+                    {
+                        for (int i = 0; i < mappedProduct.ProductInfos.Count(); i++)
+                        {
+                            mappedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(product.ProductInfos[i].ProductInfoStockAndSizes);
+
+
+                        }
+
+
+                        mappedProduct.Images = mappedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d => d)).ToList();
+                    }
+                    mappedProducts.Add(mappedProduct);
+
+                }
+            }
+            return mappedProducts;
+
+        }
         public async Task<IActionResult> Remove(List<int> productIds)
         {
 

@@ -1,29 +1,27 @@
 ﻿@model IndexViewModel
 
 <div class="pages">
-    @if (Model.PageNumber > 1)
-    {
-<a asp-action="Blog" asp-controller="Home" asp-route-category="@Model.Category"
-   asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous Page</a>
-   }
+    <div class="paginationBlog">
+       
+        <a asp-action="Blog" asp-controller="Home" class="previous-page" asp-route-category="@Model.Category"
+           asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber - 1)">Previous </a>
 
-    @foreach (var p in Model.Pages)
-    {
-        if (p == -1)
+        @foreach (var p in Model.Pages)
         {
-        <span class="three-dots">
-               ...
-        </span> 
-    }
-                else
-                {
-<a class="@(p == Model.PageNumber ? "active" : "")" asp-action="Blog" asp-controller="Home" asp-route-category="@Model.Category"
-   asp-route-search="@Model.Search" asp-route-pageNumber="@p">@p</a>}
-            }
+            if (p == -1)
+            {
+    <span class="three-dots">
+        ...
+    </span> }
+else
+{
+    <a class="@(p == Model.PageNumber ? "currentPage" : "") activePage" asp-action="Blog" asp-controller="Home" asp-route-category="@Model.Category"
+       asp-route-search="@Model.Search" asp-route-pageNumber="@p">@p</a>}
+}
 
-    @if (Model.NextPage)
-    {
-<a asp-action="Blog" asp-controller="Home" asp-route-category="@Model.Category"
-   asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber + 1)">Next Page</a>
-   }
+        <a asp-action="Blog" asp-controller="Home" class="next-page" asp-route-category="@Model.Category"
+           asp-route-search="@Model.Search" asp-route-pageNumber="@(Model.PageNumber + 1)">Next</a>
+
+    
+    </div>
 </div>

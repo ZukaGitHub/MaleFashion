@@ -172,7 +172,7 @@ ol {
 	font-weight: 700;
 	text-transform: uppercase;
 	padding: 14px 30px;
-	color: #ffffff;
+	color: #ffffff !important;
 	background: #000000;
 	letter-spacing: 4px;
 }
@@ -554,7 +554,92 @@ ol {
 .canvas__open {
 	display: none;
 }
+/*
 
+	Cart
+*/
+/*.canvas__cart__open {
+	display: block;
+	font-size: 22px;
+	color: #111111;
+	height: 35px;
+	width: 35px;
+	line-height: 35px;
+	text-align: center;
+	border: 1px solid #111111;
+	border-radius: 2px;
+	cursor: pointer;
+	position: absolute;
+	right: 15px;
+	top: 25px;
+}*/
+
+.offcanvas-cart-overlay {
+	position: fixed;
+	right: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	content: "";
+	z-index: -10;
+	-webkit-transition: all, 0.5s;
+	-o-transition: all, 0.5s;
+	transition: all, 0.5s;
+	visibility: hidden;
+}
+/*@keyframes overlay {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+		border: 4px solid #f44336;
+		border-left-color: transparent;
+	}
+
+	50% {
+		-webkit-transform: rotate(180deg);
+		transform: rotate(180deg);
+		border: 4px solid #673ab7;
+		border-left-color: transparent;
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+		border: 4px solid #f44336;
+		border-left-color: transparent;
+	}
+}*/
+
+	.offcanvas-cart-overlay.activeCart {
+		visibility: visible;
+		transition: all, 0.5s;
+		z-index: 98;
+	}
+
+.offcanvas-cart-wrapper {
+	position: fixed;
+	right: -300px;
+	width: 500px;
+	height: 100%;
+	right:0;
+	background: #ffffff;
+	padding: 50px 20px 30px 30px;
+	display: block;
+	z-index: -10;
+	overflow-y: auto;
+	-webkit-transition: all, 0.5s;
+	-o-transition: all, 0.5s;
+	transition: all, 0.5s;
+	opacity: 0;
+}
+
+	.offcanvas-cart-wrapper.activeCart {
+		opacity: 1;
+		transition: all, 0.5s;
+		z-index: 99;
+		right: 0;
+	}
 /*---------------------
   Hero
 -----------------------*/
@@ -1093,11 +1178,11 @@ ol {
 	margin-bottom: 6px;
 }
 
-.product__item__text .rating i {
-	font-size: 14px;
-	color: #b7b7b7;
-	margin-right: -5px;
-}
+	.product__item__text .rating i {
+		font-size: 14px;
+		color: #f7941d;
+		margin-right: -5px;
+	}
 
 .product__item__text h5 {
 	color: #0d0d0d;
@@ -1252,9 +1337,9 @@ ol {
 	height: 225px;
 }
 .shop__sidebar__categories input,
-.shop__sidebar__price input,
+
 .shop__sidebar__brand input{
-	/*visibility:hidden;*/
+	visibility:hidden;
 	
 }
 .shop__sidebar__categories label,
@@ -1699,6 +1784,7 @@ ol {
 	cursor: pointer;
 }
 
+
 .product__details__option__size label:hover {
 	background: #111111;
 	color: #ffffff;
@@ -1710,10 +1796,10 @@ ol {
 		border-color: #111111;
 	}
 
-.product__details__option__size label input {
-	position: absolute;
-	visibility: hidden;
-}
+	.product__details__option__size input{
+		position:  absolute;
+		visibility:  hidden;
+	}
 
 .product__details__option__color {
 	display: inline-block;
@@ -1738,30 +1824,22 @@ ol {
 	margin-bottom: 0;
 	display: inline-block;
 	cursor: pointer;
+	transition:200ms all ease;
 }
 
-.product__details__option__color label.c-1 {
-	
-}
-	
 
+	.product__details__option__color input {
+		position: absolute;
+		visibility: hidden;
+	}
 
-.product__details__option__color label:after {
-	position: absolute;
-	left: -3px;
-	top: -3px;
-	height: 36px;
-	width: 36px;
-	border: 1px solid #e5e5e5;
-	content: "";
-	border-radius: 50%;
-}
-
-.product__details__option__color label input {
-	position: absolute;
-	visibility: hidden;
-}
-
+		.product__details__option__color input[type="radio"]:checked + label {
+			left: +3px;
+			top: +3px;
+			width: 36px;
+			height: 36px;
+			transition: 200ms all ease;
+		}
 .product__details__cart__option {
 	margin-bottom: 25px;
 }
@@ -1942,6 +2020,21 @@ ol {
 		border-radius: 50%;
 		padding: 0 10px 0 10px;
 	}
+.paginationBlog {
+	text-align: center;
+	margin: 30px 30px 60px;
+	user-select: none;
+	align-content: center;
+	justify-content: center;
+}
+	.paginationBlog a {
+		display: inline-block;
+		box-shadow: 0 5px 25px rgb(1 1 1/10%);
+		margin: 5px;
+		color:white;
+		border-radius: 50%;
+		padding: 0 10px 0 10px;
+	}
 .pagination li a{
 	color:white;
 	text-decoration:none;
@@ -1949,6 +2042,13 @@ ol {
 	line-height:45px;
 
 }
+.paginationBlog li a {
+	color: white;
+	text-decoration: none;
+	font-size: 1.2em;
+	line-height: 45px;
+}
+
 .previous-page, .next-page{
 	background:black;
     cursor:pointer;
@@ -1979,9 +2079,9 @@ ol {
 	background:black;
 	
 }
-.disable{
-	background:#ccc;
-	pointer-events:none;
+.disable {
+	background:  #ccc !important;
+	pointer-events:  none !important;
 }
 .sizes {
 }
@@ -3480,6 +3580,8 @@ ol {
 	.container {
 		max-width: 1170px;
 	}
+	
+
 }
 
 /* Medium Device = 1200px */
@@ -3605,6 +3707,7 @@ ol {
 	.offcanvas-menu-overlay.active {
 		visibility: visible;
 	}
+	
 	.offcanvas-menu-wrapper {
 		position: fixed;
 		left: -300px;
@@ -3623,6 +3726,10 @@ ol {
 	.offcanvas-menu-wrapper.active {
 		opacity: 1;
 		left: 0;
+	}
+	
+	.offcanvas__menu {
+		display: none;
 	}
 	.offcanvas__menu {
 		display: none;
@@ -3962,6 +4069,33 @@ ol {
 		height: 250px;
 	}
 }
+@media only screen and (max-width: 3000px) and (min-width:1px) {
+	.offcanvas-cart-wrapper .offCanvasWidth {
+		width: 100% !important;
+		display:block !important;
+		max-width:100% !important;
+		flex:unset;
+		padding-right:0;
+		padding-left:0;
+	}
+	.offcanvas-cart-wrapper .cart__total {
+		width: 100% !important;
+		
+		max-width: 100% !important;
+		text-align:center;
+		padding-right: 0;
+		padding-left: 0;
+	}
+	.offcanvas-cart-wrapper .cart__discount{
+		text-align:center;
+		margin-top:20px;
+	}
+	.offcanvas-cart-wrapper.activeCart {
+		transform: translateY(-100px);
+	}
+}
+
+
 .Panel{
 
 	display:inline-block;
@@ -4090,12 +4224,16 @@ ol {
 
 
 /*      Price Range Filter    */
-#priceRangeSlider .container {
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 50px;
+#priceRangeSlider .container .range-min-max div {
+	
+	display:inline-block;
+}
+#priceRangeSlider .container .range-min-max .max-value {
+	float:right;
+}
+#priceRangeSlider .container numberVal{
+
+
 }
 
 	#priceRangeSlider .container input [type="number"] {
@@ -4124,8 +4262,8 @@ ol {
 
 	}
 	#priceRangeSlider .container .range-slider .progressBar {
-		left: 25%;
-		right: 25%;
+		left: 1%;
+		right: 1%;
 		height: 100%;
 		background: #17a288;
 		border-radius: 50px;
@@ -4151,6 +4289,37 @@ ol {
 			border-radius: 50px;
 		}
 
+
+
+
+
+
+		/****************************/
+		/************CheckOut********/
+
+
+		.checkout__wrapper{
+			
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			flex-direction:column;
+			height:auto;
+			width:100%;
+			margin-top:40px;
+
+
+		}
+		.cardPayment{
+
+		}
+		.deliveryInfo{
+			margin-top:20px;
+			margin-bottom:30px;
+		}
+		.deliveryInfo label{
+			display:block;
+		}
 
 
 

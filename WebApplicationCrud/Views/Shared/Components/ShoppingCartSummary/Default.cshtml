@@ -1,0 +1,25 @@
+﻿@model ShoppingCartViewModel
+
+
+@if (Model.ShoppingCart.ShoppingCartItems.Count > 0)
+{
+    <a href="#" class="canvas__cart__open"><img src="~/img/icon/cart.png" alt=""> <span>@Model.ShoppingCart.ShoppingCartItems.Count</span></a>
+
+    <div class="price">
+        @Model.ShoppingCart.GetShoppingCartTotal()
+    </div>
+
+    <div class="offcanvas-cart-overlay"></div>
+    <div class="offcanvas-cart-wrapper">
+        @await Html.PartialAsync("_ShoppingCart", Model)
+    </div>
+
+
+
+    <script type="text/javascript">
+       var carTable= document.querySelector('.shopping__cart__table');
+        carTable.style.width = '100%';
+
+    </script>
+}
+

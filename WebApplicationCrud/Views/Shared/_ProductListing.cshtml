@@ -35,11 +35,22 @@
 
                         </a>
                         <ul class="product__hover">
-                            <li><a href="#"><img src="../img/icon/heart.png" alt=""></a></li>
-                            <li class="compare">
-                                <a href="#"><img src="../img/icon/compare.png" alt=""> <span>Compare</span></a>
-                            </li>
-                            <li><a href="#"><img src="../img/icon/search.png" alt=""></a></li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (prod.IsUserFavourite)
+                                {
+                                    <li data-id="@prod.Id" class="favourite"><i data-id="@prod.Id" class="fa fa-heart"></i></li>
+
+                                }
+                                else  
+                                {
+                                     <li data-id="@prod.Id" class="favourite"><i data-id="@prod.Id" class="fa fa-heart-o"></i></li>
+                                }
+
+                            }
+
+
+
                         </ul>
                     </div>
                     
@@ -111,7 +122,7 @@
 <script>
     $(document).ready(function () {
         $(".colorChange").change(function () {
-          
+
             srcId = this.dataset.imgsrcid;
             imgname = this.dataset.imgname;
             var colors = document.querySelectorAll(".colorChange");
@@ -122,11 +133,22 @@
             if (this.checked) {
                 this.parentElement.classList.add("active");
             }
-          
+
             document.getElementById(srcId).src = src;
-           
+
+
+        })
+
+        $(".favourite").on("click", function (e) {
+
+            var id = e.target.dataset.id;
+            $.ajax({
+                url: "@Url.Action("ToggleFavourite","Panel")",
+                type: 'POST',
+                data: { id: id }
+            });
 
         })
     })
-  
+
 </script>

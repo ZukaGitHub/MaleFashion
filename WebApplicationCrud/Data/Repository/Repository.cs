@@ -31,7 +31,23 @@ namespace WebApplicationCrud.Data.Repository
         {
             return _ctx.Posts.ToList();
         }
+        public int PageCountValidity(int pageNumber)
+        {
+            int pageSize = 3;
+            var query = _ctx.Posts.AsNoTracking().AsQueryable();
+            int postsCount = query.Count();
+            int pageCount = (int)Math.Ceiling((double)postsCount / pageSize);
 
+            if (pageNumber < 1)
+            {
+                return 1;
+            }
+            if (pageNumber > pageCount)
+            {
+                return pageCount;
+            }
+            return pageNumber;
+        }
         public IndexViewModel GetAllPosts(
             int pageNumber, 
             string category,
@@ -44,7 +60,7 @@ namespace WebApplicationCrud.Data.Repository
             int pageSize = 3;
             int skipAmount = pageSize * (pageNumber - 1);
 
-            var query = _ctx.Posts.AsNoTracking().AsQueryable();
+            var query = _ctx.Posts.Include(com=>com.MainComments).ThenInclude(subcom=>subcom.SubComments).AsNoTracking().AsQueryable();
 
             if (!String.IsNullOrEmpty(category))
                 query = query.Where(x => InCategory(x));
@@ -57,6 +73,7 @@ namespace WebApplicationCrud.Data.Repository
             int postsCount = query.Count();
             int pageCount = (int)Math.Ceiling((double)postsCount / pageSize);
 
+         
             return new IndexViewModel
             {
                 PageNumber = pageNumber,
@@ -128,6 +145,40 @@ namespace WebApplicationCrud.Data.Repository
 
                    })
                    .FirstOrDefault(p => p.Id == id);
+        }
+
+        public List<RelatedBlogsViewModel> GetPrevAndNextPosts(int id)
+        {
+            var relatedPosts = new List<RelatedBlogsViewModel>();
+            var prevPost = _ctx.Posts.Where(s => s.Id < id)?.OrderByDescending(x => x.Id).FirstOrDefault();
+
+           var nextPost= _ctx.Posts.Where(s => s.Id > id)?.OrderBy(x => x.Id).FirstOrDefault();
+
+           
+            if (prevPost != null)
+            {
+                relatedPosts.Add(new RelatedBlogsViewModel()
+                {
+                    Id = prevPost.Id,
+                    IsPrev = true,
+                    Title = prevPost.Title,
+                
+                });
+             
+            }
+            if (nextPost != null)
+            {
+                relatedPosts.Add(new RelatedBlogsViewModel()
+                {
+                    Id = nextPost.Id,
+                    IsPrev = false,
+                    Title = nextPost.Title,
+
+                });
+            }
+
+
+            return relatedPosts;
         }
     }
 }

@@ -10,5 +10,6 @@ namespace WebApplicationCrud.ViewModels.BlogVMs
         public string Title { get; set; }
         public string Image { get; set; }
         public int Id { get; set; }
+        public bool IsPrev { get; set; }
     }
 }

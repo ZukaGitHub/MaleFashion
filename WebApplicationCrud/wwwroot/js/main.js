@@ -1,12 +1,64 @@
 
 
+  /*------------------
+     Modal Popup
+  --------------------*/
+showInPopup=(url, title) =>{
+    $.ajax({
+        type: "GET",
+        url: url,
+       
+        success: function (res) {
+
+           
+            $("#form-modal .modal-body").html(res);
+            $("#form-modal .modal-title").html(title);
+            $("#form-modal").modal('show');
+        }
+    })
+}
+
+JqueryAjaxModalPost = form => {
+    try {
+        console.log("form",form);
+        $.ajax({
+            type: "POST",
+            url: form.action,
+            data: new FormData(form),
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                console.log("res",res)
+                $("#rolesList").html(res.html);
+                $("#form-modal .modal-body").html('');
+                $("#form-modal .modal-title").html('');
+                $("#form-modal").modal('hide');
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+
+    } catch (e) {
+
+        console.log("nigero catchia",e);
+    }
+    return false;
+}
+/*-------------------
+     SubComments
+    ------------------*/
+function SubCommentsCollapse(id) {
+    var subComment = document.getElementById("subComments+" + id);
+    subComment.classList.toggle("inactiveSection");
+}
 'use strict';
 
   
 (function ($) {
-
-
-    
+  
+   
+   
     /*------------------
         Preloader
     --------------------*/
@@ -53,7 +105,7 @@
         prependTo: '#mobile-menu-wrap',
         allowParentLinks: true
     });
-
+   
     /*------------------
         Accordin Active
     --------------------*/
@@ -74,6 +126,16 @@
     $(".offcanvas-menu-overlay").on('click', function () {
         $(".offcanvas-menu-wrapper").removeClass("active");
         $(".offcanvas-menu-overlay").removeClass("active");
+    });
+    //Cart Menu
+    $(".canvas__cart__open").on('click', function () {
+        $(".offcanvas-cart-wrapper").addClass("activeCart");
+        $(".offcanvas-cart-overlay").addClass("activeCart");
+    });
+
+    $(".offcanvas-cart-overlay").on('click', function () {
+        $(".offcanvas-cart-wrapper").removeClass("activeCart");
+        $(".offcanvas-cart-overlay").removeClass("activeCart");
     });
 
     /*-----------------------
@@ -273,6 +335,7 @@
     })
   
 
+    
 
 
 

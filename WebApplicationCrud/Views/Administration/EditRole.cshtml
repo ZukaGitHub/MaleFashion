@@ -28,8 +28,8 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group row">
                         <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                            <a asp-action="GetRoles" asp-controller="Administration">Cancel</a>
+                            <button type="submit" class="btn btn-dark">Update</button>
+                            <a asp-action="GetRoles" asp-controller="Administration" class="btn btn-danger">Cancel</a>
                         </div>
 
                     </div>
@@ -52,12 +52,10 @@
                             }
                         </div>
                         <div class="card-footer">
-                            <a class="btn btn-primary"
-                               asp-action="EditUsersInRole"
-                               asp-controller="Administration"
-                               asp-route-id="@Model.Id"
-                               style="width:auto">
-                                Add or Remove Users
+                            <a class="btn btn-dark"
+                               onclick="showInPopup('@Url.Action("EditUsersRole","Administration",new { userId = Model.Id },Context.Request.Scheme)','Manage User Role')"
+                               style="width:auto;color:white">
+                               Add or Remove Users
                             </a>
                         </div>
                     </div>

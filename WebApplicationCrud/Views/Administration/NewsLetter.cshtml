@@ -1,0 +1,52 @@
+﻿
+
+<link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+
+
+
+
+
+@model List<NewsLetter>
+
+
+<div class="wrapper d-flex align-items-stretch">
+    <partial name="_AdministrationSidebar">
+
+        <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
+
+
+            @if (Model != null && Model.Count > 0)
+            {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Date Reveived</th>
+                      
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                      @foreach(var email in Model)
+                {
+                    <td>@email.Email</td>
+                }
+                      
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                       @foreach(var date in Model)
+                {
+                    <td>@date.DateReceived</td>
+                }
+                      
+                    </tr>
+                   
+                </tbody>
+            </table>
+            }
+        </div>
+        </div>
+

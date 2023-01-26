@@ -26,12 +26,13 @@ namespace WebApplicationCrud.Models
                 .HttpContext.Session;
             var context = services.GetService<CRUDdbcontext>();
             string cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
+          
             session.SetString("CartId", cartId);
             return new ShoppingCart(context) { ShoppingCartId = cartId };
 
         }
 
-        public void AddToCart(ProductInfo product, int amount, Product Product)
+        public void AddToCart(ProductInfo product, int amount, Product Product,string SizeText)
         {
             var shoppingCartItem = _ctx.shoppingCartItems
                 .SingleOrDefault(s => s.ProductInfo.Id == product.Id
@@ -45,7 +46,8 @@ namespace WebApplicationCrud.Models
                     Product = Product,
                     ShoppingCartId = ShoppingCartId,
                     ProductInfo = product,
-                    Amount = 1
+                    Amount = amount,
+                    SizeText=SizeText
                 };
                 _ctx.shoppingCartItems.Add(shoppingCartItem);
             }
@@ -91,7 +93,7 @@ namespace WebApplicationCrud.Models
             var ShoppingCartItems =
                 _ctx.shoppingCartItems.Where(c => c.ShoppingCartId == ShoppingCartId)
                 .Include(p => p.Product)
-                .Include(p => p.ProductInfo)
+                .Include(p => p.ProductInfo).ThenInclude(s=>s.ProductInfoStockAndSizes)
                 .ToList();
 
 

@@ -16,11 +16,15 @@ using WebApplicationCrud.Data.FileManager;
 
 using WebApplicationCrud.Models;
 using AutoMapper;
+using WebApplicationCrud.Models.Identity;
+using Stripe;
+using WebApplicationCrud.Models.PaymentI;
 
 namespace WebApplicationCrud
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,6 +35,17 @@ namespace WebApplicationCrud
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(name: MyAllowSpecificOrigins,
+            //                      policy =>
+            //                      {
+            //                          policy.WithOrigins("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap",
+            //                                              "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js",
+            //                                              "https://unpkg.com/axios/dist/axios.min.js",
+            //                                              "https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js");
+            //                      });
+            //});
             services.AddControllersWithViews();
             services.AddDbContext<CRUDdbcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.Configure<CookiePolicyOptions>(options =>
@@ -42,7 +57,7 @@ namespace WebApplicationCrud
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sp => ShoppingCart.GetCart(sp));
           
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireDigit = false;
@@ -67,14 +82,18 @@ namespace WebApplicationCrud
                 options.AppId = "487829986500552";
                 options.AppSecret = "688e5572747e0c333034189752fe0846";
             });
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
 
-           
+            StripeConfiguration.ApiKey = "sk_test_51MC5xSE9HwHTu6RuZ6A25TMg8Nb3nG5VrYUc7uojjIMVrJtOEMtayHZ4ubQEEecmHauTNzdZwFeM3okyIR84trnb00SUSwBGfq";
             services.AddAutoMapper();
             services.AddTransient<IFileManager, FileManager>();
             services.AddTransient<IRepository, Repository>();
             services.AddMemoryCache();
-            services.AddSession();
+            services.AddSession(options=> {
+                options.Cookie.Name = "Cart";
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(20);
+            
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,20 +102,22 @@ namespace WebApplicationCrud
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
          
+            app.UseHttpsRedirection();
+          
             app.UseStaticFiles();
 
             app.UseCookiePolicy();
 
             app.UseRouting();
+            //app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
             
@@ -106,6 +127,7 @@ namespace WebApplicationCrud
             {
                 endpoints.MapControllers();
                 endpoints.MapDefaultControllerRoute();
+                
             });
 
         

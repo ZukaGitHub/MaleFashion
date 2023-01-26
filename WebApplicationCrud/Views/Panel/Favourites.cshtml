@@ -1,0 +1,24 @@
+﻿@model List<ProductViewModel>
+
+<head>
+    <title>List Of Products</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/js/DatatableAssets/extensions/filter-control/bootstrap-table-filter-control.min.css" />
+    <link href="~/js/DatatableAssets/bootstrap-table.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div class="wrapper d-flex align-items-stretch">
+        <partial name="_AdministrationSidebar">
+
+            <div id="ProductList">
+                @await Html.PartialAsync("_ProductListing", Model)
+            </div>
+    </div>
+
+</body>

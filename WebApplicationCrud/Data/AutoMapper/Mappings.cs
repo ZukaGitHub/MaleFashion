@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.Identity;
 using WebApplicationCrud.ViewModels;
+using WebApplicationCrud.ViewModels.AdministrationVms;
+using WebApplicationCrud.ViewModels.CheckOutVMs;
 using WebApplicationCrud.ViewModels.HomeVMs;
 
 namespace WebApplicationCrud.Data.AutoMapper
@@ -22,7 +25,22 @@ namespace WebApplicationCrud.Data.AutoMapper
             CreateMap<StockVm, ProductInfoStockAndSize>()
                 .ForMember(dest=>dest.Stock,opt=>opt.MapFrom(src=>src.Number))
                 .ReverseMap();
-          
+            CreateMap<DeliveryInfo, DeliveryInfoViewModel>().ReverseMap();
+            CreateMap<ApplicationUser, AccountViewModel>()
+                .ForMember(vm => vm.AdditionalDescription, user => user.MapFrom(delivery => delivery.DeliveryInfo.AdditionalDescription))
+                 .ForMember(vm => vm.Address, user => user.MapFrom(delivery => delivery.DeliveryInfo.Address))
+                  .ForMember(vm => vm.Address2, user => user.MapFrom(delivery => delivery.DeliveryInfo.Address2))
+                   .ForMember(vm => vm.Country, user => user.MapFrom(delivery => delivery.DeliveryInfo.Country))
+                    .ForMember(vm => vm.City, user => user.MapFrom(delivery => delivery.DeliveryInfo.City))
+                     .ForMember(vm => vm.Street, user => user.MapFrom(delivery => delivery.DeliveryInfo.Street))
+                     .ReverseMap();
+
+
+
+
         }
+
+
+       
     }
 }

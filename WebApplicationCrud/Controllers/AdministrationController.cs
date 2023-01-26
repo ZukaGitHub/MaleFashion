@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,27 +9,34 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApplicationCrud.Data;
 using WebApplicationCrud.Data.DbContext;
+using WebApplicationCrud.Data.Helpers;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.AdministrationModels;
+using WebApplicationCrud.Models.Identity;
 using WebApplicationCrud.ViewModels;
+using WebApplicationCrud.ViewModels.AdministrationVms;
 using WebApplicationCrud.ViewModels.PanelVMs;
 
 namespace WebApplicationCrud.Controllers
 {
     public class AdministrationController : Controller
     {
-        private SignInManager<IdentityUser> _signInManager;
-        private UserManager<IdentityUser> _userManager;
+        private SignInManager<ApplicationUser> _signInManager;
+        private UserManager<ApplicationUser> _userManager;
         private CRUDdbcontext _ctx;
         private RoleManager<IdentityRole> _roleManager;
-        public AdministrationController(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+        private readonly IMapper _mapper;
+        public AdministrationController(SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             CRUDdbcontext ctx,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+             IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _ctx = ctx;
             _roleManager = roleManager;
+            _mapper = mapper; 
         }
         [HttpGet]
         public IActionResult CreateRole()
@@ -58,6 +67,16 @@ namespace WebApplicationCrud.Controllers
             }
 
             return View(vm);
+        }
+        [HttpGet]
+        public IActionResult NewsLetter()
+        {
+            var newsLetters = _ctx.NewsLetters.ToList();
+            if (newsLetters != null && newsLetters.Count() > 0)
+            {
+                return View(newsLetters);
+            }
+            return View(new List<NewsLetter>());
         }
         [HttpGet]
         public async Task<IActionResult> ManageUserClaims(string userId)
@@ -170,7 +189,7 @@ namespace WebApplicationCrud.Controllers
                 model.Add(userRolesViewModel);
             }
 
-            return View(model);
+             return View(model);
         }
         [HttpPost]
         public async Task<IActionResult>  ManageUserRoles(List<UserRolesViewModel> model, string userId)
@@ -200,8 +219,41 @@ namespace WebApplicationCrud.Controllers
                 ModelState.AddModelError("", "Cannot add selected roles to user");
                 return View(model);
             }
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var userClaims = await _userManager.GetClaimsAsync(user);
 
-            return RedirectToAction("EditUser", new { Id = userId });
+            var userRolesViewModel = new List<UserRolesViewModel>();
+
+            foreach (var role in _roleManager.Roles)
+            {
+                var tempuserRolesViewModel = new UserRolesViewModel
+                {
+                    RoleId = role.Id,
+                    RoleName = role.Name
+                };
+
+                if (await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    tempuserRolesViewModel.IsSelected = true;
+                }
+                else
+                {
+                    tempuserRolesViewModel.IsSelected = false;
+                }
+
+                model.Add(tempuserRolesViewModel);
+            }
+            var editUserModel = new EditUserViewModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Roles = userRoles,
+                Claims = userClaims.Select(c => c.Value).ToList()
+
+            };
+
+            return Json(new { isValid = true, html = RazorHelper.RenderRazorViewToString(this, "_RolesList", editUserModel.Roles) });
         }
         [HttpGet]
         public IActionResult GetUsers()
@@ -324,6 +376,40 @@ namespace WebApplicationCrud.Controllers
 
                 return View("GetRoles");
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> AccountDetails()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var accountVm = _mapper.Map<AccountViewModel>(user);
+
+
+            return View(accountVm);
+        }
+      
+
+        [HttpPost]
+        public async Task<IActionResult> AccountDetailsAsync(AccountViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+               
+                user.Email = vm.Email;
+                user.UserName = vm.UserName;
+                user.PhoneNumber = vm.PhoneNumber;
+                user.DeliveryInfo.AdditionalDescription = vm.AdditionalDescription;
+                user.DeliveryInfo.Address = vm.Address;
+                user.DeliveryInfo.Address2 = vm.Address2;
+                user.DeliveryInfo.City = vm.City;
+                user.DeliveryInfo.Country = vm.Country;
+                user.DeliveryInfo.Street = vm.Street;
+                await _userManager.UpdateAsync(user);
+                await _ctx.SaveChangesAsync();
+                return RedirectToAction("Index", "Panel");
+            }
+            return View(vm);
+          
         }
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
@@ -456,6 +542,21 @@ namespace WebApplicationCrud.Controllers
             }
                 
             return View();
+
+        }
+
+        public async Task<IActionResult> OrderHistory()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user != null)
+            {
+                var orders = _ctx.Orders.Include(s => s.OrderDetails).Include(s => s.user).Where(s => s.user == user).ToList();
+                return View(orders);
+            }
+         
+
+            return View(new List<Order>());
 
         }
     }

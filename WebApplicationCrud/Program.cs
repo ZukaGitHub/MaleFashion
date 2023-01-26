@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using WebApplicationCrud.Data.DbContext;
 using WebApplicationCrud.Models;
+using WebApplicationCrud.Models.Identity;
 
 namespace WebApplicationCrud
 {
@@ -15,11 +16,12 @@ namespace WebApplicationCrud
         {
             var host = CreateWebHostBuilder(args).Build();
 
+
             try
             {
                 var scope = host.Services.CreateScope();
                 var ctx = scope.ServiceProvider.GetRequiredService<CRUDdbcontext>();
-                var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                 var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
 
@@ -33,7 +35,7 @@ namespace WebApplicationCrud
                 }
                 if (!ctx.Users.Any(u => u.UserName == "admin"))
                 {
-                    var adminUser = new IdentityUser
+                    var adminUser = new ApplicationUser
                     {
                         UserName = "admin",
                         Email = "admin@test.com",
@@ -57,7 +59,11 @@ namespace WebApplicationCrud
 
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            WebHost.CreateDefaultBuilder(args).ConfigureKestrel(webBuilder =>
+            {
+                webBuilder.AddServerHeader = false;
+            })
+       
                 .UseStartup<Startup>();
     }
 }

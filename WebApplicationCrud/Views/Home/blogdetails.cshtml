@@ -11,8 +11,8 @@
     <div id="preloder">
         <div class="loader"></div>
     </div>
-
-
+    
+    
     <!-- Blog Details Hero Begin -->
     <section class="blog-hero spad">
         <div class="container">
@@ -98,22 +98,36 @@
                         </div>
                         <div class="blog__details__btns">
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <a href="" class="blog__details__btns__item">
-                                        <p><span class="arrow_left"></span> Previous Pod</p>
-                                        <h5>It S Classified How To Utilize Free Classified Ad Sites</h5>
-                                    </a>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <a href="" class="blog__details__btns__item blog__details__btns__item--next">
-                                        <p>Next Pod <span class="arrow_right"></span></p>
-                                        <h5>Tips For Choosing The Perfect Gloss For Your Lips</h5>
-                                    </a>
-                                </div>
+                                @if (Model.RelatedBlogs != null && Model.RelatedBlogs.Count > 0)
+                                {
+                                    foreach (var post in Model.RelatedBlogs)
+                                    {
+                                        if (post != null && post.IsPrev)
+                                        {
+                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <a asp-controller="Home" asp-action="BlogDetails" asp-route-id="@post.Id" class="blog__details__btns__item">
+                                                    <p><span class="arrow_left"></span> Previous Pod</p>
+                                                    <h5>@post.Title</h5>
+                                                </a>
+                                            </div>
+                                        }
+                                        if (post != null && post.IsPrev == false)
+                                        {
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                 <a asp-controller="Home" asp-action="BlogDetails" asp-route-id="@post.Id" class="blog__details__btns__item blog__details__btns__item--next">
+                                    <p>Next Pod <span class="arrow_right"></span></p>
+                                    <h5>@post.Title</h5>
+                                </a>
+                            </div>
+                                        }
+
+                                    }
+                                   
+                                }
                             </div>
                         </div>
 
-
+                        
                         <nav class="comment-section">
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -197,26 +211,7 @@
                             }
                         </nav>
                     </div>
-                    @*<div class="blog__details__comment">
-                            <h4>Leave A Comment</h4>
-                            <form action="#">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4">
-                                        <input type="text" placeholder="Name">
-                                    </div>
-                                    <div class="col-lg-4 col-md-4">
-                                        <input type="text" placeholder="Email">
-                                    </div>
-                                    <div class="col-lg-4 col-md-4">
-                                        <input type="text" placeholder="Phone">
-                                    </div>
-                                    <div class="col-lg-12 text-center">
-                                        <textarea placeholder="Comment"></textarea>
-                                        <button type="submit" class="site-btn">Post Comment</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>*@
+                   
                 </div>
             </div>
         </div>
@@ -229,9 +224,3 @@
 </body>
 
 </html>
-<script>
-    function SubCommentsCollapse(id) {
-        var subComment = document.getElementById("subComments+"+id);
-        subComment.classList.toggle("inactiveSection");
-    }
-</script>

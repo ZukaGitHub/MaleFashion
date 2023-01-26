@@ -110,8 +110,8 @@
                                                 </span>
                                                 <span class="float-right" style="cursor:pointer" v-on:click="RemoveProductDetail(Indexx,Index)">X</span>
 
-                                                @*<label>Color</label>
-                                                    <input v-model="productInfo.Color" value="#ffffff" type="color" v-on:keyup.enter="productInfo.Index=Indexx" />*@
+                                                <label>Color</label>
+                                                    <input v-model="productInfo.Color" value="#ffffff" type="color" v-on:keyup.enter="productInfo.Index=Indexx" />
 
                                             </div>
                                         </td>
@@ -213,7 +213,6 @@
 
 
 
-
 <script defer>
     var app = new Vue({
         el: '.VueModel',
@@ -263,7 +262,7 @@
                 }
 
                 axios({
-                    method: 'post',
+                    method: 'Post',
                     url: '/Panel/AddProductPanel',
                     data: formdata
 
@@ -272,7 +271,7 @@
                         alert("product was added");
                     })
                     .catch(function (error) {
-                        console.log(error);
+                        console.log(error.response.data);
                     });
 
             },
@@ -299,9 +298,9 @@
                         this.Products[0].Category = product.Category
                         this.Products[0].Description = product.Description
                         var Tagnames = "";
-                        //for (let i = 0; i < product.Tagnames.length; i++) {
-                        //    Tagnames=Tagnames + " " +product.Tagnames[i]
-                        //}
+                        for (let i = 0; i < product.Tagnames.length; i++) {
+                            Tagnames=Tagnames + " " +product.Tagnames[i]
+                        }
                         this.Products[0].Tagnames = Tagnames
                         const und = undefined;
                       

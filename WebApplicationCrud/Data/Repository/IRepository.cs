@@ -15,6 +15,8 @@ namespace WebApplicationCrud.Data.Repository
         IndexViewModel GetAllPosts(int pageNumber, string category, string search);
         void AddPost(Post post);
         void UpdatePost(Post post);
+        List<RelatedBlogsViewModel> GetPrevAndNextPosts(int id);
+        public int PageCountValidity(int pageNumber);
         void UpdateProduct(Product product);
         Product GetProduct(int id);
         void RemovePost(int id);

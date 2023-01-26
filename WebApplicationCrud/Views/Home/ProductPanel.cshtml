@@ -165,20 +165,15 @@
                             @*size---------------------------------------------------*@
                             <div class="product__details__option__size">
                                 <span>Size:</span>
-
-
-                                @*
-
-                               take care of this size color selector
-                                *@
-                          
+\
                                 @for (int i = 0; i < Model.SizeNames.Count; i++)
                                 {
 
 
+                                        <input type="radio" name="size" id="@Model.SizeNames[i]">
+                                    
                                     <label class="sizes" for="@Model.SizeNames[i]">
                                         @Model.SizeNames[i]
-                                        <input type="radio" id="@Model.SizeNames[i]">
                                     </label>
 
 
@@ -187,15 +182,26 @@
                             
                             </div>
                             @*COlors----------------------------------------------------*@
-                            <div class="product__details__option__color">
-                                <span>Color:</span>
-                                @for (int i = 0; i < Model.ProductInfos.Count; i++)
-                                {
-                                    <label class="c-1" data-sizes="" style="background-color:@Model.ProductInfos[i].Color" for="@Model.ProductInfos[i].Color">
-                                        <input type="radio" id="@Model.ProductInfos[i].Color">
-                                    </label>
-                                }
-                            </div>
+                        <div class="product__details__option__color">
+                            <span>Color:</span>
+                            @for (int i = 0; i < Model.ProductInfos.Count; i++)
+                            {
+
+                                <input class="c-1" name="color"  data-sizes="" data-productInfoId="@Model.ProductInfos[i].Id"
+                                       type="radio" id="@Model.ProductInfos[i].Color">
+                                <label
+                                       
+                                       data-sizes=""
+                                       style="background-color:@Model.ProductInfos[i].Color"
+                                       for="@Model.ProductInfos[i].Color">
+                                </label>
+                            }
+                        </div>
+
+                        <div class="product__details__option__quantity">
+                            <span>Amount:</span>
+                            <input name="quantity" type="number" min="1" value="1"/>
+                        </div>
                         </div>
                         @*add to cart-----------------------------------------------*@
                         <div class="product__details__cart__option">
@@ -205,7 +211,8 @@
                                            </div>
                                      </div>*@
                             @*asp-route-productInfoId="@product.id"*@
-                            <a asp-action="AddToShoppingCart" asp-controller="ShoppingCart" asp-route-productid="@Model.Id" class="primary-btn">+ Add To Cart</a>
+                            <a id="addToCart" 
+                              class="primary-btn">+ Add To Cart</a>
 
                         </div>
                         @*wishlist and compare-------------------------------------------------*@
@@ -424,6 +431,20 @@
 <script src="~/js/zoomsl.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+  
+        $('#addToCart').on("click", function () {
+            var productId =@Model.Id;
+            
+            var productInfoId = $("input[name=color]:checked", '.product__details__option__color')[0].dataset.productinfoid;
+             
+            var productAmount = $("input[name=quantity]", '.product__details__option__quantity').val;
+            var selectedSize = $("input[name=size]:checked", '.product__details__option__size')[0].id;
+            console.log(selectedSize);
+           
+            $('#addToCart').attr('href', '/ShoppingCart/AddToShoppingCart/?productId=' + productId + '&productInfoId=' + productInfoId + '&size=' + selectedSize + '&amount' + productAmount);
+        })
+       
         $(".big_image").imagezoomsl({
             zoomrange: [3, 5]
         });
@@ -439,37 +460,51 @@
 
             }
             document.getElementById(ProductInfos[i].color).dataset.sizes = sizeNames
+          
         }
-
+     
 
         $(".c-1").on("click", function (e) {
+         
             if (e.target.nodeName === 'LABEL') return;
 
             if (e.target.dataset.sizes != null) {
                 if (Array.isArray(e.target.dataset.sizes)) {
 
-                    document.querySelectorAll(".sizes").classList.add("disable")
-
+                    document.querySelectorAll(".sizes").forEach(size => size.classList.add("disable"));
+                    $("input[name=size]").each(function () {
+                        $(this).prop('checked', false);
+                    })
                     for (let i = 0; i < e.target.dataset.sizes.length; i++) {
-                        document.getElementById(e.target.dataset.sizes[i]).classList.remove("disable")
+                       
+                        $('label[for="' + e.target.dataset.sizes[i] + '"]').removeClass("disable");
                     }
                 }
                 if (typeof (e.target.dataset.sizes) === 'string') {
 
                     document.querySelectorAll(".sizes").forEach(size => size.classList.add("disable"));
-                    document.getElementById(e.target.dataset.sizes).parentElement.classList.remove("disable")
+                    $("input[name=size]").each(function () {
+                        $(this).prop('checked', false);
+                    })
+                    $('label[for="' + e.target.dataset.sizes + '"]').removeClass("disable");
+                 
                 }
             }
 
         })
+        $(".sizes").on("click", function (e){
+
+        }
         $(".rate").on("click", function (e) {
             console.log("e",e)
             if (e.target.nodeName === 'INPUT') return;
             $.ajax({
-                url: 'StarRating',
-                type: 'Post',
+                url: '/Home/StarRating',
+                type: 'POST',
                 data: { ProductId: e.target.dataset.id, Rate: e.target.dataset.rate },
-              
+                success: function (result) {
+                   console.log("result",result);
+                }
             });
         })
 

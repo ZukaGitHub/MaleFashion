@@ -2,10 +2,13 @@
 using WebApplicationCrud.Models.BlogModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebApplicationCrud.Models.Identity;
+using WebApplicationCrud.Models.AdministrationModels;
+using WebApplicationCrud.Models.ShoppingCartModels;
 
 namespace WebApplicationCrud.Data.DbContext
 {
-    public class CRUDdbcontext : IdentityDbContext
+    public class CRUDdbcontext : IdentityDbContext<ApplicationUser>
     {
         public CRUDdbcontext(DbContextOptions<CRUDdbcontext> options)
             : base(options)
@@ -17,6 +20,7 @@ namespace WebApplicationCrud.Data.DbContext
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<PaymentInfo> PaymentInfos { get; set; }
+        public DbSet<StockOnHold> StockOnHolds { get; set; }
         public DbSet<UserRating> UserRatings { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Image> Images { get; set; }
@@ -26,9 +30,13 @@ namespace WebApplicationCrud.Data.DbContext
         public DbSet<Thumbnail> Thumbnails { get; set; }
         public DbSet<TextSize> TextSizes { get; set; }
         public DbSet<ProductInfo> ProductInfos { get; set; }
+        public DbSet<FavouriteProduct> FavouriteProducts { get; set; }
         public DbSet<ShoppingCartItem> shoppingCartItems { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<NewsLetter> NewsLetters { get; set; }
         public DbSet<SubComment> SubComments { get; set; }
+        public DbSet<DeliveryInfo> DeliveryInfos { get; set; }
+        public DbSet<ProductInfoStockAndSize> ProductInfoStockAndSize { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -74,6 +82,11 @@ namespace WebApplicationCrud.Data.DbContext
 
 
                 );
+            builder.Entity<OrderDetails>().
+                HasOne(s => s.ProductInfo).WithMany(s=>s.OrderDetails)   
+                .HasForeignKey(s=>s.ProductInfoId)
+                .OnDelete(DeleteBehavior.NoAction);
+           
             base.OnModelCreating(builder);
         }
 

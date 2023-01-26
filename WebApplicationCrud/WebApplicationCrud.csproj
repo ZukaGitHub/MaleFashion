@@ -36,14 +36,55 @@
     <Compile Remove="Migrations\20220929204652_Rena2.Designer.cs" />
     <Compile Remove="Migrations\20220929204723_RenamingByConvention.cs" />
     <Compile Remove="Migrations\20220929204723_RenamingByConvention.Designer.cs" />
+    <Compile Remove="Migrations\20221203182108_IdentityExtension.cs" />
+    <Compile Remove="Migrations\20221203182108_IdentityExtension.Designer.cs" />
+    <Compile Remove="Migrations\20221203184115_IdentityExtension.cs" />
+    <Compile Remove="Migrations\20221203184115_IdentityExtension.Designer.cs" />
+    <Compile Remove="Migrations\20221210175742_OrderExtension.cs" />
+    <Compile Remove="Migrations\20221210175742_OrderExtension.Designer.cs" />
+    <Compile Remove="Migrations\20221210181241_AddProuctInfo.cs" />
+    <Compile Remove="Migrations\20221210181241_AddProuctInfo.Designer.cs" />
+    <Compile Remove="Migrations\20221210183014_ProductInfoExtension.cs" />
+    <Compile Remove="Migrations\20221210183014_ProductInfoExtension.Designer.cs" />
+    <Compile Remove="Migrations\20221210183337_ProductInfoExtension.cs" />
+    <Compile Remove="Migrations\20221210183337_ProductInfoExtension.Designer.cs" />
+    <Compile Remove="Migrations\20221220165324_ProductExtesionfurther.cs" />
+    <Compile Remove="Migrations\20221220165324_ProductExtesionfurther.Designer.cs" />
+    <Compile Remove="Migrations\20221220165528_ProductExtensionFurther.cs" />
+    <Compile Remove="Migrations\20221220165528_ProductExtensionFurther.Designer.cs" />
+    <Compile Remove="Migrations\20221220165713_PrdutExtensionFurther.cs" />
+    <Compile Remove="Migrations\20221220165713_PrdutExtensionFurther.Designer.cs" />
+    <Compile Remove="Migrations\20230104180533_sdjqlkwkaosidqls.cs" />
+    <Compile Remove="Migrations\20230104180533_sdjqlkwkaosidqls.Designer.cs" />
+    <Compile Remove="Migrations\20230104180800_lsjkasjlwwqdaasas.cs" />
+    <Compile Remove="Migrations\20230104180800_lsjkasjlwwqdaasas.Designer.cs" />
+    <Compile Remove="Migrations\20230104181500_productExtenson2.0.cs" />
+    <Compile Remove="Migrations\20230104181500_productExtenson2.0.Designer.cs" />
+    <Compile Remove="Migrations\20230108185513_productExtension2.0.cs" />
+    <Compile Remove="Migrations\20230108185513_productExtension2.0.Designer.cs" />
+    <Compile Remove="Migrations\20230108185705_ksdkhddkjhdooqqqwq.cs" />
+    <Compile Remove="Migrations\20230108185705_ksdkhddkjhdooqqqwq.Designer.cs" />
+    <Compile Remove="Migrations\20230108192023_qjdlkasldkjlkj.cs" />
+    <Compile Remove="Migrations\20230108192023_qjdlkasldkjlkj.Designer.cs" />
+    <Compile Remove="Migrations\20230108192202_jsdllkjlds.cs" />
+    <Compile Remove="Migrations\20230108192202_jsdllkjlds.Designer.cs" />
+    <Compile Remove="Migrations\20230108192514_ddqjlkjdkjlkjql.cs" />
+    <Compile Remove="Migrations\20230108192514_ddqjlkjdkjlkjql.Designer.cs" />
+    <Compile Remove="Migrations\20230108192642_ajlkjljlkasasssssa.cs" />
+    <Compile Remove="Migrations\20230108192642_ajlkjljlkasasssssa.Designer.cs" />
+    <Compile Remove="Migrations\20230108193027_adlajkka.cs" />
+    <Compile Remove="Migrations\20230108193027_adlajkka.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.9" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.0.0" />
+	  <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.3.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />
@@ -51,8 +92,11 @@
    
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Stripe.net" Version="41.1.0" />
   </ItemGroup>
 
   <ItemGroup>

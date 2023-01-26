@@ -2,14 +2,22 @@
 
 @{
     var userId = ViewBag.userId;
+    Layout = "";
 }
 <link href="~/css/Authorized/Authorized.css" rel="stylesheet" />
 
 <div class="wrapper d-flex align-items-stretch">
-    <partial name="_AdministrationSidebar">
+   
 
+
+
+       
         <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
-            <form method="post">
+            <form method="post"
+                  asp-controller="Administration" 
+                  asp-action="ManageUserRoles"
+                  asp-route-userId="@userId" autocomplete="off"
+                  onsubmit="return JqueryAjaxModalPost(this)">
                 <div class="card">
                     <div class="card-header">
                         <h2>Manage User Roles</h2>
@@ -36,5 +44,5 @@
                     </div>
                 </div>
             </form>
-            </div>
-          </div>
+        </div>
+</div>

@@ -47,7 +47,7 @@ namespace WebApplicationCrud
             //                      });
             //});
             services.AddControllersWithViews();
-            services.AddDbContext<CRUDdbcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CRUDdbcontext>(options => options.UseSqlServer(Configuration.GetConnectionString("Production")));
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

@@ -446,7 +446,7 @@ namespace WebApplicationCrud.Controllers
                 return View(indexProducts);
             }
 
-            return View(new IndexViewModel());
+            return View(new HomeIndexViewModel());
            
 
             

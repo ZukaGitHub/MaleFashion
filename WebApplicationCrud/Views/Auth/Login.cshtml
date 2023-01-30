@@ -82,18 +82,17 @@
                         </div>
 
                         <div class="flex-sb-m w-full p-b-48">
-                            <div class="contact100-form-checkbox">
-                                <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-                                <label class="label-checkbox100" for="ckb1">
-                                    Remember me
-                                </label>
+                            @*<div class="contact100-form-checkbox">
+            <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+            <label class="label-checkbox100" for="ckb1">
+                Remember me
+            </label>
+        </div>*@
+                            <div>
+                                <a  asp-controller="Auth" asp-action="ForgotPassword">Forgot Password?</a>
                             </div>
 
-                            <div>
-                                <a href="#" class="txt3">
-                                    Forgot Password?
-                                </a>
-                            </div>
+
                         </div>
 
                         <div class="container-login100-form-btn">
@@ -101,24 +100,38 @@
 
                             <a class="login100-form-btn" asp-action="Register" asp-controller="Auth">Sign up</a>
                         </div>
+                       
+                    </form>
+                    <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
                         <div>
-                            <a asp-action="ForgotPassword">Forgot Password?</a>
+                            Or Sign In Using
+                            @foreach (var provider in Model.ExternalLogins)
+                            {
+                                @if (provider.DisplayName == "Google")
+                                {
+                                    <button type="submit" class="btn btn-dark"
+                                            name="provider" value="@provider.Name"
+                                            title="Log in using your @provider.DisplayName account">
+                                        <i class="fa fa-google"></i>
+                                    </button>
+
+                                }
+                                else
+                                {
+                        <button type="submit" class="btn btn-dark"
+                                name="provider" value="@provider.Name"
+                                title="Log in using your @provider.DisplayName account">
+                            <i class="fa fa-facebook"></i>
+                        </button>
+                                 
+
+                                }
+                            }
                         </div>
                     </form>
                 </div>
             </div>
-            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
-                <div>
-                    @foreach (var provider in Model.ExternalLogins)
-                    {
-                        <button type="submit" class="btn btn-primary"
-                                name="provider" value="@provider.Name"
-                                title="Log in using your @provider.DisplayName account">
-                            @provider.DisplayName
-                        </button>
-                    }
-                </div>
-            </form>
+           
         </div>
 
 

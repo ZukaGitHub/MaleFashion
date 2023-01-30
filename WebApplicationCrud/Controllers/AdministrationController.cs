@@ -176,8 +176,9 @@ namespace WebApplicationCrud.Controllers
                     RoleId = role.Id,
                     RoleName = role.Name
                 };
-
-                if (await _userManager.IsInRoleAsync(user, role.Name))
+                var isinRole = await _userManager.IsInRoleAsync(user, role.Name);
+              
+                if (isinRole)
                 {
                     userRolesViewModel.IsSelected = true;
                 }

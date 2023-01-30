@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -14,14 +15,14 @@ namespace WebApplicationCrud.Controllers
         private IFileManager _fileManager;
         private CRUDdbcontext _ctx;
         private readonly ShoppingCart _shoppingCart;
-        private readonly string _sessionId;
+     
 
         public ShoppingCartController(CRUDdbcontext ctx, IFileManager fileManager, ShoppingCart shoppingCart)
         {
             _fileManager = fileManager;
             _ctx = ctx;
             _shoppingCart = shoppingCart;
-            _sessionId = HttpContext.Session.Id;
+          
           
         }
         public IActionResult Index()
@@ -59,7 +60,7 @@ namespace WebApplicationCrud.Controllers
                 ProductInfoStockAndSize = selectedProductInfoStockAndSize,
                 Amount = amount,
                 ExpiryDate = DateTime.Now.AddMinutes(20),
-                SessionId = _sessionId
+                SessionId = HttpContext.Session.Id
             }) ;
             
             if(amount<1 || amount> selectedProductInfoStockAndSize.Stock)

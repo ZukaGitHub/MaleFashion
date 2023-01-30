@@ -1,34 +1,53 @@
 ﻿@model IEnumerable<Post>
 
 
-@{ }
-
 <div class="wrapper d-flex align-items-stretch">
     <partial name="_AdministrationSidebar">
 
         <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
-            <h2>Admin Panel!</h2>
-            <a asp-controller="Blog" asp-action="Edit">
-                Add New Post
-            </a>
+               <!-- Breadcrumb Section Begin -->
+                <section class="breadcrumb-blog set-bg" data-setbg="../img/breadcrumb-bg.jpg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h2>Our Blog</h2>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Breadcrumb Section End -->
+                <!-- Blog Section Begin -->
+                <section class="blog spad">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                @foreach (var post in Model)
+                                {
 
-            <div>
-                <ul>
-                    @foreach (var post in Model)
-                    {
-        <li>
-            @post.Title
-            -
-            <a asp-controller="Blog" asp-action="Edit" asp-route-id="@post.Id">
-                Edit
-            </a>
-            -
-            <a asp-controller="Blog" asp-action="Remove" asp-route-id="@post.Id">
-                Remove
-            </a>
-        </li>
-}
-                </ul>
-            </div>
-            </div>
+
+                    <div class="blog__item">
+                        @if (post.Image != null)
+                        {
+                    <div class="blog__item__pic set-bg" data-setbg="../img/productAndBlogAddedImages/@post.Image"></div> }
+                else
+                {
+                    <div class="blog__item__pic set-bg" data-setbg="../img/Default_Blog.png"></div>}
+
+                    <div class="blog__item__text">
+                        <span><img src="~/img/icon/calendar.png" alt="">@post.Created</span>
+                        <h5>@post.Title</h5>
+                        <a asp-action="BlogDetails" asp-controller="Home" asp-route-id="@post.Id">Read More</a>
+                        <a asp-action="Edit" asp-controller="Blog" asp-route-id="@post.Id">Edit</a>
+                        <a asp-action="Remove" asp-controller="Blog" asp-route-id="@post.Id">Remove</a>
+                    </div>
+                    </div>}
+                            </div>
+
+                        </div>
+                    </div>
+                 
+                </section>
+               
+            
+    </div>
 </div>

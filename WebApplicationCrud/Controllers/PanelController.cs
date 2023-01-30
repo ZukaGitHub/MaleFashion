@@ -448,27 +448,42 @@ namespace WebApplicationCrud.Controllers
         public async Task<IActionResult> Remove(List<int> productIds)
         {
 
-            foreach (var Id in productIds)
+            try
             {
-                var currentproduct = _ctx.Products.Include(d => d.Images).SingleOrDefault(s => s.Id == Id);
 
-                if (currentproduct != null)
+
+                foreach (var Id in productIds)
                 {
-                    if (currentproduct.ProductInfos != null)
-                    {
-                        var images = currentproduct.ProductInfos.SelectMany(s => s.Images).ToList();
-                        if (images != null)
-                        {
-                            _ctx.RemoveRange(images);
-                            var imagenames = images.Select(d => d.Imagename).ToList();
-                            _filemanager.DeleteImages(imagenames);
-                        }
-                    }
-                    _ctx.Products.Remove(currentproduct);
-                    await _ctx.SaveChangesAsync();
+                    var currentproduct = _ctx.Products.Include(d => d.Images)
+                        .Include(s=>s.ProductInfos).ThenInclude(s => s.Images)
+                        .Include(s => s.Comments)
+                        
+                        .SingleOrDefault(s => s.Id == Id);
 
+                    if (currentproduct != null)
+                    {
+                        if (currentproduct.ProductInfos != null)
+                        {
+                            var images = currentproduct.ProductInfos?.SelectMany(s => s.Images).ToList();
+                            if (images != null)
+                            {
+                                _ctx.RemoveRange(images);
+                                var imagenames = images.Select(d => d.Imagename).ToList();
+                                _filemanager.DeleteImages(imagenames);
+                            }
+                        }
+
+                        _ctx.Products.Remove(currentproduct);
+                        _ctx.Entry(currentproduct).State = EntityState.Deleted;
+                        _ctx.SaveChanges();
+
+                    }
                 }
             }
+            catch(DbUpdateConcurrencyException e)
+            {
+                var ae = e.Message;
+            };
                 return RedirectToAction("Index");
             
            

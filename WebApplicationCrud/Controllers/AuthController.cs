@@ -174,7 +174,7 @@ namespace WebApplicationCrud.Controllers
 
                 // If we cannot find the user email we cannot continue
                 ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
-                ViewBag.ErrorMessage = "Please contact support on Pragim@PragimTech.com";
+                ViewBag.ErrorMessage = "Please contact support on NewsLetter";
 
                 return View("Error");
             }

@@ -179,8 +179,15 @@ namespace WebApplicationCrud.Controllers
                 return View("Error");
             }
         }
-        [HttpPost]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+
+        }
         [AllowAnonymous]
+        [HttpPost]
+      
+        
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)

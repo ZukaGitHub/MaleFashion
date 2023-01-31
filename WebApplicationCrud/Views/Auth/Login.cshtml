@@ -39,19 +39,7 @@
         <input asp-for="Password" />
     </div>
     <input type="submit" name="" value="Sign in" />
-
-
     <a asp-action="Register" asp-controller="Auth">Sign up</a>*@
-
-
-
-
-
-
-
-
-
-
     <body>
 
         <div class="limiter">
@@ -118,12 +106,12 @@
                                 }
                                 else
                                 {
-                        <button type="submit" class="btn btn-dark"
-                                name="provider" value="@provider.Name"
-                                title="Log in using your @provider.DisplayName account">
-                            <i class="fa fa-facebook"></i>
-                        </button>
-                                 
+                                    <button type="submit" class="btn btn-dark"
+                                            name="provider" value="@provider.Name"
+                                            title="Log in using your @provider.DisplayName account">
+                                        <i class="fa fa-facebook"></i>
+                                    </button>
+
 
                                 }
                             }
@@ -136,7 +124,6 @@
 
 
         <div id="dropDownSelect1"></div>
-
         <!--===============================================================================================-->
         <script src="~/LoginPage/vendor/jquery/jquery-3.2.1.min.js"></script>
         <!--===============================================================================================-->
@@ -153,7 +140,6 @@
         <script src="~/LoginPage/vendor/countdowntime/countdowntime.js"></script>
         <!--===============================================================================================-->
         <script src="~/LoginPage/js/main.js"></script>
-
     </body>
   
 

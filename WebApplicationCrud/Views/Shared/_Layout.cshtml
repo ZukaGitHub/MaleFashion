@@ -38,7 +38,7 @@
             <div class="offcanvas__links">
                 <a asp-action="Login" asp-controller="Index">Sign In</a>
 
-                @*<a href="#">FAQs</a>*@
+                <a asp-controller="Home" asp-action="FAQ">FAQs</a>
 
             </div>
             @*<div class="offcanvas__top__hover">
@@ -88,7 +88,7 @@
 
                                 }
 
-                                @*<a href="#">FAQs</a>*@
+                            <a asp-controller="Home" asp-action="FAQ">FAQs</a>
                             </div>
                             <div class="header__top__hover">
                                 @*<span>Usd <i class="arrow_carrot-down"></i></span>
@@ -112,8 +112,8 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li class="active"><a asp-action="Index" asp-controller="Home">Home</a></li>
+                        <ul id="pageNavigation">
+                            <li><a asp-action="Index" asp-controller="Home">Home</a></li>
                             <li><a asp-action="shop" asp-controller="Home">Shop</a></li>
 
 

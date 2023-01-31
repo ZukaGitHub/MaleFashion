@@ -38,6 +38,11 @@ body, html {
 	height: 100%;
 	font-family: Raleway-Regular, sans-serif;
 }
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
 
 /*---------------------------------------------*/
 a {
@@ -488,6 +493,13 @@ iframe {
   }
 }
 
+
+
+/*------------------------------------------------------------------
+[ footer ]*/
+footer {
+	margin-top: auto;
+}
 
 /*//////////////////////////////////////////////////////////////////
 [ Responsive ]*/

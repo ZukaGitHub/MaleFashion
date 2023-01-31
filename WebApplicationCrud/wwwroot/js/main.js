@@ -41,10 +41,29 @@ JqueryAjaxModalPost = form => {
 
     } catch (e) {
 
-        console.log("nigero catchia",e);
+      
     }
     return false;
 }
+
+
+
+$(document).ready(function () {
+    $("#pageNavigation [href]").each(function () {
+        if (this.href == window.location.href) {
+           
+            $(this).parent().addClass("active");
+        }
+    });
+});
+$(document).ready(function () {
+    $("#administrationNavigation [href]").each(function () {
+        if (this.href == window.location.href) {
+
+            $(this).parent().addClass("active");
+        }
+    });
+});
 /*-------------------
      SubComments
     ------------------*/

@@ -185,6 +185,10 @@ namespace WebApplicationCrud.Controllers
         {
             return View();
         }
+        public IActionResult FAQ()
+        {
+            return View();
+        }
         public IActionResult BlogDetails(int id)
         {
             var post = _repo.GetPost(id);

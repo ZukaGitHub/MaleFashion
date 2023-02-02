@@ -80,15 +80,7 @@ namespace WebApplicationCrud.Controllers
         }
         public async Task<IActionResult> EditAddress(DeliveryInfoViewModel vm)
         {
-            if (ModelState.IsValid)
-            {
-                var mappedDeliveryInfo = _mapper.Map<DeliveryInfo>(vm);
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-                user.DeliveryInfo = mappedDeliveryInfo;
-                await _ctx.SaveChangesAsync();
-
-                return View();
-            }
+           
             return RedirectToAction("Index");
 
         }
@@ -113,66 +105,84 @@ namespace WebApplicationCrud.Controllers
 
             return View();
         }
-        public async Task<IActionResult> PlaceOrder()
+        public async Task<IActionResult> PlaceOrder(DeliveryInfoViewModel vm)
         {
-
-
-
-          
-            var ShoppingCartItems = _shoppingCart.GetShoppingCartItems();
-            float orderTotal = _shoppingCart.GetShoppingCartTotal();
-            var Order = new Order();
-            var OrderDetails = new List<OrderDetails>(ShoppingCartItems.Count);
-            var OrderDetail = new OrderDetails();
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-            var productInfos = new List<ProductInfo>();
-
-
-            var sessionId = HttpContext.Session.Id;
-            var stockOnHold = _ctx.StockOnHolds.Where(s => s.SessionId == sessionId).ToList();
-            _ctx.RemoveRange(stockOnHold);
-            foreach (var Item in ShoppingCartItems)
+            if (ModelState.IsValid)
             {
+                
+                var mappedDeliveryInfo = _mapper.Map<DeliveryInfo>(vm);
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                user.DeliveryInfo = mappedDeliveryInfo;
+                var ShoppingCartItems = _shoppingCart.GetShoppingCartItems();
+                float orderTotal = _shoppingCart.GetShoppingCartTotal();
+                var Order = new Order();
+                var OrderDetails = new List<OrderDetails>(ShoppingCartItems.Count);
+                var OrderDetail = new OrderDetails();
+               
+                var productInfos = new List<ProductInfo>();
 
-                try
+
+                var sessionId = HttpContext.Session.Id;
+                var stockOnHold = _ctx.StockOnHolds.Where(s => s.SessionId == sessionId).ToList();
+                _ctx.RemoveRange(stockOnHold);
+                foreach (var Item in ShoppingCartItems)
                 {
-                    var productInfo = _ctx.ProductInfos
-                   .Where(prod => prod.ProductInfoStockAndSizes.Select(size => size.SizeName).Contains(Item.SizeText)
-                   && prod.Id == Item.ProductInfo.Id).SingleOrDefault();
-                    var productInfoStockAndSize = productInfo.ProductInfoStockAndSizes.SingleOrDefault(s => s.SizeName == Item.SizeText);
-                       productInfoStockAndSize.Stock = productInfoStockAndSize.Stock - Item.Amount;
-                    if(productInfoStockAndSize.Stock < 0)
+                  
+
+                  
+                    try
+                    {
+                        var productInfo = _ctx.ProductInfos
+                       .Where(prod => prod.ProductInfoStockAndSizes.Select(size => size.SizeName).Contains(Item.SizeText)
+                       && prod.Id == Item.ProductInfo.Id).SingleOrDefault();
+                        var productInfoStockAndSize = productInfo.ProductInfoStockAndSizes.SingleOrDefault(s => s.SizeName == Item.SizeText);
+                        productInfoStockAndSize.Stock = productInfoStockAndSize.Stock - Item.Amount;
+
+                        var product = _ctx.Products.Where(d => d.Id == Item.Product.Id).FirstOrDefault();
+                        product.TimesSold++;
+                        _ctx.Products.Update(product);
+
+                        if (productInfoStockAndSize.Stock < 0)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            productInfos.Add(productInfo);
+                        }
+
+                    }
+                    catch (NullReferenceException e)
                     {
                         continue;
                     }
-                    else
-                    {
-                        productInfos.Add(productInfo);
-                    }
 
-                }
-                catch(NullReferenceException e)
-                {
-                    continue;
+                    _ctx.UpdateRange(productInfos);
+
+                    OrderDetail.SizeText = Item.SizeText;
+                    OrderDetail.Quantity = Item.Amount;
+                    OrderDetails.Add(OrderDetail);
                 }
 
-                _ctx.UpdateRange(productInfos);
+                Order.SessionId = sessionId;
+                Order.OrderDetails = OrderDetails;
+                Order.OrderDate = DateTime.Now;
+                Order.OrderTotal = orderTotal;
+                Order.user = user;
+                Order.OrderStatus = "Received";
+                _ctx.Orders.Add(Order);
+                await _ctx.SaveChangesAsync();
+                _shoppingCart.ClearCart();
+                return RedirectToAction("OrderPlacedSuccessfully", "Home");
+               
 
-                OrderDetail.SizeText = Item.SizeText;
-                OrderDetail.Quantity = Item.Amount;              
-                OrderDetails.Add(OrderDetail);
+              
             }
+            return RedirectToAction("Index");
 
-            Order.SessionId = sessionId;
-            Order.OrderDetails = OrderDetails;
-            Order.OrderDate = DateTime.Now;
-            Order.OrderTotal = orderTotal;
-            Order.user = user;
-            Order.OrderStatus = "Received";
-            _ctx.Orders.Add(Order);    
-            await _ctx.SaveChangesAsync();
-            _shoppingCart.ClearCart();
-            return RedirectToAction("OrderPlacedSuccessfully", "Home");
+
+
+         
         }
     }
 }

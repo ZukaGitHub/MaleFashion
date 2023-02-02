@@ -6,15 +6,12 @@
 
         <div id="content" class="p-4 p-md-5 pt-5" style="width:100%">
                <!-- Breadcrumb Section Begin -->
-                <section class="breadcrumb-blog set-bg" data-setbg="../img/breadcrumb-bg.jpg">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <h2>Our Blog</h2>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+               
+
+            <div>
+                <a asp-controller="Blog" asp-action="Edit" class="btn btn-dark">Add New Blog</a>
+            </div>
+
                 <!-- Breadcrumb Section End -->
                 <!-- Blog Section Begin -->
                 <section class="blog spad">
@@ -28,17 +25,19 @@
                     <div class="blog__item">
                         @if (post.Image != null)
                         {
-                    <div class="blog__item__pic set-bg" data-setbg="../img/productAndBlogAddedImages/@post.Image"></div> }
+                    <div class="blog__item__pic set-bg" style="background-image:url(img/productAndBlogAddedImages/@post.Image)"></div> }
                 else
                 {
-                    <div class="blog__item__pic set-bg" data-setbg="../img/Default_Blog.png"></div>}
+                    <div class="blog__item__pic set-bg" style="background-image:url(img/Default_Blog.png)"></div>}
 
                     <div class="blog__item__text">
                         <span><img src="~/img/icon/calendar.png" alt="">@post.Created</span>
                         <h5>@post.Title</h5>
-                        <a asp-action="BlogDetails" asp-controller="Home" asp-route-id="@post.Id">Read More</a>
-                        <a asp-action="Edit" asp-controller="Blog" asp-route-id="@post.Id">Edit</a>
-                        <a asp-action="Remove" asp-controller="Blog" asp-route-id="@post.Id">Remove</a>
+                        <a class="hoverObject" asp-action="BlogDetails" asp-controller="Home" asp-route-id="@post.Id">Read More</a>
+                        <br />
+                        <a  class="hoverObject" asp-action="Edit" asp-controller="Blog" asp-route-id="@post.Id">Edit</a>
+                        <br />
+                        <a  class="hoverObject"asp-action="Remove" asp-controller="Blog" asp-route-id="@post.Id">Remove</a>
                     </div>
                     </div>
                     }

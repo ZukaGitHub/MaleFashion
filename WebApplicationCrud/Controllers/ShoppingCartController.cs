@@ -48,7 +48,7 @@ namespace WebApplicationCrud.Controllers
         }
         public RedirectToActionResult AddToShoppingCart(int productid, int productInfoId,string size,int amount)
         {
-            var Product = _ctx.Products.Include(s => s.ProductInfos).SingleOrDefault(p => p.Id == productid);
+            var Product = _ctx.Products.Include(s => s.ProductInfos).ThenInclude(s=>s.ProductInfoStockAndSizes).Include(s=>s.Images).SingleOrDefault(p => p.Id == productid);
             var selectedProduct = Product.ProductInfos.FirstOrDefault(p => p.ProductId == productid && p.Id == productInfoId);
             var selectedProductInfoStockAndSize = selectedProduct.ProductInfoStockAndSizes.SingleOrDefault(s => s.SizeName == size);
 

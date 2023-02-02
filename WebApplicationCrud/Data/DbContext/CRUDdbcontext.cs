@@ -84,7 +84,7 @@ namespace WebApplicationCrud.Data.DbContext
                 );
             builder.Entity<OrderDetails>().
                 HasOne(s => s.ProductInfo).WithMany(s=>s.OrderDetails)   
-                .HasForeignKey(s=>s.ProductInfoId)
+               
                 .OnDelete(DeleteBehavior.NoAction);
            
             base.OnModelCreating(builder);

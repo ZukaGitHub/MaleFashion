@@ -321,6 +321,7 @@ namespace WebApplicationCrud.Controllers
                         Price = vm.Products[i].Price,
                         CategoryName = vm.Products[i].Category,
                         ProductInfos = productInfos,
+                        TimeAdded=DateTime.Now,
                         SalePercentage = int.Parse(vm.Products[i].SalePercentage),
                         NewPrice = (vm.Products[i].Price * (100 - salepercentage) / 100),
                         Tags = Tags,
@@ -393,6 +394,26 @@ namespace WebApplicationCrud.Controllers
             }
             return View();
         }
+
+
+        public IActionResult ChangeOrderState(int[] ids,string state)
+        {
+            var orders = _ctx.Orders.ToList();
+
+            var ordersToChange = orders.Where(order => ids.Any(id => id == order.Id)).ToList();
+            ordersToChange.ForEach(order=> { 
+            order.OrderStatus=state;
+            });
+            _ctx.Orders.UpdateRange(ordersToChange);
+            _ctx.SaveChanges();
+
+            return RedirectToAction("OrderList");
+        }
+        public IActionResult RemoveOrders()
+        {
+
+            return RedirectToAction("OrderList");
+        } 
         public List<ProductViewModel> MapProducts(List<Product> products)
         {
             var mappedProducts = new List<ProductViewModel>();

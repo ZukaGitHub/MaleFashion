@@ -47,8 +47,8 @@
                                 {
                                     <tr>
                                         <td class="product__cart__item">
-                                            <div class="product__cart__item__pic">
-                                                <img src="img/shopping-cart/cart-1.jpg" alt="">
+                                            <div style="max-width:200px;max-height:200px;" class="product__cart__item__pic">
+                                                <img style="max-width:200px; max-height:200px;" src="~/img/productAndBlogAddedImages/@line.ProductInfo.ProductInfoThumbnailName" alt="">
                                             </div>
                                             <div class="product__cart__item__text">
                                                 <h6>@line.Product.Name</h6>
@@ -95,7 +95,7 @@
                             <li>Subtotal <span>@Model.ShoppingCartTotal</span></li>
                             <li>Total <span>@Model.ShoppingCartTotal</span></li>
                         </ul>
-                        <a href="#" class="primary-btn">Proceed to checkout</a>
+                        <a class="btn btn-dark" style="color:white" asp-action="Index" asp-controller="CheckOut">Proceed to checkout</a>
                     </div>
                 </div>
             </div>

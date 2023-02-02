@@ -25,8 +25,8 @@
                             {
                                 <tr>
                                     <td class="product__cart__item">
-                                        <div class="product__cart__item__pic">
-                                            <img src="img/shopping-cart/cart-1.jpg" alt="">
+                                        <div style="max-width:200px;max-height:200px;" class="product__cart__item__pic">
+                                            <img style="max-width:200px; max-height:200px;" src="~/img/productAndBlogAddedImages/@line.ProductInfo.ProductInfoThumbnailName" alt="">
                                         </div>
                                         <div class="product__cart__item__text">
                                             <h6>@line.Product.Name</h6>
@@ -70,30 +70,30 @@
             </div>
 
             <div class="deliveryInfo">
-                <form asp-controller="CheckOut" asp-action="PlaceOrder">
+                <form asp-controller="CheckOut"  asp-action="PlaceOrder">
                     <div>
                         <label>Country</label>
-                        <input class="form-control ajaxvalue" required type="text" value="@Model.DeliveryInfo.Country" />
+                        <input class="form-control ajaxvalue" name="vm.Country" required type="text" value="@Model.DeliveryInfo.Country" />
                     </div>
                     <div>
                         <label>City</label>
-                        <input type="text" required class="form-control ajaxvalue" value="@Model.DeliveryInfo.City" />
+                        <input type="text" required class="form-control ajaxvalue" name="vm.City" value="@Model.DeliveryInfo.City" />
                     </div>
                     <div>
                         <label>Street</label>
-                        <input type="text" required class="form-control ajaxvalue" value="@Model.DeliveryInfo.Street" />
+                        <input type="text" required class="form-control ajaxvalue" name="vm.Street" value="@Model.DeliveryInfo.Street" />
                     </div>
                     <div>
                         <label>Address</label>
-                        <input type="text" required class="form-control ajaxvalue" value="@Model.DeliveryInfo.Address" />
+                        <input type="text" required class="form-control ajaxvalue" name="vm.Address" value="@Model.DeliveryInfo.Address" />
                     </div>
                     <div>
                         <label>Address2</label>
-                        <input type="text" class="form-control ajaxvalue " value="@Model.DeliveryInfo.Address2" />
+                        <input type="text" class="form-control ajaxvalue " name="vm.Address2" value="@Model.DeliveryInfo.Address2" />
                     </div>
                     <div>
                         <label>Additional Description</label>
-                        <input type="text" required class="form-control ajaxvalue" value="@Model.DeliveryInfo.AdditionalDescription" />
+                        <input type="text" required class="form-control ajaxvalue" name="vm.AdditionalDescription" value="@Model.DeliveryInfo.AdditionalDescription" />
                     </div>
 
                     <span style="display:block" onclick="editAddress" class="btn btn-primary mt-2">Edit Address</span>
@@ -134,7 +134,7 @@
                 url: "EditAddress",
                 type: "POST",
                 data: {model},
-                success:
+               
             })
         }
 

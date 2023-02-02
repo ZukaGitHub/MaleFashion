@@ -63,6 +63,8 @@ namespace WebApplicationCrud.Controllers
                 Title = vm.Title,
                 Body = vm.Body,
                 Description = vm.Description,
+                Qoute=vm.Quote,
+                QouteAuthor=vm.QuoteAuthor,
                 Category = vm.Category,
                 Tags = vm.Tags,
             };

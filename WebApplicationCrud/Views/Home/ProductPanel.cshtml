@@ -194,9 +194,9 @@
                             }
                         </div>
 
-                        <div class="product__details__option__quantity">
+                        <div class="product__details__option__quantity mt-3">
                             <span>Amount:</span>
-                            <input name="quantity" type="number" min="1" value="1"/>
+                            <input id="amount" class="form-control"  name="quantity" type="number" min="1" value="1"/>
                         </div>
                         </div>
                         @*add to cart-----------------------------------------------*@
@@ -428,17 +428,21 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
+
+      
   
         $('#addToCart').on("click", function () {
             var productId =@Model.Id;
             
             var productInfoId = $("input[name=color]:checked", '.product__details__option__color')[0].dataset.productinfoid;
              
-            var productAmount = $("input[name=quantity]", '.product__details__option__quantity').val;
+            var productAmount = $("input[name=quantity]", '.product__details__option__quantity');
+        
+        
             var selectedSize = $("input[name=size]:checked", '.product__details__option__size')[0].id;
-            console.log(selectedSize);
+        
            
-            $('#addToCart').attr('href', '/ShoppingCart/AddToShoppingCart/?productId=' + productId + '&productInfoId=' + productInfoId + '&size=' + selectedSize + '&amount' + productAmount);
+            $('#addToCart').attr('href', '/ShoppingCart/AddToShoppingCart/?productId=' + productId + '&productInfoId=' + productInfoId + '&size=' + selectedSize + '&amount=' + productAmount[0].value);
         })
        
         $(".big_image").imagezoomsl({
@@ -487,10 +491,7 @@
                 }
             }
 
-        })
-        $(".sizes").on("click", function (e){
-
-        }
+        }),
         $(".rate").on("click", function (e) {
             console.log("e",e)
             if (e.target.nodeName === 'INPUT') return;

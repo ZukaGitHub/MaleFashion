@@ -51,14 +51,14 @@ namespace WebApplicationCrud.Controllers
             var products = _ctx.Products?
                  .Include(prod => prod.ProductInfos)?.ThenInclude(img => img.Images)?
                  .Include(prod => prod.ProductInfos)?.ThenInclude(stock => stock.ProductInfoStockAndSizes)?
-                 .Include(comment => comment.Comments)?.ThenInclude(subcomment=>subcomment.SubComments)?
+                 .Include(comment => comment.Comments)?.ThenInclude(subcomment => subcomment.SubComments)?
                  .Include(x => x.Tags)?.ToList();
 
 
             var stockOnHold = _ctx.StockOnHolds.Where(x => x.ExpiryDate < DateTime.Now).ToList();
             if (stockOnHold.Count > 0)
             {
-                var stockToReturn = _ctx.ProductInfoStockAndSize.Where(prodinfoss => stockOnHold.Any(soh => soh.ProductInfoStockAndSizeId == prodinfoss.Id));
+                var stockToReturn = _ctx.ProductInfoStockAndSize.ToList().Where(prodinfoss => stockOnHold.Any(soh => soh.ProductInfoStockAndSizeId == prodinfoss.Id));
                 foreach(var stock in stockToReturn)
                 {
                     stock.Stock = stock.Stock + stockOnHold.FirstOrDefault(soh => soh.ProductInfoStockAndSizeId == stock.Id).Amount;
@@ -68,15 +68,15 @@ namespace WebApplicationCrud.Controllers
             }
 
 
-            var product=products?.FirstOrDefault(x => x.Id == id);
 
+            var product = products.FirstOrDefault(s => s.Id == id);
             if (product == null)
             {
 
                 return RedirectToAction("Shop");
 
             }
-            var relatedProducts = products?.Where(s => s.CategoryName == product.CategoryName).Take(4).ToList();
+            var relatedProducts =products.Where(s => s.CategoryName == product.CategoryName).Take(4).ToList();
             var relatedProductsDict = new Dictionary<int, int>();
             var mappedRelatedProducts = new List<ProductViewModel>();
             if (relatedProducts != null && relatedProducts.Count>0)
@@ -150,15 +150,15 @@ namespace WebApplicationCrud.Controllers
 
             if (mappedProduct.ProductInfos != null)
             {
-                for(int i=0; i< mappedProduct.ProductInfos.Count();i++)
+                for (int i = 0; i < mappedProduct.ProductInfos.Count(); i++)
                 {
                     mappedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(product.ProductInfos[i].ProductInfoStockAndSizes);
-             
-                
+
+
                 }
 
 
-                mappedProduct.Images = mappedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d=>d)).ToList();
+                mappedProduct.Images = mappedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d => d)).ToList();
             }
 
             mappedProduct.RelatedProducts = mappedRelatedProducts;
@@ -430,18 +430,17 @@ namespace WebApplicationCrud.Controllers
                 .ThenInclude(d=>d.Images).ToList()) ?? new List<Product>();
             if(products!=null && products.Count > 0)
             {
-                var hotSale = MapProduct(products.OrderByDescending(s => s.SalePercentage)?.First());
-            
-                var hotSlaes = MapProducts(products.OrderByDescending(s => s.SalePercentage)?.Take(8).ToList());
-                var newArrivals=MapProducts(products.OrderByDescending(s=>s.TimeAdded)?.Take(8).ToList());
-                var bestSellers=MapProducts(products.OrderByDescending(s=>s.TimesSold)?.Take(8).ToList());
+                var hotSale = MapProduct(products.OrderByDescending(s => s.SalePercentage)?.First());          
+                var hotSales = MapProducts(products.OrderByDescending(s => s.SalePercentage)?.Take(8).ToList());
+                var newArrivals = MapProducts(products.OrderByDescending(s=>s.TimeAdded)?.Take(8).ToList());
+                var bestSellers = MapProducts(products.OrderByDescending(s=>s.TimesSold)?.Take(8).ToList());
                 
                 var indexProducts = new HomeIndexViewModel()
                 {
                    BestSellers=bestSellers.Count()>0 ? bestSellers : null,
                    HotSale= hotSale ?? null,  
                    NewArrivals=newArrivals.Count()>0 ? newArrivals :null,
-                   HotSales=hotSlaes.Count()>0 ? hotSlaes :null,
+                   HotSales=hotSales.Count()>0 ? hotSales :null,
 
                    
 

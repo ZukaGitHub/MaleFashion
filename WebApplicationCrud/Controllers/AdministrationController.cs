@@ -552,7 +552,8 @@ namespace WebApplicationCrud.Controllers
 
             if (user != null)
             {
-                var orders = _ctx.Orders.Include(s => s.OrderDetails).Include(s => s.user).Where(s => s.user == user).ToList();
+                var orders = _ctx.Orders.Include(s => s.OrderDetails).Include(s => s.user).Where(s => s.user == user).Include(s=>s.user.DeliveryInfo).
+                    ToList();
                 return View(orders);
             }
          

@@ -16,7 +16,7 @@
             <partial name="_AdministrationSidebar">
 
                 <!-- Page Content  -->
-                <div id="content" class="p-4 p-md-5 pt-5 container">
+                <div id="content" class="p-4 p-md-5 pt-5 container-fluid">
                     <h2 class="mb-4">List Of Products</h2>
                     <div id="toolbar">
                         <button class="btn btn-danger"
@@ -106,22 +106,22 @@
                                     @OrderDetail.Quantity
                                 </td>
                                 <td>
-                                    @Order.user?.DeliveryInfo.Country
+                                    @Order.user?.DeliveryInfo?.Country
                                 </td>
                                 <td>
-                                    @Order.user?.DeliveryInfo.City
+                                    @Order.user?.DeliveryInfo?.City
                                 </td>
                                 <td>
-                                    @Order.user?.DeliveryInfo.Street
+                                    @Order.user?.DeliveryInfo?.Street
                                 </td>
                                 <td>
-                                    @Order.user?.DeliveryInfo.Address
+                                    @Order.user?.DeliveryInfo?.Address
                                 </td>
                                 <td>
-                                    @Order.user?.DeliveryInfo.Address2
+                                    @Order.user?.DeliveryInfo?.Address2
                                 </td>
                                 <td>
-                                    @Order.user?.DeliveryInfo.AdditionalDescription
+                                    @Order.user?.DeliveryInfo?.AdditionalDescription
                                 </td>
                                 <td>
                                     @Order.OrderDate
@@ -157,11 +157,12 @@
                 return row
 
             })
-            console.log(rows);
+          
             let formdata = new FormData()
             for (let i = 0; i < rows.length; i++) {
                 formdata.append("Ids[" + i + "]", rows[i].Id)
-                rows[i].State=e.Id
+                rows[i].State = e.Id
+                formdata.append("State", e.target.innerText)
              
             }
             axios({

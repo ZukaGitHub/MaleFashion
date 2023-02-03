@@ -176,11 +176,30 @@
                                 <h6>@bestSeller.Name</h6>
                                 <a href="#" class="add-cart">+ Add To Cart</a>
                                 <div class="rating">
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
+                                    @if (bestSeller.StarRate.HasValue)
+                                    {
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            if (i < bestSeller.StarRate)
+                                            {
+                                                <i class="fa fa-star"></i>
+
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-star-o"></i>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    { <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+
+                                    }
                                 </div>
                                 <h5>@bestSeller.Price</h5>
                                 <div class="product__color__select">
@@ -203,7 +222,7 @@
                 {
                     foreach (var newArrival in Model.NewArrivals)
                     {
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+            <div style="display:none"class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="img/productAndBlogAddedImages/@newArrival.Images[0]">
                         <span class="label">New</span>
@@ -228,11 +247,30 @@
                         <h6>@newArrival.Name</h6>
                         <a href="#" class="add-cart">+ Add To Cart</a>
                         <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
+                            @if (newArrival.StarRate.HasValue)
+                            {
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    if (i < newArrival.StarRate)
+                                    {
+                                        <i class="fa fa-star"></i>
+
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-star-o"></i>
+
+                                    }
+                                }
+                            }
+                            else
+                            { <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+
+                            }
                         </div>
                         <h5>@newArrival.Price</h5>
                         <div class="product__color__select">
@@ -256,7 +294,7 @@
                 {
                     foreach (var hotSales in Model.HotSales)
                     {
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+                    <div style="display:none" class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
                         <div class="product__item">
                             <div class="product__item__pic set-bg" data-setbg="img/productAndBlogAddedImages/@hotSales.Images[0]">
                                 <ul class="product__hover">
@@ -280,11 +318,30 @@
                                 <h6>@hotSales.Name</h6>
                                 <a href="#" class="add-cart">+ Add To Cart</a>
                                 <div class="rating">
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
+                                    @if (hotSales.StarRate.HasValue)
+                                    {
+                                        @for (int i = 0; i < 5; i++)
+                                        {
+                                            if (i < hotSales.StarRate)
+                                            {
+                                                <i class="fa fa-star"></i>
+
+                                            }
+                                            else
+                                            {
+                                                <i class="fa fa-star-o"></i>
+
+                                            }
+                                        }
+                                    }
+                                    else
+                                    { <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+                                        <i class="fa fa-star-o"></i>
+
+                                    }
                                 </div>
                                 <h5>@hotSales.Price</h5>
                                 <div class="product__color__select">

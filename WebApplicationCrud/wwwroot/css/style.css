@@ -1769,6 +1769,7 @@ ol {
 .product__details__option__size {
 	display: inline-block;
 	margin-right: 50px;
+
 }
 
 .product__details__option__size span {
@@ -1789,10 +1790,17 @@ ol {
 	margin-right: 5px;
 	cursor: pointer;
 }
+
+.product__details__option__quantity {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 .product__details__option__quantity input {
-	display:flex;
-	justify-content:center;
-	align-items:center;
+	display: flex;
+	justify-content: center;
+	width:100px;
+	align-items: center;
 }
 
 .product__details__option__size label:hover {

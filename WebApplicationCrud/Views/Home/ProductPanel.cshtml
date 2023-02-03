@@ -161,13 +161,13 @@
                             @*size---------------------------------------------------*@
                             <div class="product__details__option__size">
                                 <span>Size:</span>
-\
+                                \
                                 @for (int i = 0; i < Model.SizeNames.Count; i++)
                                 {
 
 
-                                        <input type="radio" name="size" id="@Model.SizeNames[i]">
-                                    
+                                    <input type="radio" name="size" id="@Model.SizeNames[i]">
+
                                     <label class="sizes" for="@Model.SizeNames[i]">
                                         @Model.SizeNames[i]
                                     </label>
@@ -175,29 +175,27 @@
 
 
                                 }
-                            
+
                             </div>
                             @*COlors----------------------------------------------------*@
-                        <div class="product__details__option__color">
-                            <span>Color:</span>
-                            @for (int i = 0; i < Model.ProductInfos.Count; i++)
-                            {
+                            <div class="product__details__option__color">
+                                <span>Color:</span>
+                                @for (int i = 0; i < Model.ProductInfos.Count; i++)
+                                {
 
-                                <input class="c-1" name="color"  data-sizes="" data-productInfoId="@Model.ProductInfos[i].Id"
-                                       type="radio" id="@Model.ProductInfos[i].Color">
-                                <label
-                                       
-                                       data-sizes=""
-                                       style="background-color:@Model.ProductInfos[i].Color"
-                                       for="@Model.ProductInfos[i].Color">
-                                </label>
-                            }
-                        </div>
-
-                        <div class="product__details__option__quantity mt-3">
-                            <span>Amount:</span>
-                            <input id="amount" class="form-control"  name="quantity" type="number" min="1" value="1"/>
-                        </div>
+                                    <input class="c-1" name="color" data-sizes="" data-productInfoId="@Model.ProductInfos[i].Id"
+                                           type="radio" id="@Model.ProductInfos[i].Color">
+                                    <label data-sizes=""
+                                           style="background-color:@Model.ProductInfos[i].Color"
+                                           for="@Model.ProductInfos[i].Color">
+                                    </label>
+                                }
+                            </div>
+                           
+                            <div class="product__details__option__quantity mt-3">
+                                <span>Amount:</span>
+                                <input id="amount" class="form-control" name="quantity" type="number" min="1" value="1" />
+                            </div>
                         </div>
                         @*add to cart-----------------------------------------------*@
                         <div class="product__details__cart__option">
@@ -334,7 +332,7 @@
     {
 
         <div>
-            <a class="font-weight-bold" asp-action="Login" asp-controller="Auth"> Sign In </a> <p class="note">to comment on this awesome post!</p>
+            <a class="font-weight-bold btn btn-danger" asp-action="Login"  asp-controller="Auth"> Sign In </a> <p class="note">to comment on this awesome post!</p>
 
         </div>
     }
@@ -381,7 +379,7 @@
                         else
                         {
                             <div>
-                                <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this post
+                                <a asp-action="Login" class="btn btn-danger"  asp-controller="Auth"> Sign In </a> to comment on this post
 
                             </div>
 
@@ -398,7 +396,7 @@
                 else
                 {
                     <div>
-                        <a asp-action="Login" asp-controller="Auth"> Sign In </a> to comment on this post
+                        <a asp-action="Login" class="btn btn-danger"  asp-controller="Auth"> Sign In </a> to comment on this post
 
                     </div>
 

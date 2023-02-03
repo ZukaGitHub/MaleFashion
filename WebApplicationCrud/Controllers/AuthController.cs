@@ -43,10 +43,17 @@ namespace WebApplicationCrud.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel vm,string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel vm, string returnUrl)
         {
-            await _signInManager.PasswordSignInAsync(vm.UserName, vm.Password, false, false);
-            return RedirectToAction("Index", "Home");
+           var result= await _signInManager.PasswordSignInAsync(vm.UserName, vm.Password, false, false);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ModelState.AddModelError(string.Empty,"Login Attempt Failed");
+            vm.ExternalLogins= (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            return View(vm);
+            
         }
         //[HttpPost]
         //public async Task<IActionResult> Login(LoginViewModel vm, string returnUrl)
@@ -64,9 +71,9 @@ namespace WebApplicationCrud.Controllers
         //            ModelState.AddModelError(string.Empty, "Email not confirmed yet");
         //            return View(vm);
         //        }
-        //              change below value to true and lockout will be enabled
-        //        var result = await _signInManager.PasswordSignInAsync(vm.Email,
-        //                                vm.Password, vm.RememberMe, false);
+
+        //  var result = await _signInManager.PasswordSignInAsync(vm.Email,
+        //                          vm.Password, vm.RememberMe, false);
 
         //        if (result.Succeeded)
         //        {
@@ -79,18 +86,18 @@ namespace WebApplicationCrud.Controllers
         //                return RedirectToAction("index", "home");
         //            }
         //        }
-    //      if (result.IsLockedOut)
-    //    {
-    //        return View("AccountLocked");
-    //    }
+        //        if (result.IsLockedOut)
+        //        {
+        //            return View("AccountLocked");
+        //        }
 
-    //        ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
-    //    }
+        //        ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
+        //    }
 
-    //    return View(vm);
-    //}
+        //    return View(vm);
+        //}
 
-    [AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {

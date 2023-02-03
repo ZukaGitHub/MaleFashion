@@ -21,7 +21,7 @@ namespace WebApplicationCrud.ViewModels
 
         public string ReturnUrl { get; set; }
 
-        // AuthenticationScheme is in Microsoft.AspNetCore.Authentication namespace
+       
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string UserName { get; set; }

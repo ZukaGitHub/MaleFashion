@@ -219,7 +219,7 @@
     }
     $('#removerow').on('click', function () {
         let formdata = new FormData()
-        formdata.append("productIds["+ 0 +"]", this.TempId)
+        formdata.append("productIds["+ 0 +"]", TempId)
 
         axios({
             method: 'post',

@@ -14,11 +14,14 @@ namespace WebApplicationCrud.ViewModels.PanelVMs
     public class ProductImages
     {
         public List<RoomImagesVm> RoomImagesVms { get; set; }
+       
     }
     public class RoomImagesVm
     {
         public int ProductIndex { get; set; }
+        public List<string> PreviousImages { get; set; }
         public List<IFormFile> RoomImages { get; set; }
         public int? ThumbnailIndex { get; set; }
+        public int? ThumbnailEditIndex { get; set; }
     }
 }

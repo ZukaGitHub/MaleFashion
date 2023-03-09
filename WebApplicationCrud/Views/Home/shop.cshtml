@@ -67,10 +67,10 @@
                                                         @foreach (var category in Model.Categories)
                                                         {
                                                             <li>
-                                                                <input id="@category" type="checkbox"
+                                                                <input id="@category+'cat'" type="checkbox"
                                                                        class="checkbox_selector category"
                                                                        value="@category" />
-                                                                <label for="@category">@category</label>
+                                                                <label for="@category+'cat'">@category</label>
 
                                                             </li>
                                                         }
@@ -220,12 +220,15 @@
                         </div>
                     </div>
 
+                
 
+                        <div id="ProductList">
+                            @await Html.PartialAsync("_ProductListing", Model.products)
+                        </div>
+                   
                     @*normal Shop*@
 
-                    <div id="ProductList">
-                        @await Html.PartialAsync("_ProductListing", Model.products)
-                    </div>
+                 
                     @*Pagination-----------------------------*@
                     <div class="row">
                         <div class="col-lg-12">
@@ -254,6 +257,7 @@
 
 </body>
 
+
 <script>
 
 
@@ -281,7 +285,10 @@
         });
 
         function filter_data() {
-
+            
+            $(".loader-overlay").show();
+           
+           
             var brandNames = get_filter("brand");
             var categoryNames = get_filter("category");
             var tagNames = get_filter("tag");
@@ -312,6 +319,8 @@
               
                 success: function (result) {
                     $("#ProductList").html(result);
+                    pagination();
+                    $(".loader-overlay").hide();
                 }
             });
         };

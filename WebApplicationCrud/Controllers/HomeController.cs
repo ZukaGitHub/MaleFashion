@@ -83,6 +83,10 @@ namespace WebApplicationCrud.Controllers
             {
                 foreach (var relatedProduct in relatedProducts)
                 {
+                    if (relatedProduct.Id == id)
+                    {
+                        continue;
+                    }
                     if (relatedProduct.Tags.Intersect(product.Tags)!=null && relatedProduct.Tags.Intersect(product.Tags).Count()>0)
                     {
                         relatedProductsDict.Add(relatedProduct.Id, relatedProduct.Tags.Intersect(product.Tags).Count());
@@ -110,26 +114,7 @@ namespace WebApplicationCrud.Controllers
 
                 }
                 mappedRelatedProducts = MapProducts(relatedProducts);
-                //foreach (var prod in relatedProducts)
-                //{
-                //    var mappedRelatedProduct = _mapper.Map<ProductViewModel>(prod);
-
-                //    if (mappedRelatedProduct.ProductInfos != null)
-                //    {
-                //        for (int i = 0; i < mappedRelatedProduct.ProductInfos.Count(); i++)
-                //        {
-                //            mappedRelatedProduct.ProductInfos[i].Stock = _mapper.Map<List<StockVm>>(prod.ProductInfos[i].ProductInfoStockAndSizes);
-
-
-                //        }
-
-
-                //        mappedRelatedProduct.Images = mappedRelatedProduct.ProductInfos.SelectMany(s => s.ImageNames.Select(d => d)).ToList();
-                //    }
-
-                //    mappedRelatedProducts.Add(mappedRelatedProduct);
-
-                //}
+               
             }
 
            
@@ -363,7 +348,7 @@ namespace WebApplicationCrud.Controllers
                 {
                     products = mappedProducts,                   
                     Categories = mappedProducts?.Select(s=>s.CategoryName)?.ToList(),
-                    Brands = mappedProducts?.Select(b=>b.BrandName)?.ToList(),
+                    Brands = mappedProducts?.Select(b=>b.BrandName)?.Distinct().ToList(),
                     TextSizes =sizes?.Select(s=>s.Name)?.ToList(),                              
                     Tags = TopTagNames,
                     MinPrice=mappedProducts.OrderBy(s=>s.Price).Select(s=>s.Price).FirstOrDefault(),
@@ -431,9 +416,9 @@ namespace WebApplicationCrud.Controllers
             if(products!=null && products.Count > 0)
             {
                 var hotSale = MapProduct(products.OrderByDescending(s => s.SalePercentage)?.First());          
-                var hotSales = MapProducts(products.OrderByDescending(s => s.SalePercentage)?.Take(8).ToList());
-                var newArrivals = MapProducts(products.OrderByDescending(s=>s.TimeAdded)?.Take(8).ToList());
-                var bestSellers = MapProducts(products.OrderByDescending(s=>s.TimesSold)?.Take(8).ToList());
+                var hotSales = MapProducts(products.OrderByDescending(s => s.SalePercentage)?.Take(4).ToList());
+                var newArrivals = MapProducts(products.OrderByDescending(s=>s.TimeAdded)?.Take(4).ToList());
+                var bestSellers = MapProducts(products.OrderByDescending(s=>s.TimesSold)?.Take(4).ToList());
                 
                 var indexProducts = new HomeIndexViewModel()
                 {

@@ -81,6 +81,9 @@ namespace WebApplicationCrud.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageUserClaims(string userId)
         {
+
+
+
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)

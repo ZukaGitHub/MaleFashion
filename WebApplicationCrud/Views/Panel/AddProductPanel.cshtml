@@ -135,7 +135,7 @@
                                         <td>
                                             @*v-if="productInfo.Sizes.length>0"*@
                                             <div>
-                                                @*Computed Properties biiiiiiitch*@
+                                               
                                                 <div>
                                                     <div v-for="(sizes,indexxx) in productInfo.Sizes">
 
@@ -181,12 +181,14 @@
                                                     <span @@click="RemoveImage(this.event,index,Index,Indexx)">X</span>
                                                 </div>
                                                 <div class="UploadedImage" v-for="(Image,index) in productInfo.dropzoneFilesUrl">
-                                                    <input type="radio"  v-on:click="Thumbnail(index,this.event)" name=thumbnailSelector :value=index v-model="productInfo.Thumbnail" />
+                                                    @*<span class="btn btn-danger" @@click="RemoveImage()">X</span>*@
+                                                    <input type="radio"  @*v-on:click="Thumbnail(index,this.event)"*@   :name="Index+product+Indexx"   :value=index v-model="productInfo.Thumbnail" />
                                                     <img :src="Image" />
 
                                                 </div>
                                                 <div v-if="productInfo.ImageNames.length>0" class="UploadedImage" v-for="(Image,index) in productInfo.ImageNames">
-                                                    <input type="radio" v-on:click="ThumbnailName(ImageName,this.event)"  name=thumbnailSelectorName :value=index v-model="productInfo.ThumbnailEditIndex" />
+                                                    @*<span class="btn btn-danger" @@click="RemoveImage()">X</span>*@
+                                                    <input type="radio" @*v-on:click="ThumbnailName(ImageName,this.event)"*@  :name="Index+product+Indexx"  :value=index v-model="productInfo.ThumbnailEditIndex" />
                                                     <img :src="Image" />
 
                                                 </div>
@@ -235,7 +237,7 @@
                             stock: [],
                             dropzoneFiles: [],
                             dropzoneFilesUrl: [],                        
-                            ImageNames: [],
+                           
                             ThumbnailEditIndex:''
                         }
                     ],
@@ -252,8 +254,14 @@
                     for (let j = 0; j < this.Products[i].ProductInfos.length; j++) {
                         formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].ProductIndex", i)
                         formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].ThumbnailIndex", this.Products[i].ProductInfos[j].Thumbnail)
+                        formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].ThumbnailEditIndex", this.Products[i].ProductInfos[j].ThumbnailEditIndex)
                         for (let g = 0; g < this.Products[i].ProductInfos[j].dropzoneFiles.length; g++) {
                             formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].RoomImages", this.Products[i].ProductInfos[j].dropzoneFiles[g])
+                        }
+                        if (this.Products[i].ProductInfos[j].ImageNames != null) {
+                            for (let g = 0; g < this.Products[i].ProductInfos[j].ImageNames.length; g++) {
+                                formdata.append("productImages.ProductImages[" + i + "].RoomImagesVms[" + j + "].PreviousImages", this.Products[i].ProductInfos[j].ImageNames[g])
+                            }
                         }
 
                     }
@@ -265,10 +273,12 @@
                     data: formdata
 
                 })
-                    .then(function (response) {
+                    .then(function (response) {                    
+                        location.reload();
                         alert("product was added");
                     })
                     .catch(function (error) {
+                        alert("error occured")
                         console.log(error.response.data);
                     });
 
@@ -290,7 +300,7 @@
                         console.log("products", this.Products)
                         
                         this.Products[0].Brand = product.Brand
-                        this.Products[0].id = product.id
+                        this.Products[0].id = product.Id
                         this.Products[0].price=product.Price
                         this.Products[0].name = product.Name
                         this.Products[0].Category = product.Category
@@ -301,28 +311,54 @@
                         }
                         this.Products[0].Tagnames = Tagnames
                         const und = undefined;
-                      
-                        for (let i = 0; i < product.ProductInfos.length; i++) {
-                            this.Products[0].ProductInfos[i] = {
-                                Color: product.ProductInfos[i].Color,
-                                Sizes: [],
-                                stock: [],
-                                ImageNames:[]
 
-                            };
+                        if (product.ProductInfos.length > 0) {
+                         
+                        }
+                        for (let i = 0; i < product.ProductInfos.length; i++) {
+
+                            if (i == 0) {
+                                this.Products[0].ProductInfos[0] = {
+                                    Color: product.ProductInfos[i].Color,
+                                    Sizes: [],
+                                    stock: [],
+                                    dropzoneFiles: [],
+                                    dropzoneFilesUrl: [],
+                                    ThumbnailEditIndex: '',
+                                    Thumbnail: '',
+                                    ImageNames: []
+
+                                };
+                            }
+                            else {
+
+
+
+                                this.Products[0].ProductInfos.push({
+                                    Color: product.ProductInfos[i].Color,
+                                    Sizes: [],
+                                    stock: [],
+                                    dropzoneFiles: [],
+                                    dropzoneFilesUrl: [],
+                                    ThumbnailEditIndex: '',
+                                    Thumbnail: '',
+                                    ImageNames: []
+
+                                });
+                            }
                             
                             product.ProductInfos[i].StockAndSize
                                 .forEach((SizeAndStock) => {
                                     this.Products[0].ProductInfos[i].Sizes.push(SizeAndStock.SizeName)
                                     this.Products[0].ProductInfos[i].stock.push({
                                         SizeName: SizeAndStock.SizeName,
-                                        number: SizeAndStock.stock
+                                        number: SizeAndStock.Stock
                                     })
                                 })
                            
                             product.ProductInfos[i].ImageNames.forEach((imageName) => {
 
-                                this.Products[0].ProductInfos[i].ImageNames.push(imageName)
+                                this.Products[0].ProductInfos[i].ImageNames.push("../img/productAndBlogAddedImages/"+imageName)
                             })
                             
 
@@ -413,10 +449,7 @@
                 }
                 else {
 
-
-
-
-                    for (let i = 0; i < this.ProductInfos[ProdInfoIndex]
+                    for (let i = 0; i < this.Products[ProdInfoIndex]
                         .ProductInfos[ProdDetailsIndex].stock.length; i++) {
                         if (this.Products[ProdInfoIndex]
                             .ProductInfos[ProdDetailsIndex].stock[i].SizeName == event.target.value) {
@@ -434,25 +467,25 @@
 
 
             },
-            Thumbnail(index, e) {
-                var radio = document.querySelector('input[type=radio][name=thumbnailSelectorName]:checked');
-                if (radio != null) {
-                    radio.checked = false;
-                }
-                this.Offer.Thumbnail = index;
-            },
-            ThumbnailName(name, e) {
+            //Thumbnail(index, e) {
+            //    var radio = document.querySelector('input[type=radio][name=thumbnailSelectorName]:checked');
+            //    if (radio != null) {
+            //        radio.checked = false;
+            //    }
+            //    this.Offer.Thumbnail = index;
+            //},
+            ////ThumbnailName(name, e) {
 
-                console.log(e)
-                var radio = document.querySelector('input[type=radio][name=thumbnailSelector]:checked');
-                console.log(radio)
-                if (radio != null) {
-                    radio.checked = false;
-                }
+            ////    console.log(e)
+            ////    var radio = document.querySelector('input[type=radio][name=thumbnailSelector]:checked');
+            ////    console.log(radio)
+            ////    if (radio != null) {
+            ////        radio.checked = false;
+            ////    }
 
 
-                this.Offer.Thumbnail = name;
-            },
+            ////    this.Offer.Thumbnail = name;
+            ////},
             AddNewProductDetail: function (Index) {
 
 

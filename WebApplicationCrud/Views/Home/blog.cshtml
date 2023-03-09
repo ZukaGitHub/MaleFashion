@@ -45,31 +45,32 @@
     <section class="blog spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    @foreach (var post in Model.Posts)
-                    {
+                @foreach (var post in Model.Posts)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6">
 
 
-                    <div class="blog__item">
-                        @if (post.Image != null)
-                        {
-                            <div class="blog__item__pic set-bg" data-setbg="../img/productAndBlogAddedImages/@post.Image"></div>
-                        }
-                        else
-                        {
-                            <div class="blog__item__pic set-bg" data-setbg="../img/Default_Blog.png"></div>
-                        }
 
-                        <div class="blog__item__text">
-                            <span><img src="~/img/icon/calendar.png" alt="">@post.Created</span>
-                            <h5>@post.Title</h5>
-                            <a asp-action="BlogDetails" asp-controller="Home" asp-route-id="@post.Id">Read More</a>
+                        <div class="blog__item">
+                            @if (post.Image != null)
+                            {
+                                <div class="blog__item__pic set-bg" data-setbg="../img/productAndBlogAddedImages/@post.Image"></div>
+                            }
+                            else
+                            {
+                                <div class="blog__item__pic set-bg" data-setbg="../img/Default_Blog.png"></div>
+                            }
+
+                            <div class="blog__item__text">
+                                <span><img src="~/img/icon/calendar.png" alt="">@post.Created</span>
+                                <h5>@post.Title</h5>
+                                <a asp-action="BlogDetails" asp-controller="Home" asp-route-id="@post.Id">Read More</a>
+                            </div>
                         </div>
+                        
                     </div>
-                    }
+                }
                 </div>
-              
-            </div>
         </div>
         <div>
 

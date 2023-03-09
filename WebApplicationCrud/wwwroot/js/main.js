@@ -71,6 +71,75 @@ function SubCommentsCollapse(id) {
     var subComment = document.getElementById("subComments+" + id);
     subComment.classList.toggle("inactiveSection");
 }
+
+/*------------------
+      Pagination
+   --------------------*/
+function pagination() {
+    function getPageList(totalPages, page, maxLength) {
+        function range(start, end) {
+            return Array.from(Array(end - start + 1), (_, i) => i + start)
+        }
+
+        var sideWidth = maxLength < 9 ? 1 : 2;
+        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+        var rigthWidth = (maxLength - sideWidth * 2 - 3) >> 1;
+        if (totalPages <= maxLength) {
+            return range(1, totalPages);
+        }
+        if (page <= maxLength - sideWidth - 1 - rigthWidth) {
+            return range(1, maxLength - sidewidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
+        }
+        if (page >= totalPages - sideWidth - 1 - rigthWidth) {
+            return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rigthWidth - leftWidth, totalPages));
+
+        }
+        return range(1, sideWidth).concat(0, range(page - leftWidth, page + rigthWidth), 0, range(totalPages - sideWidth + 1, totalPages));
+
+    }
+    $(function () {
+        var numberOfItems = $(".pagination-content .content").length;
+        var limitPerPage = 9;
+        var totalPages = Math.ceil(numberOfItems / limitPerPage);
+        var paginationSize = 7;
+        var currentPage;
+
+        function ShowPage(whichPage) {
+            if (whichPage < 1 || whichPage > totalPages) return false;
+            currentPage = whichPage;
+            $(".pagination-content .content").hide().slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage).show();
+            $(".pagination li").slice(1, -1).remove();
+            getPageList(totalPages, currentPage, paginationSize).forEach(item => {
+                $("<li>").addClass("page-item").addClass(item ? "currentPage" : "dots")
+                    .toggleClass("activePage", item === currentPage).append($("<a>")
+                        .attr({ href: "javascript:void(0)" }).text(item || "...")).insertBefore(".next-page");
+            });
+            $(".previous-page").toggleClass("disable", currentPage === 1);
+            $(".next-page").toggleClass("disable", currentPage === totalPages);
+
+        }
+        $(".pagination").append(
+            $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").attr({ href: "javascript:void(0)" }).text("Prev")),
+            $("<li>").addClass("page-item").addClass("next-page").append($("<a>").attr({ href: "javascript:void(0)" }).text("Next"))
+
+        );
+        $("pagination-content").show();
+        ShowPage(1);
+        $(document).on("click", ".pagination li.currentPage:not('.activePage')", function () {
+
+            return ShowPage(+$(this).text());
+        });
+        $(".next-page").on("click", function () {
+            return ShowPage(currentPage + 1);
+        })
+        $(".previous-page").on("click", function () {
+            return ShowPage(currentPage - 1);
+        })
+
+    })
+}
+pagination();
+
 'use strict';
 
   
@@ -289,70 +358,7 @@ function SubCommentsCollapse(id) {
             }
         });
     });
-    /*------------------
-       Pagination
-    --------------------*/
-    function getPageList(totalPages, page, maxLength) {
-        function range(start, end) {
-            return Array.from(Array(end-start+1),(_,i)=>i+start)
-        }
-
-        var sideWidth = maxLength < 9 ? 1 : 2;
-        var leftWidth = (maxLength - sideWidth * 2 - 3) >> 1;
-        var rigthWidth = (maxLength - sideWidth * 2 - 3) >> 1;
-        if (totalPages <= maxLength) {
-            return range(1, totalPages);
-        }
-        if (page <= maxLength - sideWidth - 1 - rigthWidth) {
-            return range(1, maxLength - sidewidth - 1).concat(0, range(totalPages - sideWidth + 1, totalPages));
-        }
-        if (page >= totalPages - sideWidth - 1 - rigthWidth) {
-            return range(1, sideWidth).concat(0, range(totalPages - sideWidth - 1 - rigthWidth - leftWidth, totalPages));
-
-        }
-        return range(1, sideWidth).concat(0, range(page - leftWidth,page+rigthWidth),0,range(totalPages-sideWidth+1,totalPages));
-
-    }
-    $(function () {
-        var numberOfItems = $(".pagination-content .content").length;
-        var limitPerPage = 3;
-        var totalPages = Math.ceil(numberOfItems / limitPerPage);
-        var paginationSize = 7;
-        var currentPage;
-
-        function ShowPage(whichPage) {
-            if (whichPage < 1 || whichPage > totalPages) return false;
-            currentPage = whichPage;
-            $(".pagination-content .content").hide().slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage).show();
-            $(".pagination li").slice(1, -1).remove();
-            getPageList(totalPages, currentPage, paginationSize).forEach(item => {
-                $("<li>").addClass("page-item").addClass(item ? "currentPage" : "dots")
-                    .toggleClass("activePage", item === currentPage).append($("<a>")
-                        .attr({ href: "javascript:void(0)" }).text(item || "...")).insertBefore(".next-page");
-            });
-            $(".previous-page").toggleClass("disable", currentPage === 1);
-            $(".next-page").toggleClass("disable", currentPage === totalPages); 
-
-        }
-        $(".pagination").append(
-            $("<li>").addClass("page-item").addClass("previous-page").append($("<a>").attr({ href: "javascript:void(0)" }).text("Prev")),
-           $("<li>").addClass("page-item").addClass("next-page").append($("<a>").attr({ href: "javascript:void(0)" }).text("Next"))
-
-        );
-        $("pagination-content").show();
-        ShowPage(1);
-        $(document).on("click", ".pagination li.current-page:not(.activePage)", function () {
-            return ShowPage(+$(this).text());
-        });
-        $(".next-page").on("click", function () {
-            return ShowPage(currentPage + 1);
-        })
-        $(".previous-page").on("click", function () {
-            return ShowPage(currentPage -1);
-        })
-
-    })
-  
+   
 
     
 

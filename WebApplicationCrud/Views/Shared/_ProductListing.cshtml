@@ -1,13 +1,18 @@
 ﻿@model List<ProductViewModel>
 
 
-<div class="pagination-content" id="pagination-content">
+<div class="pagination-content row" id="pagination-content" >
+
+    <div class="loader-overlay">
+        <div class="spinner-border text-secondary" role="status"> <span class="sr-only"> Loading...</span></div>
+    </div>
+
     @foreach (var prod in Model)
     {
 
 
-        <div data-name="@prod.Name" class="row content">
-            <div class="col-lg-4 col-md-6 col-sm-6">
+       
+            <div class="col-lg-4 col-md-6 col-sm-6 content" data-name="@prod.Name">
                 <div class="product__item ">
                    
 
@@ -94,13 +99,13 @@
                             <div class="product__color__select">
                                 @foreach (var productInfo in prod.ProductInfos)
                                 {
-                                <label for="@productInfo.Color"  style="background-color:@productInfo.Color">
+                                <label for="@productInfo.Color @prod.Id"  style="background-color:@productInfo.Color">
                                     <input class="colorChange" 
                                            data-imgsrcid="img @prod.Id"
                                            data-imgname="@productInfo.ProductInfoThumbnailName"
                                            type="radio" 
                                            name="colorSelect"
-                                           id="@productInfo.Color"
+                                           id="@productInfo.Color @prod.Id"
                                            style="background-color:@productInfo.Color">
                                 </label>
 
@@ -113,7 +118,7 @@
                 </div>
             </div>
 
-        </div>
+      
     }
 </div>
 

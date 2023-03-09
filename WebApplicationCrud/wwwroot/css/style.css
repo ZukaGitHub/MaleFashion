@@ -221,6 +221,24 @@ ol {
 	transition:all 1s ease;
 }
 
+.loader-overlay {
+	display:none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 999999;
+	background: white;
+}
+.spinner-border {
+	height: 30px;
+	width: 30px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+
 @keyframes loader {
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -2054,7 +2072,7 @@ ol {
 		padding: 0 10px 0 10px;
 	}
 .pagination li a{
-	color:white;
+	color:black;
 	text-decoration:none;
 	font-size:1.2em;
 	line-height:45px;
@@ -2093,9 +2111,15 @@ ol {
 	border-radius: 50%;
 
 }
-.activePage{
+ .current-page li a {
+	color:black;
+}
+.activePage {
 	background:black;
 	
+}
+.activePage a {
+	color:white !important;
 }
 .disable {
 	background:  #ccc !important;
@@ -2108,6 +2132,9 @@ ol {
 
 }
 .content{
+
+/*	display:inline-block;
+	max-width:33%;*/
 
 }
 /*---------------------
@@ -3699,6 +3726,10 @@ ol {
 /* Wide Mobile = 480px */
 
 @media only screen and (max-width: 767px) {
+
+	.content{
+		max-width:100% !important;
+	}
 	.canvas__open {
 		display: block;
 		font-size: 22px;
@@ -4120,6 +4151,9 @@ ol {
 }
 
 
+
+
+
 .Panel{
 
 	display:inline-block;
@@ -4250,10 +4284,13 @@ ol {
 /*      Price Range Filter    */
 #priceRangeSlider .container .range-min-max div {
 	
-	display:inline-block;
+	display:inline-block !important;
+}
+#priceRangeSlider .container .range-min-max input {
+	max-width:80px;
 }
 #priceRangeSlider .container .range-min-max .max-value {
-	float:right;
+	float: right !important;
 }
 #priceRangeSlider .container numberVal{
 
@@ -4293,13 +4330,24 @@ ol {
 		border-radius: 50px;
 		position: absolute;
 	}
+@-moz-document url-prefix() {
+	#priceRangeSlider .container .range-slider input[type="range"]{
+		pointer-events:auto!important;
+
+	}
+	.range-min{
+		left:-18px !important;
+	}
+}
+
+
 	#priceRangeSlider .container .range-slider input[type="range"]{
 		position:absolute;
 		top:-8px;
 		left:-5px;
 		width:101%;
 		-webkit-appearance:none;
-		pointer-events:none;
+	    pointer-events:none;
 		background:none;
 		outline:none;
 
@@ -4318,22 +4366,17 @@ ol {
 
 
 
-		/****************************/
-		/************CheckOut********/
-
-
-		.checkout__wrapper{
-			
-			display:flex;
-			justify-content:center;
-			align-items:center;
-			flex-direction:column;
-			height:auto;
-			width:100%;
-			margin-top:40px;
-
-
-		}
+/****************************/
+/************CheckOut********/
+.checkout__wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: auto;
+	width: 100%;
+	margin-top: 40px;
+}
 		.cardPayment{
 
 		}
@@ -4347,20 +4390,3 @@ ol {
 
 
 
-/*didebulo gmerto es ushveba*/ 
-/*.DropzoneC label{
-	padding:8px 12px;
-    color:white;
-	background-color:red;
-	
-}*/
-/*.DropzoneC input{
-	display:none;
-	
-}
-.active-dropzone{
-
-	background-color:gray;
-	
-
-}*/

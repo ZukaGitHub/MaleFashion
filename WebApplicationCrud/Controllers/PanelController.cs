@@ -227,6 +227,34 @@ namespace WebApplicationCrud.Controllers
                     //ViewBag["Brandss"] = Brandss;
 
                     int counter = 0;
+                    if (vm.Products[i].Id != null) {
+
+
+
+
+                        if (vm.Products[i].Id.HasValue)
+                        {
+                            var preEditImages = _ctx.Products?.Where(s => s.Id == vm.Products[i].Id).SingleOrDefault().ProductInfos?.SelectMany(s => s.Images.Select(d => d.Imagename)).ToList();
+
+                            if (preEditImages != null && preEditImages.Count > 0)
+                            {
+                                var postEditImages = productImages.ProductImages[i].RoomImagesVms.SelectMany(s => s.PreviousImages.Select(s => s)).ToList();
+                                var Difference = preEditImages.ToList()
+                                    .Except(postEditImages).ToList();
+                                if (Difference.Count > 0)
+                                {
+                                    _filemanager.DeleteImages(Difference);
+                                    foreach (var image in Difference)
+                                    {
+
+                                        _ctx.Images.Remove(_ctx.Images.Where(s => s.Imagename == image).SingleOrDefault());
+                                    }
+                                }
+                            }
+
+
+                        }
+                    }
                     foreach (var Productinfo in vm.Products[i].ProductInfos)
                     {
 
@@ -238,35 +266,17 @@ namespace WebApplicationCrud.Controllers
                         var path = "product";
                         var tempListOfImages = new List<Image>();
 
-                        if (Productinfo.ImageNames != null && vm.Products[i].Id != null)
+                        if (Productinfo.ThumbnailEditIndex.HasValue)
                         {
-                            var preEditProduct = _ctx.Products?.Where(s => s.Id == vm.Products[i].Id).SingleOrDefault();
-                            if (preEditProduct != null)
-                            {
-                                var preEditImages = preEditProduct.Images;
-                                var Difference = preEditImages.Select(s => s.Imagename).ToList()
-                                    .Except(Productinfo.ImageNames).ToList();
-                                if (Difference.Count > 0)
-                                {
-                                    _filemanager.DeleteImages(Difference);
-                                    foreach (var image in Difference)
-                                    {
-                                        _ctx.Remove(_ctx.Images.Where(s => s.Imagename == image));
-                                    }
-                                }
-
-                                if (Productinfo.ThumbnailEditIndex.HasValue)
-                                {
-                                    tempProductInfo.ProductInfoThumbnailName = Productinfo.ImageNames[(int)Productinfo.ThumbnailEditIndex];
-                                }
-
-                            }
+                            tempProductInfo.ProductInfoThumbnailName = Productinfo.ImageNames[(int)Productinfo.ThumbnailEditIndex];
                         }
+                        
                         if (productImages != null)
                         {
                             if (productImages.ProductImages[i] != null)
                             {
-                                var imgnames = await _filemanager.SaveImagesAsync(productImages.ProductImages[i].RoomImagesVms[counter].RoomImages, path);
+                               
+                                    var imgnames = await _filemanager.SaveImagesAsync(productImages.ProductImages[i].RoomImagesVms[counter].RoomImages, path);
 
                                 if (imgnames != null)
                                 {
@@ -281,6 +291,21 @@ namespace WebApplicationCrud.Controllers
                                         tempListOfImages.Add(img);
 
                                     }
+                                    if (productImages.ProductImages[i].RoomImagesVms[counter].PreviousImages != null && 
+                                        productImages.ProductImages[i].RoomImagesVms[counter].PreviousImages.Count>0)
+                                    {
+                                        foreach (var Image in productImages.ProductImages[i].RoomImagesVms[counter].PreviousImages)
+                                        {
+
+                                            var img = new Image()
+                                            {
+                                                Imagename = Image,
+                                            };
+
+                                            tempListOfImages.Add(img);
+
+                                        }
+                                    }
                                     tempProductInfo.Images = tempListOfImages;
                                     if (productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex != null)
                                     {
@@ -289,12 +314,24 @@ namespace WebApplicationCrud.Controllers
                                         tempProductInfo.ProductInfoThumbnailName =
                                             tempListOfImages[(int)productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailIndex].Imagename;
                                     }
+                                    if (productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailEditIndex.HasValue)
+                                    {
+
+
+                                        tempProductInfo.ProductInfoThumbnailName =
+                                            productImages
+                                            .ProductImages[i].
+                                            RoomImagesVms[counter].PreviousImages
+                                            [(int)productImages.ProductImages[i].RoomImagesVms[counter].ThumbnailEditIndex];
+                                    }
                                     counter++;
                                 }
                             }
                         }
 
 
+                        var tempSizesAndStocks = new List<ProductInfoStockAndSize>();
+                          
                         foreach (var StockAndSize in Productinfo.Stock)
                         {
                             var tempStockandSize = new ProductInfoStockAndSize()
@@ -303,12 +340,10 @@ namespace WebApplicationCrud.Controllers
                                 SizeName = StockAndSize.SizeName,
 
                             };
-                            var tempSizesAndStocks = new List<ProductInfoStockAndSize>
-                            {
-                                tempStockandSize
-                            };
-                            tempProductInfo.ProductInfoStockAndSizes = tempSizesAndStocks;
+                            tempSizesAndStocks.Add(tempStockandSize);
+                            
                         }
+                        tempProductInfo.ProductInfoStockAndSizes = tempSizesAndStocks;
                         productInfos.Add(tempProductInfo);
                     }
                     var salepercentage = int.Parse(vm.Products[i].SalePercentage);
@@ -331,8 +366,8 @@ namespace WebApplicationCrud.Controllers
                     if (vm.Products[i].Id.HasValue)
                     {
                         product.Id = (int)vm.Products[i].Id;
-
-                        _ctx.Update(product);
+                        _ctx.Products.Remove(_ctx.Products.Where(s => s.Id == product.Id).SingleOrDefault());
+                        _ = _ctx.Products.Add(product);
                         await _ctx.SaveChangesAsync();
                         continue;
 
@@ -468,7 +503,11 @@ namespace WebApplicationCrud.Controllers
         }
         public async Task<IActionResult> Remove(List<int> productIds)
         {
-
+          
+            //SSL ginda 
+            //daamate produqtebi da blogebi
+           
+            //documentacia dawere ch
             try
             {
 

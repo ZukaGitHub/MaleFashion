@@ -14,14 +14,38 @@ As i Have mentioned before,this project is a portfolio project,
 I have been working on MaleFashion for combined duration
 of 10 months.It started out as simple CRUD project and as of
 now it has blossomed into something approximating a production-level
-code.
+code.Website is using Colorib Free Template.
 ---------------------------Technologies Used-----------------------------
 Many technologies(APIs,Libraries,Frameworks) have been used for this project,Including
 HTML/CSS
 Native Javascript
+Vue.JS
+C#
 SQL (MSSQL)
-Jquery 3.3.1
-Bootstrap
+Jquery 3.3.1(nice-select,nicescroll,magnific-popup,countdown,slicknav)
+Bootstrap,Bootstrap Table Api
+popper.js
+trumbowyg.js
+mixitup.js
+Owl Carousel
+Microsoft Asp.Net Core Identity
+Google And Facebook Authentication API
+SMTP
+Stripe Payment Api
+---------------------------Project Structure-----------------------------'
+Coding pattern used is MVC
+Project has Several Folders
+Dependencies
+wwwRoot
+Components
+Controllers
+Data
+Migrations
+Models
+ViewModels
+Views
+appsettings.json
+Program.cs
+Startup.cs
 
 
----------------------------Project Structure-----------------------------

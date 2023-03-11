@@ -15,6 +15,8 @@ I have been working on MaleFashion for combined duration
 of 10 months.It started out as simple CRUD project and as of
 now it has blossomed into something approximating a production-level
 code.Website is using Colorib Free Template.
+It has its own Blog,Custom written comment section,authorization and authentication
+Shopping Cart,Admin Panel,
 ---------------------------Technologies Used-----------------------------
 Many technologies(APIs,Libraries,Frameworks) have been used for this project,Including
 HTML/CSS
@@ -36,16 +38,38 @@ Stripe Payment Api
 Coding pattern used is MVC
 Project has Several Folders
 Dependencies
-wwwRoot
+wwwroot
 Components
-Controllers
-Data
-Migrations
-Models
-ViewModels
-Views
-appsettings.json
-Program.cs
-Startup.cs
+----This Folder Consists of ShoppingCartSummary ViewComponent used to get and populate ShoppingCartViewModel which consists of selected items
+
+Controllers------------------------------------------
+--this folder has 9 controllers
+-AdministrationController takes care of managing roles and claims of specific accounts 
+-AuthController-takes care of Authentication,Authorisation and related topics
+-BlogController-Blog related functionality is defined here
+-CheckOutController-this controller manages process of check out
+-HomeController-manages access to different pages,populates them,also manages star rating system and custom product filter
+-PanelController-manages Admin panel functionality
+-PaymentApiController-is intended to manage payments however due to non-commercial nature of this project is feature is not
+fully implemented
+-ShoppingCartController-together with ShoppingCartSummary ViewComponent,this controller makes shopping cart work
+
+Data--------------------------------------
+Helper Classes,dbcontext and etc are defined under this folder
+-AutoMapper-defines mapping between objects using AutoMapper.Extensions.Microsoft.DependencyInjection 5.0.1
+-Claims-is a list of simple claims
+-DbContext-Contains CRUDdbcontext which is IdentityDbContext that accepts ApplicationUser as an argument which inherits from IdentityUser------
+-FileManager-Contains an interface IFileManager which manages images --------
+-Helpers-this folder contains PageHelper,which is manages server-side pagination and is Blog related and RazorHelper which helps render Razor Views to String,used in Ajax popup modal when Managing users role
+-Repository-Repository pattern which Handles Blog related Functionality
+-SMTP-simple mail transfer service
+
+Migrations----------------
+Models-----------------
+ViewModels------------
+Views-----------
+appsettings.json-----------
+Program.cs------------
+Startup.cs------------
 
 

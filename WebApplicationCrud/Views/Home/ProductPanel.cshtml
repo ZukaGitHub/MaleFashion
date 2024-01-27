@@ -2,10 +2,31 @@
 <head>
     <link href="~/css/lightbox.min.css" rel="stylesheet" />
 </head>
+<style>
+    .zoomed_main_image {
+        top: 0;
+        right: 0;
+        position: absolute;
+        width: 200px;
+        height: 400px;
+        display: none;
+        transform: translateX(300px);
+    }
 
+    .lens {
+        width: 100px;
+        height: 100px;
+        background: rgba(0,0,0,0.1);
+        border: 2px solid black;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        pointer-events: none;
+        display: none;
+    }
+</style>
 
 <body>
-  
+
 
 
     <!-- Shop Details Section Begin -->
@@ -27,85 +48,101 @@
 
                 @*style="background-image: url('../../@image_path')"*@
                 @*style="background-image: url('../../@image_path')"*@
-            <div class="row">
-                <div id="ImageGallery" class="col-lg-3 col-md-3">
-                    <ul class="nav nav-tabs" role="tablist">
+                <div class="row">
+                    <div id="ImageGallery" class="col-lg-3 col-md-3">
+                        <ul class="nav nav-tabs" role="tablist">
 
-                        @for (int i = 0; i < Model.Images.Count; i++)
-                        {
-                            var image_path = $"img/productAndBlogAddedImages/{Model.Images[i]}";
-                            if (i == 0)
+                            @for (int i = 0; i < Model.Images.Count; i++)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="tab" href="#tabs-0" role="tab">
-                                        <div class="product__thumb__pic set-bg">
-                                            <img src="~/@image_path" />
+                                var image_path = $"img/productAndBlogAddedImages/{Model.Images[i]}";
+                                if (i == 0)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link imageGallery active" data-toggle="tab" href="#tabs-0" role="tab">
+                                            <div class="product__thumb__pic set-bg">
+                                                <img src="~/@image_path" />
 
-                                        </div>
-                                    </a>
-                                </li>
-
-                            }
-
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tabs-@i" role="tab">
-                                        <div class="product__thumb__pic set-bg">
-                                            <img src="~/@image_path" />
-                                        </div>
-                                    </a>
-                                </li>
-                            }
-                        }
-                    </ul>
-                </div>
-
-                @*class="product__details__pic__item"*@
-
-                <div class="col-lg-6 col-md-9 ">
-                    <div class="tab-content ">
-
-                        @for (int i = 0; i < Model.Images.Count; i++)
-                        {
-                            var image_path = $"/img/productAndBlogAddedImages/{Model.Images[i]}";
-                            if (i == 0)
-                            {
-                                <div class="tab-pane active" id="tabs-0" role="tabpanel">
-                                    <div class="product__details__pic__item">
-
-                                        <a href="@image_path" data-lightbox="models">
-                                            <svg  style="color:black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fullscreen" viewBox="0 0 16 16">
-                                                <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
-                                            </svg>
+                                            </div>
                                         </a>
-                                        <img class="big_image" src="@image_path" />
+                                    </li>
+
+                                }
+
+                                else
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link imageGallery" data-toggle="tab" href="#tabs-@i" role="tab">
+                                            <div class="product__thumb__pic set-bg">
+                                                <img src="~/@image_path" />
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                    @*class="product__details__pic__item"*@
+
+                    <div class="col-lg-6 col-md-9 ">
+                        <div class="tab-content ">
+
+                            @for (int i = 0; i < Model.Images.Count; i++)
+                            {
+                                var image_path = $"/img/productAndBlogAddedImages/{Model.Images[i]}";
+                                if (i == 0)
+                                {
+                                    <div class="tab-pane active" id="tabs-0" role="tabpanel">
+                                        <div class="product__details__pic__item">
+                                            <div class="magnifying-glass"></div>
+                                            <a href="@image_path" data-lightbox="models">
+                                                <svg style="color:black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fullscreen" viewBox="0 0 16 16">
+                                                    <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
+                                                </svg>
+                                            </a>
+                                            <div class="image_display_zoom_field">
+                                                <div class="main_image" id="main_image" style="background:url('@image_path'); width: 600px;height: 600px;background-size: 100% 100%;">
+                                                    @*     <img  class="big_image" src="@image_path" /> *@
+                                                    <span class="lens" id="lens"></span>
+
+                                                </div>
+                                                <div style="background:url('@image_path');background-size:600% 600%;" id="zoomed_main_image" class="zoomed_main_image">
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
-                                </div>
 
-                            }
-                            else
-                            {
+                                }
+                                else
+                                {
 
-                                <div class="tab-pane" id="tabs-@i" role="tabpanel">
-                                    <div class="product__details__pic__item">
-                                        <a href="@image_path" data-lightbox="models">
-                                            <svg style="color:black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fullscreen" viewBox="0 0 16 16">
-                                                <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
-                                            </svg>
-                                        </a>
-                                        <img class="big_image" src="@image_path" />
+                                    <div class="tab-pane" id="tabs-@i" role="tabpanel">
+                                        <div class="product__details__pic__item">
+                                            <div class="magnifying-glass"></div>
+                                            <a href="@image_path" data-lightbox="models">
+                                                <svg style="color:black" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fullscreen" viewBox="0 0 16 16">
+                                                    <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z" />
+                                                </svg>
+                                            </a>
+                                            <div class="image_display_zoom_field">
+                                                <div class="main_image" id="main_image" style="background:url('@image_path'); width: 600px;height: 600px;background-size: 100% 100%;">
+                                                    @*     <img  class="big_image" src="@image_path" /> *@
+                                                    <span class="lens" id="lens"></span>
 
+                                                </div>
+                                                <div style="background:url('@image_path');background-size:600% 600%;" id="zoomed_main_image" class="zoomed_main_image">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                }
+
                             }
 
-                        }
-
+                        </div>
                     </div>
                 </div>
-            </div>
 
             </div>
         </div>
@@ -120,7 +157,7 @@
                                 {
                                     @for (int i = 0; i < 5; i++)
                                     {
-                                        if (i <Model.StarRate)
+                                        if (i < Model.StarRate)
                                         {
                                             <i class="fa fa-star"></i>
 
@@ -133,7 +170,8 @@
                                     }
                                 }
                                 else
-                                { <i class="fa fa-star-o"></i>
+                                {
+                                    <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
@@ -152,300 +190,344 @@
 
                                         @Model.PreviousPrice
                                     }
-                            </span>
-                        </h3>
-                        <p>
-                            @Model.Description
-                        </p>
-                        <div class="product__details__option">
-                            @*size---------------------------------------------------*@
-                            <div class="product__details__option__size">
-                                <span>Size:</span>
-                                \
-                                @for (int i = 0; i < Model.SizeNames.Count; i++)
-                                {
-
-
-                                    <input type="radio" name="size" id="@Model.SizeNames[i]">
-
-                                    <label class="sizes" for="@Model.SizeNames[i]">
-                                        @Model.SizeNames[i]
-                                    </label>
-
-
-
-                                }
-
-                            </div>
-                            @*COlors----------------------------------------------------*@
-                            <div class="product__details__option__color">
-                                <span>Color:</span>
-                                @for (int i = 0; i < Model.ProductInfos.Count; i++)
-                                {
-
-                                    <input class="c-1" name="color" data-sizes="" data-productInfoId="@Model.ProductInfos[i].Id"
-                                           type="radio" id="@Model.ProductInfos[i].Color">
-                                    <label data-sizes=""
-                                           style="background-color:@Model.ProductInfos[i].Color"
-                                           for="@Model.ProductInfos[i].Color">
-                                    </label>
-                                }
-                            </div>
-                           
-                            <div class="product__details__option__quantity mt-3">
-                                <span>Amount:</span>
-                                <input id="amount" class="form-control" name="quantity" type="number" min="1" value="1" />
-                            </div>
-                        </div>
-                        @*add to cart-----------------------------------------------*@
-                        <div class="product__details__cart__option">
-                            @*<div class="quantity">
-                                <div class="pro-qty">
-                                   <input type="text" value="1">
-                                           </div>
-                                     </div>*@
-                            @*asp-route-productInfoId="@product.id"*@
-                            <a id="addToCart" 
-                              class="primary-btn">+ Add To Cart</a>
-
-                        </div>
-                        @*wishlist and compare-------------------------------------------------*@
-                        @*<div class="product__details__btns__option">
-                                <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
-                                <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-                            </div>*@
-                        <div class="product__details__last__option">
-                            <h5><span>Guaranteed Safe Checkout</span></h5>
-                            <img src="~/img/shop-details/details-payment.png" alt="">
-                            <ul>
-
-                                <li><span>Categories:</span> @Model.CategoryName</li>
-                                <li>
-                                    <span>Tag:</span> @foreach (var tag in Model.Tags)
+                                </span>
+                            </h3>
+                            <p>
+                                @Model.Description
+                            </p>
+                            <div class="product__details__option">
+                                @*size---------------------------------------------------*@
+                                <div class="product__details__option__size">
+                                    <span>Size:</span>
+                                    \
+                                    @for (int i = 0; i < Model.SizeNames.Count; i++)
                                     {
-                                        @tag <span>&nbsp;</span>
+
+
+                                        <input type="radio" name="size" id="@Model.SizeNames[i]">
+
+                                        <label class="sizes" for="@Model.SizeNames[i]">
+                                            @Model.SizeNames[i]
+                                        </label>
+
+
+
                                     }
-                                </li>
-                            </ul>
+
+                                </div>
+                                @*COlors----------------------------------------------------*@
+                                <div class="product__details__option__color">
+                                    <span>Color:</span>
+                                    @for (int i = 0; i < Model.ProductInfos.Count; i++)
+                                    {
+
+                                        <input class="c-1" name="color" data-sizes="" data-productInfoId="@Model.ProductInfos[i].Id"
+                                               type="radio" id="@Model.ProductInfos[i].Color">
+                                        <label data-sizes=""
+                                               style="background-color:@Model.ProductInfos[i].Color"
+                                               for="@Model.ProductInfos[i].Color">
+                                        </label>
+                                    }
+                                </div>
+
+                                <div class="product__details__option__quantity mt-3">
+                                    <span>Amount:</span>
+                                    <input id="amount" class="form-control" name="quantity" type="number" min="1" value="1" />
+                                </div>
+                            </div>
+                            @*add to cart-----------------------------------------------*@
+                            <div class="product__details__cart__option">
+                                @*<div class="quantity">
+                                <div class="pro-qty">
+                                <input type="text" value="1">
+                                </div>
+                                </div>*@
+                                @*asp-route-productInfoId="@product.id"*@
+                                <a id="addToCart"
+                                   class="primary-btn">+ Add To Cart</a>
+
+                            </div>
+                            @*wishlist and compare-------------------------------------------------*@
+                            @*<div class="product__details__btns__option">
+                            <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
+                            <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
+                            </div>*@
+                            <div class="product__details__last__option">
+                                <h5><span>Guaranteed Safe Checkout</span></h5>
+                                <img src="~/img/shop-details/details-payment.png" alt="">
+                                <ul>
+
+                                    <li><span>Categories:</span> @Model.CategoryName</li>
+                                    <li>
+                                        <span>Tag:</span> @foreach (var tag in Model.Tags)
+                                        {
+                                            @tag <span>&nbsp;</span>
+                                        }
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="product__details__tab">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-5"
-                                   role="tab">Description</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">
-                                    Additional Information
-                                </a>
-                            </li>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product__details__tab">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#tabs-5"
+                                       role="tab">Description</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">
+                                        Additional Information
+                                    </a>
+                                </li>
 
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-5" role="tabpanel">
-                                <div class="product__details__tab__content">
-                                    <p class="note">
-                                        Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                        solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                        ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.
-                                    </p>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="tabs-6" role="tabpanel">
-                                <div class="product__details__tab__content">
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Products Infomation</h5>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tabs-5" role="tabpanel">
+                                    <div class="product__details__tab__content">
                                         <p class="note">
-                                            A Pocket PC is a handheld computer, which features many of the same
-                                            capabilities as a modern PC. These handy little devices allow
-                                            individuals to retrieve and store e-mail messages, create a contact
-                                            file, coordinate appointments, surf the internet, exchange text messages
-                                            and more. Every product that is labeled as a Pocket PC must be
-                                            accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.
+                                            Nam tempus turpis at metus scelerisque placerat nulla deumantos
+                                            solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
+                                            ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
+                                            pharetras loremos.
                                         </p>
 
                                     </div>
-
                                 </div>
-                            </div>
+                                <div class="tab-pane" id="tabs-6" role="tabpanel">
+                                    <div class="product__details__tab__content">
+                                        <div class="product__details__tab__content__item">
+                                            <h5>Products Infomation</h5>
+                                            <p class="note">
+                                                A Pocket PC is a handheld computer, which features many of the same
+                                                capabilities as a modern PC. These handy little devices allow
+                                                individuals to retrieve and store e-mail messages, create a contact
+                                                file, coordinate appointments, surf the internet, exchange text messages
+                                                and more. Every product that is labeled as a Pocket PC must be
+                                                accompanied with specific software to operate the unit and must feature
+                                                a touchscreen and touchpad.
+                                            </p>
 
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
+    </section>
 
-<!-- Shop Details Section End -->
-<!-- Related Section Begin -->
-<section class="related spad">
-    @*Try to use Swiper js here--------------------------------------------------------*@
-    <div class="container">
-        @*Related Products Should Match Through Tags not ProductInfos----------------------------*@
-        <div class="row">
-            <div class="col-lg-12">
-                <h3 class="related-title">Related Products</h3>
+    <!-- Shop Details Section End -->
+    <!-- Related Section Begin -->
+    <section class="related spad">
+        @*Try to use Swiper js here--------------------------------------------------------*@
+        <div class="container">
+            @*Related Products Should Match Through Tags not ProductInfos----------------------------*@
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="related-title">Related Products</h3>
+                </div>
+            </div>
+            <div>
+
+                @await Html.PartialAsync("_ProductListing", Model.RelatedProducts)
+
             </div>
         </div>
-        <div>
+    </section>
 
-            @await Html.PartialAsync("_ProductListing", Model.RelatedProducts)
-
-        </div>
-    </div>
-</section>
-
-<!-- Related Section End -->
-<section>
-    <div class="container">
-        <nav class="comment-section">
-            @if (User.Identity.IsAuthenticated)
-            {
-
-                <div class="star-rating">
-                    <input type="radio"  name="rate" id="rate-1">
-                    <label for="rate-1" data-rate="5" data-Id="@Model.Id" class="fa fa-star rate"></label>
-                    <input type="radio"   name="rate" id="rate-2">
-                    <label for="rate-2" data-rate="4" data-Id="@Model.Id" class="fa fa-star rate"></label>
-                    <input type="radio"   name="rate" id="rate-3">
-                    <label for="rate-3" data-rate="3" data-Id="@Model.Id" class="fa fa-star rate"></label>
-                    <input type="radio"   name="rate" id="rate-4">
-                    <label for="rate-4" data-rate="2" data-Id="@Model.Id" class="fa fa-star rate"></label>
-                    <input type="radio"  name="rate" id="rate-5">
-                    <label for="rate-5" data-rate="1" data-Id="@Model.Id"class="fa fa-star rate"></label>                    
-                </div>
-       
-
-        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
-    }
-    else
-    {
-
-        <div>
-            <a class="font-weight-bold btn btn-danger" asp-action="Login"  asp-controller="Auth"> Sign In </a> <p class="note">to comment on this awesome post!</p>
-
-        </div>
-    }
-
-
-            @if (Model.Comments != null)
-            {
-                @foreach (var comment in Model.Comments)
-                {
-
-                    <div class="Comment">
-
-                        <span><img src="" class="rounded-circle" /></span>
-                        <span style="font-weight:bold">@comment.Author</span>
-                        <span style="font-style:italic">@comment.Created</span>
-                        <button style="position:relative;float:right" id="@comment.Id" class="replyButton" onclick="SubCommentsCollapse(this.id)">
-                            <span><i class="fa fa-reply"></i> reply</span>
-                        </button>
-                        <p>
-                            @comment.Message
-                        </p>
-                    </div>
-                    <div class="subComment inactiveSection" id="subComments+@comment.Id" style="margin-left: 50px;">
-
-
-
-
-                        @foreach (var subComment in comment.SubComments)
-                        {
-                            <div class="Comment">
-                                <span><img src="" class="rounded-circle" /></span>
-                                <span style="font-weight:bold">@subComment.Author</span>
-                                <span style="font-style:italic">@subComment.Created</span>
-
-                                <p>
-                                    @subComment.Message
-                                </p>
-                            </div>
-                        }
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = comment.Id, IsPost = false, IsProduct = true });
-                        }
-                        else
-                        {
-                            <div>
-                                <a asp-action="Login" class="btn btn-danger"  asp-controller="Auth"> Sign In </a> to comment on this post
-
-                            </div>
-
-                        }
-                    </div>
-                }
-            }
-            else
-            {
+    <!-- Related Section End -->
+    <section>
+        <div class="container">
+            <nav class="comment-section">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
+
+                    <div class="star-rating">
+                        <input type="radio" name="rate" id="rate-1">
+                        <label for="rate-1" data-rate="5" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                        <input type="radio" name="rate" id="rate-2">
+                        <label for="rate-2" data-rate="4" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                        <input type="radio" name="rate" id="rate-3">
+                        <label for="rate-3" data-rate="3" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                        <input type="radio" name="rate" id="rate-4">
+                        <label for="rate-4" data-rate="2" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                        <input type="radio" name="rate" id="rate-5">
+                        <label for="rate-5" data-rate="1" data-Id="@Model.Id" class="fa fa-star rate"></label>
+                    </div>
+
+
+                    await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = this.Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
                 }
                 else
                 {
+
                     <div>
-                        <a asp-action="Login" class="btn btn-danger"  asp-controller="Auth"> Sign In </a> to comment on this post
+                        <a class="font-weight-bold btn btn-danger" asp-action="Login" asp-controller="Auth"> Sign In </a> <p class="note">to comment on this awesome post!</p>
 
                     </div>
-
                 }
 
-            }
+
+                @if (Model.Comments != null)
+                {
+                    @foreach (var comment in Model.Comments)
+                    {
+
+                        <div class="Comment">
+
+                            <span><img src="" class="rounded-circle" /></span>
+                            <span style="font-weight:bold">@comment.Author</span>
+                            <span style="font-style:italic">@comment.Created</span>
+                            <button style="position:relative;float:right" id="@comment.Id" class="replyButton" onclick="SubCommentsCollapse(this.id)">
+                                <span><i class="fa fa-reply"></i> reply</span>
+                            </button>
+                            <p>
+                                @comment.Message
+                            </p>
+                        </div>
+                        <div class="subComment inactiveSection" id="subComments+@comment.Id" style="margin-left: 50px;">
+
+
+
+
+                            @foreach (var subComment in comment.SubComments)
+                            {
+                                <div class="Comment">
+                                    <span><img src="" class="rounded-circle" /></span>
+                                    <span style="font-weight:bold">@subComment.Author</span>
+                                    <span style="font-style:italic">@subComment.Created</span>
+
+                                    <p>
+                                        @subComment.Message
+                                    </p>
+                                </div>
+                            }
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = comment.Id, IsPost = false, IsProduct = true });
+                            }
+                            else
+                            {
+                                <div>
+                                    <a asp-action="Login" class="btn btn-danger" asp-controller="Auth"> Sign In </a> to comment on this post
+
+                                </div>
+
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        await Html.RenderPartialAsync("_CommentSection", new CommentViewModel { Id = Model.Id, MainCommentId = 0, IsPost = false, IsProduct = true });
+                    }
+                    else
+                    {
+                        <div>
+                            <a asp-action="Login" class="btn btn-danger" asp-controller="Auth"> Sign In </a> to comment on this post
+
+                        </div>
+
+                    }
+
+                }
             </nav>
-            </div>
-        </section>
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
+        </div>
+    </section>
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
     </div>
-</div>
-<!-- Search End -->
+    <!-- Search End -->
 
 
 </body>
 
 
 
-<script src="~/js/zoomsl.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
 
 
-      
-  
+        function imageZoom() {
+            var imageContainers = document.querySelectorAll('.image_display_zoom_field');
+            imageContainers.forEach(function (container) {
+
+
+                var lens = container.querySelector('.lens');
+                var main_image = container.querySelector('.main_image');
+                var zoomed_main_image = container.querySelector('.zoomed_main_image');
+
+
+                var zoomed_main_image_rect = zoomed_main_image.getBoundingClientRect();
+
+                main_image.addEventListener('mousemove', function (e) {
+                    var main_image_rect = main_image.getBoundingClientRect();
+                    var x = e.clientX - main_image_rect.left;
+                    var y = e.clientY - main_image_rect.top;
+
+
+                    var lens_width = lens.offsetWidth;
+                    var lens_height = lens.offsetHeight;
+                    var lens_x = x - lens_width / 2;
+                    var lens_y = y - lens_height / 2;
+
+                    lens_x = Math.max(0, Math.min(main_image.offsetWidth - lens_width, lens_x));
+                    lens_y = Math.max(0, Math.min(main_image.offsetHeight - lens_height, lens_y));
+
+                    lens.style.left = e.offsetX + 'px';
+                    lens.style.top = e.offsetY + 'px';
+
+                    var zoomed_x = (lens_x / main_image.offsetWidth) * 115;
+                    var zoomed_y = (lens_y / main_image.offsetHeight) * 115;
+
+                    zoomed_main_image.style.backgroundPosition = zoomed_x + '% ' + zoomed_y + '%';
+                });
+
+                main_image.addEventListener('mouseenter', function () {
+                    lens.style.display = 'block';
+                    zoomed_main_image.style.display = 'block';
+                });
+
+                main_image.addEventListener('mouseleave', function () {
+                    lens.style.display = 'none';
+                    zoomed_main_image.style.display = 'none';
+                });
+            });
+        }
+        imageZoom();
+
         $('#addToCart').on("click", function () {
             var productId =@Model.Id;
-            
+
             var productInfoId = $("input[name=color]:checked", '.product__details__option__color')[0].dataset.productinfoid;
-             
+
             var productAmount = $("input[name=quantity]", '.product__details__option__quantity');
-        
-        
+
+
             var selectedSize = $("input[name=size]:checked", '.product__details__option__size')[0].id;
-        
-           
+
+
             $('#addToCart').attr('href', '/ShoppingCart/AddToShoppingCart/?productId=' + productId + '&productInfoId=' + productInfoId + '&size=' + selectedSize + '&amount=' + productAmount[0].value);
         })
-       
-        $(".big_image").imagezoomsl({
-            zoomrange: [3, 5]
-        });
+
+
         var ProductInfos = @Json.Serialize(Model.ProductInfos)
             console.log("ProductInfos", ProductInfos);
 
@@ -458,12 +540,12 @@
 
             }
             document.getElementById(ProductInfos[i].color).dataset.sizes = sizeNames
-          
+
         }
-     
+
 
         $(".c-1").on("click", function (e) {
-         
+
             if (e.target.nodeName === 'LABEL') return;
 
             if (e.target.dataset.sizes != null) {
@@ -474,7 +556,7 @@
                         $(this).prop('checked', false);
                     })
                     for (let i = 0; i < e.target.dataset.sizes.length; i++) {
-                       
+
                         $('label[for="' + e.target.dataset.sizes[i] + '"]').removeClass("disable");
                     }
                 }
@@ -485,13 +567,13 @@
                         $(this).prop('checked', false);
                     })
                     $('label[for="' + e.target.dataset.sizes + '"]').removeClass("disable");
-                 
+
                 }
             }
 
         }),
         $(".rate").on("click", function (e) {
-            console.log("e",e)
+
             if (e.target.nodeName === 'INPUT') return;
             $.ajax({
                 url: '/Home/StarRating',
@@ -507,13 +589,38 @@
 
 
 
-       
+
     });
 
 
 
+        function showMagnifyingGlass(event) {
+            const container = document.querySelector('.product__details__pic__item');
+            const magnifyingGlass = container.querySelector('.magnifying-glass');
+            const image = container.querySelector('.big_image');
 
-    
+            const containerRect = container.getBoundingClientRect();
+            const x = event.clientX - containerRect.left;
+            const y = event.clientY - containerRect.top;
+
+            const percentX = x / containerRect.width * 100;
+            const percentY = y / containerRect.height * 100;
+
+            magnifyingGlass.style.left = `${percentX - 50}%`; // Adjust the position based on the magnifying glass size
+            magnifyingGlass.style.top = `${percentY - 50}%`;
+
+            magnifyingGlass.style.backgroundImage = `url('${image.src}')`;
+            magnifyingGlass.style.backgroundSize = `${containerRect.width * 2}px ${containerRect.height * 2}px`; // Adjust the magnification factor
+            magnifyingGlass.style.display = 'block';
+        }
+
+    function hideMagnifyingGlass() {
+        const magnifyingGlass = document.querySelector('.magnifying-glass');
+        magnifyingGlass.style.display = 'none';
+    }
+
+
+
 
 </script>
 <script src="~/js/lightbox.min.js"></script>
